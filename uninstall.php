@@ -7,12 +7,12 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-$table_subsriptions_data  = $wpdb->prefix . 'lpcustom_subsriptions_data';
+$table_subscriber_migrations = $wpdb->prefix . 'laterpay_subscriber_migrations';
 
 // remove custom tables
 $sql = "
     DROP TABLE IF EXISTS
-        $table_subsriptions_data
+        $table_subscriber_migrations
     ;
 ";
 $wpdb->query( $sql );
