@@ -1,6 +1,5 @@
 .idea/
 .sublime-gulp.cache
-built_assets/
 nbproject/
 node_modules/
 .gulp
