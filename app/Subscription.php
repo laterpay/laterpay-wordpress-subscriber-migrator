@@ -2,13 +2,6 @@
 
 class LaterPay_Migrator_Subscription {
 
-    public static $subscriptions_table_name = 'laterpay_subscriber_migrations';
-    public static $subscription_durations   = array(
-                                                    '3 months',
-                                                    '6 months',
-                                                    '1 year',
-                                                );
-
     /**
      * Get WP user.
      *
@@ -38,14 +31,7 @@ class LaterPay_Migrator_Subscription {
             }
         }
 
-        $subscription_start = strtotime( $data['purchase_date'] );
-        $subscription_end   = strtotime(
-                                    '+' . self::$subscription_durations[$data['subscription_duration']],
-                                    $subscription_start
-                                );
-        $expiry_time        = $subscription_end - time();
-
-        return $expiry_time;
+        return strtotime( $data['subscription_end'] . ' ' . '23:59' );
     }
 
     /**
@@ -56,8 +42,13 @@ class LaterPay_Migrator_Subscription {
     public static function get_subscription_data() {
         global $wpdb;
 
-        $table     = $wpdb->prefix . self::$subscriptions_table_name;
+        $table     = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
         $user_data = self::get_user_data();
+
+        if ( ! $user_data ) {
+            return false;
+        }
+
         $email     = $user_data->user_email;
 
         $sql = "
@@ -111,7 +102,7 @@ class LaterPay_Migrator_Subscription {
     public static function mark_as_migrated_to_laterpay( $is_migrated_to_laterpay ) {
         global $wpdb;
 
-        $table                      = $wpdb->prefix . self::$subscriptions_table_name;
+        $table                      = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
         $user_data                  = self::get_user_data();
         $email                      = $user_data->user_email;
         $is_migrated_to_laterpay    = (int) $is_migrated_to_laterpay;
@@ -162,8 +153,7 @@ class LaterPay_Migrator_Subscription {
                 {$table}
             WHERE
                 duration = {$opts['duration']} AND
-                period   = {$opts['period']} AND
-                price    = {$opts['price']}
+                period   = {$opts['period']}
             ;";
 
         $result = $wpdb->get_results( $sql );

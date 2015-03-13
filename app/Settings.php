@@ -8,9 +8,9 @@ class LaterPay_Migrator_Settings {
     public function add_settings_page() {
         add_options_page(
             'Subscription Migration Settings',
-            'Lpcustom',
+            'Subscription Migration Settings',
             'manage_options',
-            'lpcustom',
+            'lpmigrator-settings',
             array( $this, 'render_settings_page' )
         );
     }
@@ -28,25 +28,32 @@ class LaterPay_Migrator_Settings {
         );
         wp_enqueue_style( 'laterpay-migrator-settings' );
 
-        // register and enqueue Javascript
-        wp_register_script(
-            'laterpay-migrator-settings',
-            LATERPAY_MIGRATOR_JS_URL . 'laterpay-migrator-settings.js',
-            array( 'jquery' ),
-            false,
-            true
-        );
-        wp_enqueue_script( 'laterpay-migrator-settings' );
+        $this->get_content();
+    }
 
-        wp_localize_script(
-            'laterpay-migrator-settings',
-            'lpMigratorVars',
-            array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-            )
+    /**
+     * [init_settings_page description]
+     *
+     * @return [type] [description]
+     */
+    public function init_settings_page() {
+        // add sections with fields
+        add_settings_section(
+            'lpmigrator-data',
+            __( 'Parsing', 'laterpay' ),
+            array( $this, 'get_section_description' ),
+            'lpmigrator-settings'
         );
 
-        echo $this->get_content();
+        add_settings_field(
+            'lpmigrator_data',
+            __( 'CSV Data', 'laterpay' ),
+            array( $this, 'get_textarea' ),
+            'lpmigrator-settings',
+            'lpmigrator-data'
+        );
+
+        register_setting( 'lpmigrator-settings', 'lpmigrator_data', array( $this, 'parse_text' ) );
     }
 
     /**
@@ -55,14 +62,47 @@ class LaterPay_Migrator_Settings {
      * @return [type] [description]
      */
     public function get_content() {
-        $content = '
-            <p>Upload your exported subscriptions here</p>
-            <form id="lp_migrator_uploadForm">
-                <input type="file" id="lp_migrator_fileInput" name="lp_migrator_file" multiple="false" />
-                <input type="submit" id="lp_migrator_startUpload" value="Upload" />
-            </form>
-        ';
+        $content_head = '<div class="wrap">
+                         <h2>Laterpay Migration Settings</h2>
+                         <form id="lpmigration" method="POST" action="options.php">';
+        echo $content_head;
+        settings_fields( 'lpmigrator-settings' );
+        do_settings_sections( 'lpmigrator-settings' );
+        submit_button();
+        echo '</form></div>';
+    }
 
-        return $content;
+    /**
+     * [get_section_description description]
+     *
+     * @return [type] [description]
+     */
+    public function get_section_description( $args ) {
+        echo 'Enter your CSV Data here and press save to parse it:';
+    }
+
+    /**
+     * [get_textarea description]
+     *
+     * @return [type] [description]
+     */
+    public function get_textarea( $args ) {
+        $inputs_markup = '';
+
+        $inputs_markup .= '<textarea rows="20" cols="80" name="lpmigrator_data">';
+        $inputs_markup .= '</textarea>';
+
+        echo $inputs_markup;
+    }
+
+    /**
+     * [parse_text description]
+     *
+     * @param $input
+     *
+     * @return [type] [description]
+     */
+    public function parse_text( $input ) {
+        // limit and parse data here
     }
 }

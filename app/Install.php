@@ -2,52 +2,55 @@
 
 class LaterPay_Migrator_Install {
 
-    public static $time_pass_seed_data = array(
-                                            0 => array(
-                                                'duration'      => 3,
-                                                'period'        => 3,
-                                                'price'         => 14.99,
-                                                'revenue_model' => 'sis',
-                                                'title'         => '3-Monats-Pass',
-                                                'description'   => '3 Monate Zugriff auf alle Inhalte dieser Webseite',
-                                            ),
-                                            1 => array(
-                                                'duration'      => 6,
-                                                'period'        => 3,
-                                                'price'         => 24.99,
-                                                'revenue_model' => 'sis',
-                                                'title'         => '6-Monats-Pass',
-                                                'description'   => '6 Monate Zugriff auf alle Inhalte dieser Webseite',
-                                            ),
-                                            2 => array(
-                                                'duration'      => 1,
-                                                'period'        => 4,
-                                                'price'         => 44.99,
-                                                'revenue_model' => 'sis',
-                                                'title'         => '1-Jahres-Pass',
-                                                'description'   => '1 Jahr Zugriff auf alle Inhalte dieser Webseite',
-                                            ),
-                                      );
+    public static $subscriptions_table_name = 'laterpay_subscriber_migrations';
+
+    public static $time_pass_seed_data      = array(
+                                                0 => array(
+                                                    'duration'      => 3,
+                                                    'period'        => 3,
+                                                    'price'         => 14.99,
+                                                    'revenue_model' => 'sis',
+                                                    'title'         => '3-Monats-Pass',
+                                                    'description'   => '3 Monate Zugriff auf alle Inhalte dieser Webseite',
+                                                ),
+                                                1 => array(
+                                                    'duration'      => 6,
+                                                    'period'        => 3,
+                                                    'price'         => 24.99,
+                                                    'revenue_model' => 'sis',
+                                                    'title'         => '6-Monats-Pass',
+                                                    'description'   => '6 Monate Zugriff auf alle Inhalte dieser Webseite',
+                                                ),
+                                                2 => array(
+                                                    'duration'      => 1,
+                                                    'period'        => 4,
+                                                    'price'         => 44.99,
+                                                    'revenue_model' => 'sis',
+                                                    'title'         => '1-Jahres-Pass',
+                                                    'description'   => '1 Jahr Zugriff auf alle Inhalte dieser Webseite',
+                                                ),
+                                            );
 
     /**
      * [install description]
      *
      * @return [type] [description]
      */
-    public static function install() {
+    public function install() {
         // create table for storing parsed subscriber data
-        self::create_custom_table();
+        $this->create_custom_table();
 
         // create equivalent time passes for existing subscriptions
         if ( ! LaterPay_Helper_TimePass::get_all_time_passes() ) {
-            self::create_timepasses();
+            $this->create_timepasses();
         }
 
         // parse CSV, if it's present in uploads folder
-        self::parse_csv();
+        $this->parse_csv();
 
         // only allow time pass purchases and no purchases of individual posts
         update_option( 'laterpay_only_time_pass_purchases_allowed', 1 );
+        add_option( 'lpmigrator_limit', 200 );
     }
 
     /**
@@ -74,11 +77,11 @@ class LaterPay_Migrator_Install {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-        $table_subscriber_migrations = $wpdb->prefix . 'laterpay_subscriber_migrations';
+        $table_subscriber_migrations = $wpdb->prefix . self::$subscriptions_table_name;
         $sql = "
             CREATE TABLE $table_subscriber_migrations (
                 id                      INT(11)        NOT NULL AUTO_INCREMENT,
-                purchase_date           TIMESTAMP      NOT NULL,
+                subscription_end        DATE           NOT NULL,
                 subscription_duration   tinyint(1)     NOT NULL,
                 email                   varchar(255)   NOT NULL,
                 migrated_to_laterpay    tinyint(1)     NOT NULL,
@@ -96,7 +99,7 @@ class LaterPay_Migrator_Install {
     protected function parse_csv() {
         global $wpdb;
 
-        $table_subscriber_migrations = $wpdb->prefix . 'laterpay_subscriber_migrations';
+        $table_subscriber_migrations = $wpdb->prefix . self::$subscriptions_table_name;
         $sql = "
             SELECT
                 *

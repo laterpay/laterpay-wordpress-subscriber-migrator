@@ -3,8 +3,7 @@
 class LaterPay_Migrator_ParseCSV {
 
     public static $column_mapping = array(
-        'date'      => 'Datum',
-        'time'      => 'Zeit',
+        'date'      => 'Nächste Zahlung am',
         'type'      => 'Erste Zahlung',
         'status'    => 'Zahlungsstatus',
         'email'     => 'E-Mail',
@@ -28,6 +27,7 @@ class LaterPay_Migrator_ParseCSV {
         if ( ! $csvFile ) {
             return false;
         }
+        // get text input data
 
         $data = array();
         foreach ( $csvFile as $line ) {
@@ -51,18 +51,16 @@ class LaterPay_Migrator_ParseCSV {
             // check status
             $status = strpos( $final_row['status'], 'aktiv' ) !== false ? 1 : 0;
             if ( ! $status ) {
-                continue
-            };
+                continue;
+            }
 
             // process final row and set it to array
             $migrated_to_laterpay_data = array();
-            $migrated_to_laterpay_data['puchased_date']         =   '\'' .
+            $migrated_to_laterpay_data['subscription_end']       =   '\'' .
                                                                     date(
-                                                                        'Y-m-d H:i:s',
+                                                                        'Y-m-d',
                                                                         strtotime(
-                                                                            $final_row['date'] .
-                                                                            ' ' .
-                                                                            $final_row['time']
+                                                                            $final_row['date']
                                                                         )
                                                                     ) .
                                                                     '\'';
@@ -78,6 +76,7 @@ class LaterPay_Migrator_ParseCSV {
         $table      = $wpdb->prefix . 'laterpay_subscriber_migrations';
         $total_rows = count( $final_data );
         $last_key   = 0;
+        $limit      = get_option( 'lpmigrator_limit' );
 
         while ( $total_rows > 0 ) {
             // create SQL from final data
@@ -86,14 +85,14 @@ class LaterPay_Migrator_ParseCSV {
 
             $sql        = "
                 INSERT INTO
-                    {$table} (purchase_date, subscription_duration, email, migrated_to_laterpay)
+                    {$table} (subscription_end, subscription_duration, email, migrated_to_laterpay)
                 VALUES
             ";
 
             foreach ( $final_data as $key => $data ) {
                 if ( $key < $last_key ) {
-                    continue
-                };
+                    continue;
+                }
 
                 if ( ! $is_first ) {
                     $sql .= ',';
@@ -104,7 +103,7 @@ class LaterPay_Migrator_ParseCSV {
                 $is_first = false;
                 $count++;
 
-                if ( $count > self::$limit ) {
+                if ( $count > $limit ) {
                     break;
                 }
             }
@@ -113,13 +112,13 @@ class LaterPay_Migrator_ParseCSV {
 
             $last_key = $key + 1;
 
-            $total_rows = $total_rows - self::$limit;
+            $total_rows = $total_rows - $limit;
 
             $result = $wpdb->query( $sql );
 
             if ( ! $result ) {
-                return false
-            };
+                return false;
+            }
         }
 
         return $total_rows;

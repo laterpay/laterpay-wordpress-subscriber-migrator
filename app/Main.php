@@ -9,13 +9,11 @@ class LaterPay_Migrator_Main {
      */
     public function init() {
         // register Ajax actions
+        $settings = new LaterPay_Migrator_Settings;
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
-        add_action( 'admin_menu',                                   array( new LaterPay_Migrator_Settings, 'add_settings_page' ) );
+        add_action( 'admin_menu',                                   array( $settings, 'add_settings_page' ) );
+        add_action( 'admin_init',                                   array( $settings, 'init_settings_page' ) );
         add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role') );
-        // TODO: add file upload and processing to the settings?
-        add_action( 'wp_ajax_laterpay_migrator_upload_file',        array( $this, 'ajax_upload_file' ) );
-        // TODO: why is wp_ajax_parse_csv not prefixed with 'laterpay_migrator_'?
-        add_action( 'wp_ajax_parse_csv',                            array( $this, 'ajax_parse_csv' ) );
 
         // include styles and scripts only if user is logged in and not in admin area
         if ( ! is_admin() && is_user_logged_in() ) {
@@ -37,7 +35,7 @@ class LaterPay_Migrator_Main {
             wp_enqueue_script( 'laterpay-migrator-frontend' );
 
             wp_localize_script(
-                'lpcustom-front',
+                'laterpay-migrator-frontend',
                 'lpMigratorVars',
                 array(
                     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -98,30 +96,6 @@ class LaterPay_Migrator_Main {
     }
 
     /**
-     * Ajax method to upload file.
-     *
-     * @wp-hook wp_ajax_laterpay_migrator_upload_file
-     *
-     * @return void
-     */
-    public function ajax_upload_file() {
-        exit;
-    }
-
-    /**
-     * Ajax method to parse CSV.
-     *
-     * @wp-hook wp_ajax_laterpay_migrator_upload_file
-     *
-     * @return void
-     */
-    public function ajax_parse_csv() {
-        $result = LaterPay_Migrator_ParseCSV::parse_csv();
-
-        exit;
-    }
-
-    /**
      * [get_purchase_url description]
      *
      * @return [type] [description]
@@ -142,7 +116,7 @@ class LaterPay_Migrator_Main {
         $subscription_data = LaterPay_Migrator_Subscription::get_subscription_data();
         $time_pass         = LaterPay_Migrator_Subscription::get_time_pass_by_subscription( $subscription_data );
 
-        if ( ! $time_pass ) {
+        if ( ! $time_pass || ! $subscription_data ) {
             return false;
         }
 
@@ -163,7 +137,7 @@ class LaterPay_Migrator_Main {
         $params = array(
             'article_id'    => LaterPay_Helper_TimePass::get_tokenized_time_pass_id( $time_pass['pass_id'] ),
             'pricing'       => $currency . ( $price * 100 ),
-            'expiry'        => '+' . $expiry_time,
+            'expiry'        => $expiry_time,
             'url'           => $url,
             'title'         => $time_pass['title'],
         );
@@ -244,7 +218,8 @@ class LaterPay_Migrator_Main {
      */
     public static function activate() {
         // install table for storing users to be migrated and their respective migration status
-        LaterPay_Migrator_Install::install();
+        $install = new LaterPay_Migrator_Install;
+        $install->install();
 
         // register the notify about_subscription_expiry cron job
         // wp_schedule_event( time(), 'hourly', 'laterpay_notify_about_subscription_expiry' );
