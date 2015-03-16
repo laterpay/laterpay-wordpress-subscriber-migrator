@@ -164,4 +164,26 @@ class LaterPay_Migrator_Subscription {
 
         return (array) $result[0];
     }
+
+    /**
+     * [get_expired_subsriptions description]
+     *
+     * @return [type] [description]
+     */
+    public static function get_expired_subsriptions() {
+        //TODO: implementation
+        return array();
+    }
+
+    /**
+     * [get_subscriptions_by_date description]
+     *
+     * @param  [type] $date [description]
+     *
+     * @return [type]       [description]
+     */
+    public static function get_subscriptions_by_date( $date = null ) {
+        //TODO: implementation
+        return array();
+    }
 }

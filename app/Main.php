@@ -11,7 +11,9 @@ class LaterPay_Migrator_Main {
         // register Ajax actions
         $config = get_laterpay_migrator_config();
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
-        add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role') );
+        add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role' ) );
+        add_action( 'notify_subscription_expired',                  array( 'LaterPay_Migrator_Mail', 'notify_subscription_expired' ) );
+        add_action( 'notify_subscription_about_to_expiry',          array( 'LaterPay_Migrator_Mail', 'notify_subscription_about_to_expiry' ) );
         add_filter( 'modify_menu',                                  array( $this, 'add_menu' ) );
 
         // include styles and scripts only if user is logged in and not in admin area
@@ -240,8 +242,9 @@ class LaterPay_Migrator_Main {
         $install = new LaterPay_Migrator_Install;
         $install->install();
 
-        // register the notify about_subscription_expiry cron job
-        // wp_schedule_event( time(), 'hourly', 'laterpay_notify_about_subscription_expiry' );
+        // register mail sending cron jobs
+        wp_schedule_event( time(), 'daily', 'notify_subscription_expired' );
+        wp_schedule_event( time(), 'daily', 'notify_subscription_about_to_expiry' );
     }
 
     /**
@@ -252,6 +255,7 @@ class LaterPay_Migrator_Main {
      * @return void
      */
     public static function deactivate() {
-        // wp_clear_scheduled_hook( 'laterpay_notify_about_subscription_expiry' );
+        wp_clear_scheduled_hook( 'notify_subscription_expired' );
+        wp_clear_scheduled_hook( 'notify_subscription_about_to_expiry' );
     }
 }
