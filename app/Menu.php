@@ -3,7 +3,7 @@
 class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
 
     /**
-     * Load assets
+     * Load assets.
      *
      * @return void
      */
@@ -44,7 +44,6 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
         );
         wp_enqueue_script( 'laterpay-backend' );
         wp_enqueue_script( 'laterpay-migrator-backend' );
-
     }
 
     /**

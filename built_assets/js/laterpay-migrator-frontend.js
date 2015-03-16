@@ -2,6 +2,8 @@
 
     function laterpayMigratorFrontend() {
         var $o = {
+                body                : $('body'),
+                sitenotice          : $('.lp_sitenotice'),
                 purchaseButton      : $('#lp_buySubscription'),
                 fakePurchaseButton  : '#lp_fakeButton',
             },
@@ -12,6 +14,14 @@
                     getPurchaseUrl();
                 })
                 .on('click', function(e) {e.preventDefault();});
+            },
+
+            displaySitenotice = function() {
+                var spaceForSitenotice = (parseInt($o.body.style.paddingTop, 10) || 0 ) + $o.sitenotice.outerHeight();
+
+                // increase the top padding of the body by the height of the sitenotice
+                // so the sitenotice can be absolute positioned at top:0 without overlap
+                $('body').css('padding-top', spaceForSitenotice + 'px');
             },
 
             getPurchaseUrl = function() {
@@ -32,9 +42,14 @@
                     },
                     'json'
                 );
+            },
+
+            init = function() {
+                displaySitenotice();
+                bindEvents();
             };
 
-        bindEvents();
+        init();
     }
 
     laterpayMigratorFrontend();
