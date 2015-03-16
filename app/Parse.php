@@ -27,7 +27,6 @@ class LaterPay_Migrator_ParseCSV {
         if ( ! $csvFile ) {
             return false;
         }
-        // get text input data
 
         $data = array();
         foreach ( $csvFile as $line ) {
@@ -56,12 +55,10 @@ class LaterPay_Migrator_ParseCSV {
 
             // process final row and set it to array
             $migrated_to_laterpay_data = array();
-            $migrated_to_laterpay_data['subscription_end']       =   '\'' .
+            $migrated_to_laterpay_data['subscription_end']      =   '\'' .
                                                                     date(
                                                                         'Y-m-d',
-                                                                        strtotime(
-                                                                            $final_row['date']
-                                                                        )
+                                                                        strtotime($final_row['date'])
                                                                     ) .
                                                                     '\'';
             $migrated_to_laterpay_data['type']                  = self::$types_match[$final_row['type']];

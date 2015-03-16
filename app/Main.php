@@ -9,7 +9,7 @@ class LaterPay_Migrator_Main {
      */
     public function init() {
         // register Ajax actions
-        $config   = get_laterpay_migrator_config();
+        $config = get_laterpay_migrator_config();
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
         add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role') );
         add_filter( 'modify_menu',                                  array( $this, 'add_menu' ) );
@@ -51,15 +51,15 @@ class LaterPay_Migrator_Main {
     public function render_migration_sitenotice() {
         if ( is_user_logged_in() ) {
             if ( LaterPay_Migrator_Subscription::is_active() ) {
-                $text = '
-                    <div style="float: right;">
+                $sitenotice = '
+                    <div class="lp_sitenotice">
                         <a href="#" id="lp_buySubscription">Purchase</a>
                         <a href="#" id="lp_fakeButton" class="lp_js_doPurchase" style="display:none;" data-laterpay=""></a>
                     </div>
                 ';
 
-                // render notice with LaterPay purchase button
-                echo $text;
+                // render sitenotice with LaterPay purchase button
+                echo $sitenotice;
             }
         }
 
