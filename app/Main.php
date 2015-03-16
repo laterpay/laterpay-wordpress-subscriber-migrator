@@ -9,11 +9,10 @@ class LaterPay_Migrator_Main {
      */
     public function init() {
         // register Ajax actions
-        $settings = new LaterPay_Migrator_Settings;
+        $config   = get_laterpay_migrator_config();
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
-        add_action( 'admin_menu',                                   array( $settings, 'add_settings_page' ) );
-        add_action( 'admin_init',                                   array( $settings, 'init_settings_page' ) );
         add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role') );
+        add_filter( 'modify_menu',                                  array( $this, 'add_menu' ) );
 
         // include styles and scripts only if user is logged in and not in admin area
         if ( ! is_admin() && is_user_logged_in() ) {
@@ -21,13 +20,13 @@ class LaterPay_Migrator_Main {
 
             wp_register_style(
                 'laterpay-migrator-frontend',
-                LATERPAY_MIGRATOR_CSS_URL . 'laterpay-migrator-frontend.css'
+                $config->get( 'css_url' ) . 'laterpay-migrator-frontend.css'
             );
             wp_enqueue_style( 'laterpay-migrator-frontend' );
 
             wp_register_script(
                 'laterpay-migrator-frontend',
-                LATERPAY_MIGRATOR_JS_URL . 'laterpay-migrator-frontend.js',
+                $config->get( 'js_url' ) . 'laterpay-migrator-frontend.js',
                 array( 'jquery' ),
                 false,
                 true
@@ -207,6 +206,26 @@ class LaterPay_Migrator_Main {
         wp_redirect( $redirect_url );
         // exit script after redirect was set
         exit;
+    }
+
+    /**
+     * Add migration tab to the menu
+     *
+     * @param $menu
+     *
+     * @return mixed
+     */
+    public function add_menu( $menu ) {
+        $menu_page = new LaterPay_Migrator_Menu( get_laterpay_migrator_config() );
+
+        $menu[ 'migration' ] = array(
+            'url'   => 'laterpay-migration-tab',
+            'title' => __( 'Migration', 'laterpay' ),
+            'cap'   => 'activate_plugins',
+            'run'   => array( $menu_page, 'render_page' )
+        );
+
+        return $menu;
     }
 
     /**

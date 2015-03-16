@@ -16,27 +16,57 @@ if ( ! function_exists( 'add_action' ) ) {
     exit;
 }
 
-define( 'LATERPAY_MIGRATOR_CSS_URL',    plugin_dir_url( __FILE__ ) . 'built_assets/css/' );
-define( 'LATERPAY_MIGRATOR_JS_URL',     plugin_dir_url( __FILE__ ) . 'built_assets/js/' );
-define( 'LATERPAY_MIGRATOR_UPLOAD_DIR', plugin_dir_url( __FILE__ ) . 'upload/' );
-
 $directory = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
-
 register_activation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'activate' ) );
-
 register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'deactivate' ) );
 
 if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
     require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay' . DIRECTORY_SEPARATOR . 'laterpay_load.php' );
+    require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/application/Controller/' . 'Abstract.php' );
 }
 
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Install.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Mail.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Main.php' );
+require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Menu.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Parse.php' );
-require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Settings.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Subscription.php' );
 
 $main = new LaterPay_Migrator_Main();
 
 add_action( 'init', array( $main, 'init' ) );
+
+/**
+ * Get the plugin settings.
+ *
+ * @return LaterPay_Model_Config
+ */
+function get_laterpay_migrator_config() {
+    $config = new LaterPay_Model_Config();
+
+    // plugin default settings for paths and directories
+    $config->set( 'plugin_dir_path',    plugin_dir_path( __FILE__ ) );
+    $config->set( 'plugin_file_path',   __FILE__ );
+    $config->set( 'plugin_base_name',   plugin_basename( __FILE__ ) );
+    $config->set( 'plugin_url',         plugins_url( '/', __FILE__ ) );
+    $config->set( 'view_dir',           plugin_dir_path( __FILE__ ) . 'views/' );
+
+    // laterpay plugin paths
+    $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
+    $laterpay_plugin_data = get_plugin_data( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/laterpay.php' );
+    $config->set( 'lp_version',         $laterpay_plugin_data['Version'] );
+    $config->set( 'lp_plugin_url',      $laterpay_plugin_url );
+    $config->set( 'lp_view_dir',        $laterpay_plugin_url . 'views/' );
+    $config->set( 'lp_css_url',         $laterpay_plugin_url . 'built_assets/css/' );
+    $config->set( 'lp_js_url',          $laterpay_plugin_url . 'built_assets/js/' );
+    $config->set( 'lp_image_url',       $laterpay_plugin_url . 'built_assets/img/' );
+
+    // migration plugin assets
+    $plugin_url = $config->get( 'plugin_url' );
+    $config->set( 'css_url',            $plugin_url . 'built_assets/css/' );
+    $config->set( 'js_url',             $plugin_url . 'built_assets/js/' );
+    $config->set( 'image_url',          $plugin_url . 'built_assets/img/' );
+    $config->set( 'upload_dir',         $plugin_url . 'upload/' );
+
+    return $config;
+}
