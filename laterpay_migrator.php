@@ -53,10 +53,11 @@ function get_laterpay_migrator_config() {
 
     // laterpay plugin paths
     $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
-    $laterpay_plugin_data = get_plugin_data( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/laterpay.php' );
+    $laterpay_plugin_dir  = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/';
+    $laterpay_plugin_data = get_plugin_data( $laterpay_plugin_dir . 'laterpay.php' );
     $config->set( 'lp_version',         $laterpay_plugin_data['Version'] );
     $config->set( 'lp_plugin_url',      $laterpay_plugin_url );
-    $config->set( 'lp_view_dir',        $laterpay_plugin_url . 'views/' );
+    $config->set( 'lp_view_dir',        $laterpay_plugin_dir . 'views/' );
     $config->set( 'lp_css_url',         $laterpay_plugin_url . 'built_assets/css/' );
     $config->set( 'lp_js_url',          $laterpay_plugin_url . 'built_assets/js/' );
     $config->set( 'lp_image_url',       $laterpay_plugin_url . 'built_assets/img/' );

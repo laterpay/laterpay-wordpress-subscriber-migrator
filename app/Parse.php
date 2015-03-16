@@ -21,8 +21,11 @@ class LaterPay_Migrator_ParseCSV {
      * @return [type] [description]
      */
     public static function parse_csv() {
+        $config = get_laterpay_migrator_config();
+        $file   = $config->get( 'upload_dir' ) . 'export.csv';
+
         // get all data from CSV file
-        $csvFile = file( LATERPAY_MIGRATOR_UPLOAD_DIR . 'export.csv' );
+        $csvFile = @file( $file );
 
         if ( ! $csvFile ) {
             return false;
