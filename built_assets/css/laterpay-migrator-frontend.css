@@ -1,1 +1,15 @@
-/* Add CSS here */
+body {
+    position: relative;
+}
+
+.lp_sitenotice {
+    background: hsl(47, 100%, 50%);
+    left: 0;
+    margin: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 1000000;
+}
