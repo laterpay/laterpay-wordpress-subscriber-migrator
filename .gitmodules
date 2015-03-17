@@ -1,3 +1,5 @@
 [submodule "library/mailchimp"]
 	path = library/mailchimp
 	url = https://bitbucket.org/mailchimp/mailchimp-api-php.git
+	update = checkout
+	ignore = all
