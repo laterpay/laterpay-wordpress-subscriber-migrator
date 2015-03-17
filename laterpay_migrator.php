@@ -6,7 +6,7 @@
  * Author: LaterPay GmbH and Aliaksandr Vahura
  * Version: 0.1
  * Author URI: https://laterpay.net/
- * Textdomain: laterpay
+ * Textdomain: laterpay_migrator
  * Domain Path: /languages
  */
 
