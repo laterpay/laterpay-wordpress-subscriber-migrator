@@ -8,13 +8,18 @@ class LaterPay_Migrator_Mail {
      * @return array $expired_subscriptions
      */
     public static function notify_subscription_expired() {
-        $expired_subscriptions = LaterPay_Migrator_Subscription::get_expired_subsriptions();
+        $expired_subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry( true );
         if ( $expired_subscriptions ) {
+            $data = array();
             foreach ( $expired_subscriptions as $subscription ) {
+                // set user email to data
+                $data[] = array( 'email' => $subscription['email'] );
+                // set user notified about subscription expired flag
+                LaterPay_Migrator_Subscription::mark_user( 'expired_notified' );
+            }
+            if ( $data ) {
                 // notify user that his subscription expired
-                self::send_subscription_expired_notification( $subscription );
-                // TODO: remove expired subscription from table or mark as migrated??
-                LaterPay_Migrator_Subscription::mark_as_migrated_to_laterpay( true );
+                self::send_notification_email( 'Laterpay Migration Expired', $data );
             }
         }
 
@@ -26,31 +31,63 @@ class LaterPay_Migrator_Mail {
      *
      * @return [type] [description]
      */
-    public static function send_subscription_expired_notification( $data ) {
-        // TODO: implement mail sending
+    public static function send_notification_email( $list_name, $data = array() ) {
+        if ( ! $data || ! is_array( $data ) ) {
+            return;
+        }
+
+        // init mailchimp
+        $mailchimp = self::init_mailchimp();
+        $list      = $mailchimp->lists->getList( array( 'list_name' => $list_name ) );
+        $list_id   = $list['data'][0]['id'];
+
+        // subsribe users from $data to this list
+        $subscribe_data = array();
+        // TODO: array_map can be used here
+        foreach ( $data as $email ) {
+            $subscribe_data[] = array( 'email' => $email );
+        }
+        $mailchimp->lists->batchSubscribe( $list_id, $data, false );
+
+        // send campaign
+        $campaign_name = get_option( 'laterpay_migration_company_name' );
+        $campaign      = $mailchimp->campaigns->getList( array( 'title' => $campaign_name ) );
+        $campaign_id   = $campaign['data'][0]['id'];
+        $mailchimp->campaigns->send( $campaign_id );
+
+        // unsubscribe users from $data
+        $mailchimp->lists->batchUnsubscribe( $list_id, $data, false, false );
     }
 
     /**
      * Notify users about their subscriptions about to expiry ( 2 weeks )
      */
     public static function notify_subscription_about_to_expiry() {
-        $subscriptions = LaterPay_Migrator_Subscription::get_subscriptions_by_date();
+        $subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry();
         if ( $subscriptions ) {
+            $data = array();
             foreach ( $subscriptions as $subscription ) {
-                // notify user that his subscription about to be expired
-                self::send_subscription_expiry_warning_notification( $subscription );
+                // set user email to data
+                $data[] = array( 'email' => $subscription['email'] );
+                // set user notified about subscription expired flag
+                LaterPay_Migrator_Subscription::mark_user( 'about_to_expiry_notified' );
+            }
+            if ( $data ) {
+                // notify user that his subscription expired
+                self::send_notification_email( 'Laterpay Migration About To Expiry', $data );
             }
         }
 
         return $subscriptions;
     }
 
-    /**
-     * Send notification email to the subscriber if their subscription about to expiry
-     *
-     * @return [type] [description]
-     */
-    public static function send_subscription_expiry_warning_notification( $data ) {
-        // TODO: implement mail sending
+    public static function init_mailchimp() {
+        $api_key   = get_option( 'lpmigrator_mailchimp_api_key' );
+        $mailchimp = new Mailchimp( $api_key );
+        // disable ssl verification
+        curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+        return $mailchimp;
     }
 }

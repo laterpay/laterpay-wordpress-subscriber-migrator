@@ -51,6 +51,7 @@ class LaterPay_Migrator_Install {
         // only allow time pass purchases and no purchases of individual posts
         update_option( 'laterpay_only_time_pass_purchases_allowed', 1 );
         add_option( 'lpmigrator_limit', 200 );
+        add_option( 'lpmigrator_about_to_expiry_modifier', '2 week' );
     }
 
     /**
@@ -80,11 +81,13 @@ class LaterPay_Migrator_Install {
         $table_subscriber_migrations = $wpdb->prefix . self::$subscriptions_table_name;
         $sql = "
             CREATE TABLE $table_subscriber_migrations (
-                id                      INT(11)        NOT NULL AUTO_INCREMENT,
-                subscription_end        DATE           NOT NULL,
-                subscription_duration   tinyint(1)     NOT NULL,
-                email                   varchar(255)   NOT NULL,
-                migrated_to_laterpay    tinyint(1)     NOT NULL,
+                id                        INT(11)       NOT NULL AUTO_INCREMENT,
+                subscription_end          DATE          NOT NULL,
+                subscription_duration     tinyint(1)    NOT NULL,
+                email                     varchar(255)  NOT NULL,
+                migrated_to_laterpay      tinyint(1)    NOT NULL,
+                about_to_expiry_notified  tinyint(1)    NOT NULL DEFAULT 0,
+                expired_notified          tinyint(1)    NOT NULL DEFAULT 0,
                 PRIMARY KEY  (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 

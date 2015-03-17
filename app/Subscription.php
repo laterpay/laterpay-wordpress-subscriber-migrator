@@ -20,14 +20,14 @@ class LaterPay_Migrator_Subscription {
      *
      * @param  [type] $data [description]
      *
-     * @return [type]       [description]
+     * @return null|int
      */
     public static function get_expiry_time( $data = null ) {
         if ( ! $data ) {
             $data = self::get_subscription_data();
 
             if ( ! $data ) {
-                return false;
+                return null;
             }
         }
 
@@ -37,7 +37,7 @@ class LaterPay_Migrator_Subscription {
     /**
      * [get_subscription_data description]
      *
-     * @return [type] [description]
+     * @return array|null $result
      */
     public static function get_subscription_data() {
         global $wpdb;
@@ -46,7 +46,7 @@ class LaterPay_Migrator_Subscription {
         $user_data = self::get_user_data();
 
         if ( ! $user_data ) {
-            return false;
+            return null;
         }
 
         $email     = $user_data->user_email;
@@ -60,13 +60,13 @@ class LaterPay_Migrator_Subscription {
                 email = '$email'
             ;";
 
-        $result = $wpdb->get_results( $sql );
+        $result = $wpdb->get_results( $sql, ARRAY_A );
 
         if ( ! $result ) {
-            return false;
+            return null;
         }
 
-        return (array) $result[0];
+        return $result[0];
     }
 
     /**
@@ -74,7 +74,7 @@ class LaterPay_Migrator_Subscription {
      *
      * @param  [type]  $data [description]
      *
-     * @return boolean       [description]
+     * @return boolean
      */
     public static function is_active( $data = null ) {
         if ( ! $data ) {
@@ -93,25 +93,26 @@ class LaterPay_Migrator_Subscription {
     }
 
     /**
-     * [mark_as_migrated_to_laterpay description]
+     * [mark_user description]
      *
-     * @param  [type] $is_migrated_to_laterpay [description]
+     * @param  [type] $flag [description]
+     * @param  [type] $value [description]
      *
-     * @return [type]                          [description]
+     * @return boolean
      */
-    public static function mark_as_migrated_to_laterpay( $is_migrated_to_laterpay ) {
+    public static function mark_user( $flag, $value = true ) {
         global $wpdb;
 
-        $table                      = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
-        $user_data                  = self::get_user_data();
-        $email                      = $user_data->user_email;
-        $is_migrated_to_laterpay    = (int) $is_migrated_to_laterpay;
+        $table      = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
+        $user_data  = self::get_user_data();
+        $email      = $user_data->user_email;
+        $value      = (int) $value;
 
         $sql   = "
             UPDATE
                 {$table}
             SET
-                migrated_to_laterpay = {$is_migrated_to_laterpay}
+                {$flag} = {$value}
             WHERE
                 email = '$email'
             ;";
@@ -130,14 +131,14 @@ class LaterPay_Migrator_Subscription {
      *
      * @param  [type] $data [description]
      *
-     * @return [type]       [description]
+     * @return array|null $result
      */
     public static function get_time_pass_by_subscription( $data = null ) {
         if ( ! $data ) {
             $data = self::get_subscription_data();
 
             if ( ! $data ) {
-                return false;
+                return null;
             }
         }
 
@@ -156,34 +157,46 @@ class LaterPay_Migrator_Subscription {
                 period   = {$opts['period']}
             ;";
 
-        $result = $wpdb->get_results( $sql );
+        $result = $wpdb->get_results( $sql, ARRAY_A );
 
         if ( ! $result ) {
-            return false;
+            return null;
         }
 
-        return (array) $result[0];
+        return $result[0];
     }
 
     /**
-     * [get_expired_subsriptions description]
+     * [get_subsriptions_by_expiry description]
      *
-     * @return [type] [description]
+     * @return array|null $result
      */
-    public static function get_expired_subsriptions() {
-        //TODO: implementation
-        return array();
-    }
+    public static function get_subsriptions_by_expiry( $is_expired = false ) {
+        global $wpdb;
 
-    /**
-     * [get_subscriptions_by_date description]
-     *
-     * @param  [type] $date [description]
-     *
-     * @return [type]       [description]
-     */
-    public static function get_subscriptions_by_date( $date = null ) {
-        //TODO: implementation
-        return array();
+        $modifier     = get_option( 'lpmigrator_about_to_expiry_modifier' );
+        $table        = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
+        $current_date = date( 'Y-m-d', time() );
+
+        $sql = "
+            SELECT
+                *
+            FROM
+                {$table}
+            WHERE ";
+
+        if ( $is_expired ) {
+            $sql .= "subscription_end < '$current_date';";
+        } else {
+            $sql .= "subscription_end <= DATE_ADD( '$current_date', INTERVAL $modifier );";
+        }
+
+        $result = $wpdb->get_results( $sql, ARRAY_A );
+
+        if ( ! $result ) {
+            return null;
+        }
+
+        return $result;
     }
 }

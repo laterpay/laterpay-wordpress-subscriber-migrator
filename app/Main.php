@@ -199,7 +199,7 @@ class LaterPay_Migrator_Main {
 
         if ( $has_access ) {
             // mark user as migrated to LaterPay
-            LaterPay_Migrator_Subscription::mark_as_migrated_to_laterpay( true );
+            LaterPay_Migrator_Subscription::mark_user( 'migrated_to_laterpay' );
 
             // remove role 'subscriber' from user, if he has already migrated to using LaterPay time passes
             // TODO: Should we really remove this role from the user?
