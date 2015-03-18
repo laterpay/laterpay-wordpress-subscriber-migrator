@@ -20,7 +20,7 @@ class LaterPay_Migrator_Mail {
             if ( $data ) {
                 // notify user that his subscription expired
                 $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_after_expired' );
-                self::send_notification_email( 'Laterpay Migration Expired', $campaign_name, $data );
+                self::send_notification_email( $campaign_name, $data );
             }
         }
 
@@ -30,34 +30,46 @@ class LaterPay_Migrator_Mail {
     /**
      * Notify user that his subscription expired already
      *
-     * @return [type] [description]
+     * @param string $campaign_name mailchimp campaign name
+     * @param array  $data          array of emails
+     *
+     * @return bool|string          true or error message
      */
-    public static function send_notification_email( $list_name, $campaign_name, $data = array() ) {
+    public static function send_notification_email( $campaign_name, $data = array() ) {
         if ( ! $data || ! is_array( $data ) ) {
             return;
         }
 
-        // init mailchimp
-        $mailchimp = self::init_mailchimp();
-        $list      = $mailchimp->lists->getList( array( 'list_name' => $list_name ) );
-        $list_id   = $list['data'][0]['id'];
+        // wrap in try catch block
+        try {
+            // init mailchimp
+            $mailchimp    = self::init_mailchimp();
 
-        // subsribe users from $data to this list
-        $subscribe_data = array();
-        // TODO: array_map can be used here
-        foreach ( $data as $email ) {
-            $subscribe_data[] = array( 'email' => $email );
+            // get campaign
+            $campaign     = $mailchimp->campaigns->getList( array( 'title' => $campaign_name ) );
+            $campaign_id  = $campaign['data'][0]['id'];
+            $list_id      = $campaign['data'][0]['list_id'];
+
+            // subsribe users from $data to this list
+            $subscribe_data = array();
+            foreach ( $data as $email ) {
+                $subscribe_data[] = array( 'email' => $email );
+            }
+            $mailchimp->lists->batchSubscribe( $list_id, $subscribe_data, false );
+
+            // send campaign
+            $r_campaign    = $mailchimp->campaigns->replicate( $campaign_id );
+            $r_campaign_id = $r_campaign['id'];
+            $mailchimp->campaigns->send( $r_campaign_id );
+
+            // unsubscribe users from $data
+            $mailchimp->lists->batchUnsubscribe( $list_id, $data, false, false );
+
+        } catch ( Exception $e ) {
+            return $e->getMessage();
         }
-        $mailchimp->lists->batchSubscribe( $list_id, $data, false );
 
-        // send campaign
-        // TODO: replicate campaign
-        $campaign      = $mailchimp->campaigns->getList( array( 'title' => $campaign_name ) );
-        $campaign_id   = $campaign['data'][0]['id'];
-        $mailchimp->campaigns->send( $campaign_id );
-
-        // unsubscribe users from $data
-        $mailchimp->lists->batchUnsubscribe( $list_id, $data, false, false );
+        return true;
     }
 
     /**
@@ -76,13 +88,18 @@ class LaterPay_Migrator_Mail {
             if ( $data ) {
                 // notify user that his subscription expired
                 $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_before_expired' );
-                self::send_notification_email( 'Laterpay Migration About To Expiry', $campaign_name, $data );
+                self::send_notification_email( $campaign_name, $data );
             }
         }
 
         return $subscriptions;
     }
 
+    /**
+     * Init mailchimp
+     *
+     * @return Mailchimp
+     */
     public static function init_mailchimp() {
         $api_key   = get_option( 'lpmigrator_mailchimp_api_key' );
         $mailchimp = new Mailchimp( $api_key );
