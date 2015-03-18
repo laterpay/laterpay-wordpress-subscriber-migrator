@@ -81,13 +81,13 @@
                 </label>
             </div>
 
-            <a href="#" id="laterpay_migrator_activate_button" class="button button-primary">
+            <a href="#" id="lp_js_startMigration" class="button button-primary">
                 <?php _e( 'Start Migration', 'laterpay_migrator' ); ?>
             </a>
         </div>
 
         <h2><?php _e( 'Subscriber Data CSV Import', 'laterpay_migrator' ); ?></h2>
-        <form id="laterpay_migrator_file_upload_form" method="post">
+        <form id="lp_js_uploadForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_file_upload">
             <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator_form' ); } ?>
             <div>
@@ -100,7 +100,7 @@
                                 </div>
                                 <span class="lp_upload__input-wrapper">
                                     <span class="lp_upload__button button button-primary"><?php _e( 'Select CSV File to Upload', 'laterpay_migrator' ); ?></span>
-                                    <input type="file" class="lp_upload__input" name="file" size="10" accept=".csv">
+                                    <input type="file" id="lp_js_fileInput" class="lp_upload__input" name="file" size="10" accept=".csv">
                                 </span>
                             </td>
                         </tr>
@@ -109,7 +109,7 @@
             </div>
         </form>
 
-        <form id="laterpay_migrator_main_form" method="post">
+        <form id="lp_js_migratorMainForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_activate">
             <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator_form' ); } ?>
             <div>

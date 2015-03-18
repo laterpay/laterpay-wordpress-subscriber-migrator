@@ -4,27 +4,27 @@
         var $o = {
                 // file upload
                 files               : undefined,
-                fileUploadForm      : $('#laterpay_migrator_file_upload_form'),
-                fileInput           : $('.lp_upload__input'),
+                fileUploadForm      : $('#lp_js_uploadForm'),
+                fileInput           : $('#lp_js_fileInput'),
                 // activation
-                activateButton      : $('#laterpay_migrator_activate_button'),
-                mainForm            : $('#laterpay_migrator_main_form'),
+                activateButton      : $('#lp_js_startMigration'),
+                mainForm            : $('#lp_js_migratorMainForm'),
             },
 
             bindEvents = function() {
                 // bind file upload
                 $o.fileInput
-                    .on('change', function() {
-                        $o.files = event.target.files;
-                        uploadFile();
-                    });
+                .on('change', function() {
+                    $o.files = event.target.files;
+                    uploadFile();
+                });
 
                 // bind activation
                 $o.activateButton
-                    .mousedown(function() {
-                        activateMigration();
-                    })
-                    .click(function(e) {e.preventDefault();});
+                .mousedown(function() {
+                    activateMigration();
+                })
+                .click(function(e) {e.preventDefault();});
             },
 
             uploadFile = function() {
@@ -39,8 +39,7 @@
                     dataType: 'json',
                     processData: false,
                     contentType: false,
-                    success: function(data)
-                    {
+                    success: function(data) {
                         // message
                     }
                 });
@@ -52,10 +51,10 @@
                     $o.mainForm.serializeArray(),
                     function(data) {
                         // message
-                        // refresh block with state and etc.
+                        // refresh block with state etc.
                     },
                     'json'
-                )
+                );
             },
 
             init = function() {
