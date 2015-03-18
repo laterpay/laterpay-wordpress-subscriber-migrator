@@ -36,7 +36,7 @@ class LaterPay_Migrator_Mail {
      * @return bool|string          true or error message
      */
     public static function send_notification_email( $campaign_name, $data = array() ) {
-        if ( ! $data || ! is_array( $data ) ) {
+        if ( ! $data || ! is_array( $data ) || ! $campaign_name ) {
             return;
         }
 
