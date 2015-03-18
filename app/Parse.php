@@ -1,6 +1,6 @@
 <?php
 
-class LaterPay_Migrator_ParseCSV {
+class LaterPay_Migrator_Parse {
 
     public static $column_mapping = array(
         'date'      => 'Nächste Zahlung am',
@@ -122,5 +122,53 @@ class LaterPay_Migrator_ParseCSV {
         }
 
         return $total_rows;
+    }
+
+    /**
+     * Upload file
+     *
+     * @return void
+     */
+    public static function file_upload() {
+        // TODO: clear upload folder before upload??
+        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator_form' ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Incorrect token.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        if ( ! isset( $_FILES ) || count( $_FILES  ) > 1 ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Incorrect file.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        $config = get_laterpay_migrator_config();
+
+        // upload file
+        foreach($_FILES as $file)
+        {
+            if ( ! move_uploaded_file( $file['tmp_name'], $config->get( 'upload_dir' ) . basename( $file['name'] ) ) ) {
+                wp_send_json(
+                    array(
+                        'success' => false,
+                        'message' => __( 'Can\'t upload file.', 'laterpay_migrator' ),
+                    )
+                );
+            }
+        }
+
+        wp_send_json(
+            array(
+                'success' => true,
+                'message' => __( 'File was successfully uploaded.', 'laterpay_migrator' ),
+            )
+        );
     }
 }

@@ -19,7 +19,8 @@ class LaterPay_Migrator_Mail {
             }
             if ( $data ) {
                 // notify user that his subscription expired
-                self::send_notification_email( 'Laterpay Migration Expired', $data );
+                $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_after_expired' );
+                self::send_notification_email( 'Laterpay Migration Expired', $campaign_name, $data );
             }
         }
 
@@ -31,7 +32,7 @@ class LaterPay_Migrator_Mail {
      *
      * @return [type] [description]
      */
-    public static function send_notification_email( $list_name, $data = array() ) {
+    public static function send_notification_email( $list_name, $campaign_name, $data = array() ) {
         if ( ! $data || ! is_array( $data ) ) {
             return;
         }
@@ -50,7 +51,7 @@ class LaterPay_Migrator_Mail {
         $mailchimp->lists->batchSubscribe( $list_id, $data, false );
 
         // send campaign
-        $campaign_name = get_option( 'laterpay_migration_company_name' );
+        // TODO: replicate campaign
         $campaign      = $mailchimp->campaigns->getList( array( 'title' => $campaign_name ) );
         $campaign_id   = $campaign['data'][0]['id'];
         $mailchimp->campaigns->send( $campaign_id );
@@ -74,7 +75,8 @@ class LaterPay_Migrator_Mail {
             }
             if ( $data ) {
                 // notify user that his subscription expired
-                self::send_notification_email( 'Laterpay Migration About To Expiry', $data );
+                $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_before_expired' );
+                self::send_notification_email( 'Laterpay Migration About To Expiry', $campaign_name, $data );
             }
         }
 

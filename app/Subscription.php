@@ -186,7 +186,7 @@ class LaterPay_Migrator_Subscription {
             WHERE ";
 
         if ( $is_expired ) {
-            $sql .= "subscription_end < '$current_date';";
+            $sql .= "subscription_end = '$current_date';";
         } else {
             $sql .= "subscription_end <= DATE_ADD( '$current_date', INTERVAL $modifier );";
         }
@@ -198,5 +198,95 @@ class LaterPay_Migrator_Subscription {
         }
 
         return $result;
+    }
+
+    /**
+     * [get_subscriptions_state description]
+     *
+     * @return array $state
+     */
+    public static function get_subscriptions_state() {
+        global $wpdb;
+
+        $state = array(
+            'valid'     => 0,
+            'invalid'   => 0,
+            'offered'   => 0,
+            'ignored'   => 0,
+            'migrated'  => 0,
+            'remaining' => 0,
+            'expiry'    => 0,
+        );
+
+        $table = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
+        $sql   = "
+            SELECT
+                *
+            FROM
+                {$table};";
+
+        $results = $wpdb->get_results( $sql, ARRAY_A );
+
+        if ( ! $results ) {
+            return $state;
+        }
+
+        foreach ( $results as $data ) {
+            // set valid
+            $state['valid'] += 1;
+            // set ignored
+            if ( $data['expired_notified'] && ! $data['migrated_to_laterpay'] ) {
+                $state['ignored'] += 1;
+            }
+            // set migrated
+            if ( $data['migrated_to_laterpay'] ) {
+                $state['migrated'] += 1;
+            }
+            // set last_expiry
+            if ( ! $state['expiry'] || strtotime( $data['subscription_end'] ) > strtotime( $state['expiry'] ) ) {
+                $state['expiry'] = date( 'm-d-Y', strtotime( $data['subscription_end'] ) );
+            }
+        }
+
+        // set remaining
+        $state['remaining'] = $state['valid'] - ( $state['ignored'] + $state['migrated'] );
+
+        return $state;
+    }
+
+    /**
+     * [activate_subscription description]
+     *
+     * @return void
+     */
+    public static function activate_subscription() {
+        $post_form = $_POST;
+        // TODO: validate post data via Laterpay Form and send false if no valid
+
+        update_option( 'lpmigrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
+        update_option( 'lpmigrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
+        update_option( 'lpmigrator_mailchimp_campaign_after_expired',  $post_form['mailchimp_campaign_after_expired'] );
+        update_option( 'lpmigrator_sitenotice_message',                $post_form['sitenotice_message'] );
+        update_option( 'lpmigrator_sitenotice_button_text',            $post_form['sitenotice_button_text'] );
+        update_option( 'lpmigrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
+        update_option( 'lpmigrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
+
+        // TODO: clear table ?? or prevent if table has data
+        // parse uploaded csv file
+        if ( ! LaterPay_Migrator_Parse::parse_csv() ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Error during file processing, probably file not uploaded.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        wp_send_json(
+            array(
+                'success' => true,
+                'message' => __( 'Migration successfully activated.', 'laterpay_migrator' ),
+            )
+        );
     }
 }

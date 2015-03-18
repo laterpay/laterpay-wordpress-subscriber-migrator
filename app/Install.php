@@ -115,7 +115,7 @@ class LaterPay_Migrator_Install {
         $result = $wpdb->get_results( $sql );
 
         if ( ! $result ) {
-            LaterPay_Migrator_ParseCSV::parse_csv();
+            LaterPay_Migrator_Parse::parse_csv();
         }
     }
 }

@@ -44,6 +44,14 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
         );
         wp_enqueue_script( 'laterpay-backend' );
         wp_enqueue_script( 'laterpay-migrator-backend' );
+
+        wp_localize_script(
+            'laterpay-migrator-backend',
+            'lpMigratorVars',
+            array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            )
+        );
     }
 
     /**
@@ -54,10 +62,19 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
     public function render_page() {
         $this->load_assets();
 
+        // assign variables to the template
         $view_args = array(
-            'plugin_is_in_live_mode' => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
-            'top_nav'                => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),
-            'admin_menu'             => LaterPay_Helper_View::get_admin_menu(),
+            'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
+            'top_nav'                           => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),
+            'admin_menu'                        => LaterPay_Helper_View::get_admin_menu(),
+            'subscriptions_state'               => LaterPay_Migrator_Subscription::get_subscriptions_state(),
+            'mailchimp_api_key'                 => get_option( 'lpmigrator_mailchimp_api_key' ),
+            'mailchimp_campaign_before_expired' => get_option( 'lpmigrator_mailchimp_campaign_before_expired' ),
+            'mailchimp_campaign_after_expired'  => get_option( 'lpmigrator_mailchimp_campaign_after_expired' ),
+            'sitenotice_message'                => get_option( 'lpmigrator_sitenotice_message' ),
+            'sitenotice_button_text'            => get_option( 'lpmigrator_sitenotice_button_text' ),
+            'sitenotice_bg_color'               => get_option( 'lpmigrator_sitenotice_bg_color' ),
+            'sitenotice_text_color'             => get_option( 'lpmigrator_sitenotice_text_color' ),
         );
 
         $this->assign( 'laterpay', $view_args );

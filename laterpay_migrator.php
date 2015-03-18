@@ -50,11 +50,12 @@ function get_laterpay_migrator_config() {
     $config = new LaterPay_Model_Config();
 
     // plugin default settings for paths and directories
-    $config->set( 'plugin_dir_path',    plugin_dir_path( __FILE__ ) );
+    $plugin_dir_path = plugin_dir_path( __FILE__ );
+    $config->set( 'plugin_dir_path',    $plugin_dir_path );
     $config->set( 'plugin_file_path',   __FILE__ );
     $config->set( 'plugin_base_name',   plugin_basename( __FILE__ ) );
     $config->set( 'plugin_url',         plugins_url( '/', __FILE__ ) );
-    $config->set( 'view_dir',           plugin_dir_path( __FILE__ ) . 'views/' );
+    $config->set( 'view_dir',           $plugin_dir_path . 'views/' );
 
     // laterpay plugin paths
     $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
@@ -72,7 +73,7 @@ function get_laterpay_migrator_config() {
     $config->set( 'css_url',            $plugin_url . 'built_assets/css/' );
     $config->set( 'js_url',             $plugin_url . 'built_assets/js/' );
     $config->set( 'image_url',          $plugin_url . 'built_assets/img/' );
-    $config->set( 'upload_dir',         $plugin_url . 'upload/' );
+    $config->set( 'upload_dir',         $plugin_dir_path . 'upload/' );
 
     return $config;
 }
