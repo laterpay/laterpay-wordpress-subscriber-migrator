@@ -160,21 +160,21 @@
                             &#10142;
                         </td>
                         <td>
-                            <select>
+                            <select class="lp_input">
                                 <option>TIME PASS HERE</option>
                                 <option>TIME PASS HERE</option>
                                 <option>TIME PASS HERE</option>
                             </select>
                         </td>
                         <td>
-                            <select>
+                            <select class="lp_input">
                                 <option>ROLE HERE</option>
                                 <option>ROLE HERE</option>
                                 <option>ROLE HERE</option>
                             </select>
                         </td>
                         <td>
-                            <select>
+                            <select class="lp_input">
                                 <option>ROLE HERE</option>
                                 <option>ROLE HERE</option>
                                 <option>ROLE HERE</option>
@@ -244,7 +244,8 @@
                 <div class="lp_inline-block lp_1/4">
                     <label><?php _e( 'MailChimp API Key', 'laterpay_migrator' ); ?></label>
                 </div><div class="lp_inline-block lp_1/4">
-                    <input type="text" class="lp_input" name="xxx" value="" placeholder="<?php _e( 'See Account -> API Keys and Authorized Apps', 'laterpay_migrator' ); ?>">
+                    <span class="lp_iconized-input" data-icon="j"></span>
+                    <input type="text" class="lp_input lp_api-credentials__input" name="xxx" value="" placeholder="<?php _e( 'See Account -> API Keys and Authorized Apps', 'laterpay_migrator' ); ?>">
                 </div><div class="lp_inline-block lp_1/4">
                     <dfn>
                         <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients ', 'laterpay_migrator' ); ?>
