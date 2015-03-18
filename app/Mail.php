@@ -15,11 +15,11 @@ class LaterPay_Migrator_Mail {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
                 // set user notified about subscription expired flag
-                LaterPay_Migrator_Subscription::mark_user( 'expired_notified' );
+                LaterPay_Migrator_Subscription::mark_user( 'is_notified_after_expired' );
             }
             if ( $data ) {
                 // notify user that his subscription expired
-                $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_after_expired' );
+                $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
                 self::send_notification_email( $campaign_name, $data );
             }
         }
@@ -83,11 +83,11 @@ class LaterPay_Migrator_Mail {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
                 // set user notified about subscription expired flag
-                LaterPay_Migrator_Subscription::mark_user( 'about_to_expiry_notified' );
+                LaterPay_Migrator_Subscription::mark_user( 'is_notified_before_expired' );
             }
             if ( $data ) {
                 // notify user that his subscription expired
-                $campaign_name = get_option( 'lpmigrator_mailchimp_campaign_before_expired' );
+                $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
                 self::send_notification_email( $campaign_name, $data );
             }
         }
@@ -101,7 +101,7 @@ class LaterPay_Migrator_Mail {
      * @return Mailchimp
      */
     public static function init_mailchimp() {
-        $api_key   = get_option( 'lpmigrator_mailchimp_api_key' );
+        $api_key   = get_option( 'laterpay_migrator_mailchimp_api_key' );
         $mailchimp = new Mailchimp( $api_key );
         // disable ssl verification
         curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);

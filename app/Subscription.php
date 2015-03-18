@@ -7,7 +7,7 @@ class LaterPay_Migrator_Subscription {
      *
      * @return [type] [description]
      */
-    public static function get_user_data() {
+    public static function get_current_user_data() {
         if ( ! is_user_logged_in() ) {
             return false;
         }
@@ -24,32 +24,32 @@ class LaterPay_Migrator_Subscription {
      */
     public static function get_expiry_time( $data = null ) {
         if ( ! $data ) {
-            $data = self::get_subscription_data();
+            $data = self::get_current_user_subscription_data();
 
             if ( ! $data ) {
                 return null;
             }
         }
 
-        return strtotime( $data['subscription_end'] . ' ' . '23:59' );
+        return strtotime( $data['expiry'] . ' ' . '23:59' );
     }
 
     /**
-     * [get_subscription_data description]
+     * [get_current_user_subscription_data description]
      *
      * @return array|null $result
      */
-    public static function get_subscription_data() {
+    public static function get_current_user_subscription_data() {
         global $wpdb;
 
-        $table     = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
-        $user_data = self::get_user_data();
+        $table     = LaterPay_Migrator_Install::get_migration_table_name();
+        $user_data = self::get_current_user_data();
 
         if ( ! $user_data ) {
             return null;
         }
 
-        $email     = $user_data->user_email;
+        $email = $user_data->user_email;
 
         $sql = "
             SELECT
@@ -78,14 +78,14 @@ class LaterPay_Migrator_Subscription {
      */
     public static function is_active( $data = null ) {
         if ( ! $data ) {
-            $data = self::get_subscription_data();
+            $data = self::get_current_user_subscription_data();
 
             if ( ! $data ) {
                 return false;
             }
         }
 
-        if ( $data['migrated_to_laterpay'] ) {
+        if ( $data['is_migrated_to_laterpay'] ) {
             return false;
         }
 
@@ -103,8 +103,8 @@ class LaterPay_Migrator_Subscription {
     public static function mark_user( $flag, $value = true ) {
         global $wpdb;
 
-        $table      = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
-        $user_data  = self::get_user_data();
+        $table      = LaterPay_Migrator_Install::get_migration_table_name();
+        $user_data  = self::get_current_user_subscription_data();
         $email      = $user_data->user_email;
         $value      = (int) $value;
 
@@ -133,37 +133,8 @@ class LaterPay_Migrator_Subscription {
      *
      * @return array|null $result
      */
-    public static function get_time_pass_by_subscription( $data = null ) {
-        if ( ! $data ) {
-            $data = self::get_subscription_data();
-
-            if ( ! $data ) {
-                return null;
-            }
-        }
-
-        global $wpdb;
-
-        $opts  = LaterPay_Migrator_Install::$time_pass_seed_data[$data['subscription_duration']];
-        $table = $wpdb->prefix . 'laterpay_passes';
-
-        $sql = "
-            SELECT
-                *
-            FROM
-                {$table}
-            WHERE
-                duration = {$opts['duration']} AND
-                period   = {$opts['period']}
-            ;";
-
-        $result = $wpdb->get_results( $sql, ARRAY_A );
-
-        if ( ! $result ) {
-            return null;
-        }
-
-        return $result[0];
+    public static function get_time_pass( ) {
+        // TODO: implement get time pass
     }
 
     /**
@@ -174,8 +145,8 @@ class LaterPay_Migrator_Subscription {
     public static function get_subsriptions_by_expiry( $is_expired = false ) {
         global $wpdb;
 
-        $modifier     = get_option( 'lpmigrator_about_to_expiry_modifier' );
-        $table        = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
+        $modifier     = get_option( 'laterpay_migrator_expiry_modifier' );
+        $table        = LaterPay_Migrator_Install::get_migration_table_name();
         $current_date = date( 'Y-m-d', time() );
 
         $sql = "
@@ -183,12 +154,13 @@ class LaterPay_Migrator_Subscription {
                 *
             FROM
                 {$table}
-            WHERE ";
+            WHERE
+                is_migrated_to_laterpay = 0 AND ";
 
         if ( $is_expired ) {
-            $sql .= "subscription_end = '$current_date';";
+            $sql .= "expiry = '$current_date';";
         } else {
-            $sql .= "subscription_end <= DATE_ADD( '$current_date', INTERVAL $modifier );";
+            $sql .= "expiry <= DATE_ADD( '$current_date', INTERVAL $modifier );";
         }
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
@@ -218,7 +190,7 @@ class LaterPay_Migrator_Subscription {
             'expiry'    => 0,
         );
 
-        $table = $wpdb->prefix . LaterPay_Migrator_Install::$subscriptions_table_name;
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
         $sql   = "
             SELECT
                 *
@@ -235,16 +207,16 @@ class LaterPay_Migrator_Subscription {
             // set valid
             $state['valid'] += 1;
             // set ignored
-            if ( $data['expired_notified'] && ! $data['migrated_to_laterpay'] ) {
+            if ( $data['is_notified_after_expired'] && ! $data['is_migrated_to_laterpay'] ) {
                 $state['ignored'] += 1;
             }
             // set migrated
-            if ( $data['migrated_to_laterpay'] ) {
+            if ( $data['is_migrated_to_laterpay'] ) {
                 $state['migrated'] += 1;
             }
             // set last_expiry
-            if ( ! $state['expiry'] || strtotime( $data['subscription_end'] ) > strtotime( $state['expiry'] ) ) {
-                $state['expiry'] = date( 'm-d-Y', strtotime( $data['subscription_end'] ) );
+            if ( ! $state['expiry'] || strtotime( $data['expiry'] ) > strtotime( $state['expiry'] ) ) {
+                $state['expiry'] = date( 'm-d-Y', strtotime( $data['expiry'] ) );
             }
         }
 
@@ -263,21 +235,20 @@ class LaterPay_Migrator_Subscription {
         $post_form = $_POST;
         // TODO: validate post data via Laterpay Form and send false if no valid
 
-        update_option( 'lpmigrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
-        update_option( 'lpmigrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
-        update_option( 'lpmigrator_mailchimp_campaign_after_expired',  $post_form['mailchimp_campaign_after_expired'] );
-        update_option( 'lpmigrator_sitenotice_message',                $post_form['sitenotice_message'] );
-        update_option( 'lpmigrator_sitenotice_button_text',            $post_form['sitenotice_button_text'] );
-        update_option( 'lpmigrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
-        update_option( 'lpmigrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
+        update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
+        update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
+        update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form['mailchimp_campaign_after_expired'] );
+        update_option( 'laterpay_migrator_sitenotice_message',                $post_form['sitenotice_message'] );
+        update_option( 'laterpay_migrator_sitenotice_button_text',            $post_form['sitenotice_button_text'] );
+        update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
+        update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
 
-        // TODO: clear table ?? or prevent if table has data
         // parse uploaded csv file
-        if ( ! LaterPay_Migrator_Parse::parse_csv() ) {
+        if ( ! LaterPay_Migrator_Parse::check_migration_table_data() ) {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Error during file processing, probably file not uploaded.', 'laterpay_migrator' ),
+                    'message' => __( 'Missed data, probably was not uploaded or not processed.', 'laterpay_migrator' ),
                 )
             );
         }

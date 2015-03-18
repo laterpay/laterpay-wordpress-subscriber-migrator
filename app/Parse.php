@@ -4,41 +4,56 @@ class LaterPay_Migrator_Parse {
 
     public static $column_mapping = array(
         'date'      => 'Nächste Zahlung am',
-        'type'      => 'Erste Zahlung',
+        'product'   => 'Produkt',
         'status'    => 'Zahlungsstatus',
         'email'     => 'E-Mail',
-    );
-
-    public static $types_match = array(
-        '15' => 0,
-        '25' => 1,
-        '45' => 2,
     );
 
     /**
      * Parse provided CSV file with subscriber data.
      *
-     * @return [type] [description]
+     * @return bool|int false on mysql error or total rows affected
      */
     public static function parse_csv() {
-        $config = get_laterpay_migrator_config();
-        $file   = $config->get( 'upload_dir' ) . 'export.csv';
+        $config  = get_laterpay_migrator_config();
 
-        // get all data from CSV file
-        $csvFile = @file( $file );
+        $csvFile = null;
+        // search csv file in upload folder
+        $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
+        foreach ( $files as $file ) {
+            if ( substr( $file, -4, 4 ) === '.csv' ) {
+                // get all data from CSV file
+                $csvFile = @file( $file );
+                break;
+            }
+        }
 
         if ( ! $csvFile ) {
             return false;
         }
 
+        // array of products
+        $products = array();
+
+        // export all data from file into the array
         $data = array();
         foreach ( $csvFile as $line ) {
             $data[] = str_getcsv( $line );
         }
 
+        // array to store mapped data
         $final_data = array();
+        // get column names
         $columns    = array_shift( $data );
         $columns    = explode( ';', $columns[0] );
+
+        // check if data has necessary columns and at least 1 row
+        if ( ! $data || array_diff( array_intersect( self::$column_mapping, $columns ), self::$column_mapping ) ) {
+            return 0;
+        }
+
+        // clear migration table
+        self::clear_migration_table();
 
         // build array of values for query
         foreach ( $data as $row ) {
@@ -50,78 +65,30 @@ class LaterPay_Migrator_Parse {
                 }
             }
 
-            // check status
+            // check data and ignore non-active subscriptions
+            // TODO: need standartize this
             $status = strpos( $final_row['status'], 'aktiv' ) !== false ? 1 : 0;
-            if ( ! $status ) {
+            if ( ! $status || ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
             }
 
-            // process final row and set it to array
-            $migrated_to_laterpay_data = array();
-            $migrated_to_laterpay_data['subscription_end']      =   '\'' .
-                                                                    date(
-                                                                        'Y-m-d',
-                                                                        strtotime($final_row['date'])
-                                                                    ) .
-                                                                    '\'';
-            $migrated_to_laterpay_data['type']                  = self::$types_match[$final_row['type']];
-            $migrated_to_laterpay_data['email']                 = '\'' . $final_row['email'] . '\'';
-            $migrated_to_laterpay_data['migrated_to_laterpay']  = 0;
-
-            $final_data[] = $migrated_to_laterpay_data;
-        }
-
-        global $wpdb;
-
-        $table      = $wpdb->prefix . 'laterpay_subscriber_migrations';
-        $total_rows = count( $final_data );
-        $last_key   = 0;
-        $limit      = get_option( 'lpmigrator_limit' );
-
-        while ( $total_rows > 0 ) {
-            // create SQL from final data
-            $is_first   = true;
-            $count      = 0;
-
-            $sql        = "
-                INSERT INTO
-                    {$table} (subscription_end, subscription_duration, email, migrated_to_laterpay)
-                VALUES
-            ";
-
-            foreach ( $final_data as $key => $data ) {
-                if ( $key < $last_key ) {
-                    continue;
-                }
-
-                if ( ! $is_first ) {
-                    $sql .= ',';
-                }
-
-                $sql .= '(' . implode( ',', $data ) . ')';
-
-                $is_first = false;
-                $count++;
-
-                if ( $count > $limit ) {
-                    break;
-                }
+            if ( ! in_array( $final_row['product'], $products ) ) {
+                $products[] = $final_row['product'];
             }
 
-            $sql .= ';';
-
-            $last_key = $key + 1;
-
-            $total_rows = $total_rows - $limit;
-
-            $result = $wpdb->query( $sql );
-
-            if ( ! $result ) {
-                return false;
-            }
+            // prepare data and set as final
+            $final_data[] = array(
+                'expiry'  => date( 'Y-m-d', strtotime( $final_row['date'] ) ),
+                'product' => $final_row['product'],
+                'email'   => $final_row['email'],
+            );
         }
 
-        return $total_rows;
+        // save products in options
+        update_option( 'laterpay_migrator_products', $products );
+
+        // import data into database
+        return self::import_data_into_migration_table( $final_data );
     }
 
     /**
@@ -130,7 +97,6 @@ class LaterPay_Migrator_Parse {
      * @return void
      */
     public static function file_upload() {
-        // TODO: clear upload folder before upload??
         if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator_form' ) ) {
             wp_send_json(
                 array(
@@ -151,6 +117,14 @@ class LaterPay_Migrator_Parse {
 
         $config = get_laterpay_migrator_config();
 
+        // clear upload folder from .csv files
+        $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
+        foreach ( $files as $file ) {
+            if ( substr( $file, -4, 4 ) === '.csv' ) {
+                unlink( $file );
+            }
+        }
+
         // upload file
         foreach($_FILES as $file)
         {
@@ -164,11 +138,122 @@ class LaterPay_Migrator_Parse {
             }
         }
 
+        // parse csv file
+        $result = self::parse_csv();
+
+        if ( $result === false ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Error during writing to the database.', 'laterpay_migrator' ),
+                )
+            );
+        } elseif ( $result === 0 ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'File contains wrong data.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
         wp_send_json(
             array(
                 'success' => true,
-                'message' => __( 'File was successfully uploaded.', 'laterpay_migrator' ),
+                'message' => __( 'File was successfully processed.', 'laterpay_migrator' ),
             )
         );
+    }
+
+    /**
+     * Clear migration table
+     *
+     * @return void
+     */
+    public static function clear_migration_table() {
+        global $wpdb;
+
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
+        $sql   = "TRUNCATE TABLE {$table};";
+        $wpdb->query( $sql );
+    }
+
+    /**
+     * Clear migration table
+     *
+     * @return bool|int false on mysql error or total rows affected
+     */
+    public static function import_data_into_migration_table( $data ) {
+        global $wpdb;
+
+        $table      = LaterPay_Migrator_Install::get_migration_table_name();
+        $total_rows = count( $data );
+        $last_key   = 0;
+        $limit      = get_option( 'laterpay_migrator_limit' );
+
+        if ( $data && is_array( $data ) ) {
+            while ( $total_rows > 0 ) {
+                // create SQL from final data
+                $is_first   = true;
+                $count      = 0;
+
+                $sql        = "
+                    INSERT INTO
+                        {$table} (expiry, product, email)
+                    VALUES
+                ";
+
+                foreach ( $data as $key => $values ) {
+                    if ( $key < $last_key ) {
+                        continue;
+                    }
+
+                    if ( ! $is_first ) {
+                        $sql .= ',';
+                    }
+
+                    $sql .= '(\'' . implode( '\',\'', $values ) . '\')';
+
+                    $is_first = false;
+                    $count++;
+
+                    if ( $count > $limit ) {
+                        break;
+                    }
+                }
+
+                $sql .= ';';
+
+                $last_key   = $key + 1;
+                $total_rows = $total_rows - $limit;
+
+                if ( ! $wpdb->query( $sql ) ) {
+                    return false;
+                }
+            }
+        }
+
+        return $total_rows;
+    }
+
+    /**
+     * Check if data exists in migration table
+     *
+     * @return bool
+     */
+    public static function check_migration_table_data() {
+        global $wpdb;
+
+        $table_subscriber_migrations = LaterPay_Migrator_Install::get_migration_table_name();
+        $sql = "
+            SELECT
+                *
+            FROM
+                {$table_subscriber_migrations}
+            LIMIT
+                1
+            ;";
+
+        return (bool) $wpdb->get_results( $sql );
     }
 }

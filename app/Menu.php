@@ -68,13 +68,14 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
             'top_nav'                           => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),
             'admin_menu'                        => LaterPay_Helper_View::get_admin_menu(),
             'subscriptions_state'               => LaterPay_Migrator_Subscription::get_subscriptions_state(),
-            'mailchimp_api_key'                 => get_option( 'lpmigrator_mailchimp_api_key' ),
-            'mailchimp_campaign_before_expired' => get_option( 'lpmigrator_mailchimp_campaign_before_expired' ),
-            'mailchimp_campaign_after_expired'  => get_option( 'lpmigrator_mailchimp_campaign_after_expired' ),
-            'sitenotice_message'                => get_option( 'lpmigrator_sitenotice_message' ),
-            'sitenotice_button_text'            => get_option( 'lpmigrator_sitenotice_button_text' ),
-            'sitenotice_bg_color'               => get_option( 'lpmigrator_sitenotice_bg_color' ),
-            'sitenotice_text_color'             => get_option( 'lpmigrator_sitenotice_text_color' ),
+            'mailchimp_api_key'                 => get_option( 'laterpay_migrator_mailchimp_api_key' ),
+            'mailchimp_campaign_before_expired' => get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' ),
+            'mailchimp_campaign_after_expired'  => get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' ),
+            'sitenotice_message'                => get_option( 'laterpay_migrator_sitenotice_message' ),
+            'sitenotice_button_text'            => get_option( 'laterpay_migrator_sitenotice_button_text' ),
+            'sitenotice_bg_color'               => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
+            'sitenotice_text_color'             => get_option( 'laterpay_migrator_sitenotice_text_color' ),
+            'products'                          => get_option( 'laterpay_migrator_products' ),
         );
 
         $this->assign( 'laterpay', $view_args );
