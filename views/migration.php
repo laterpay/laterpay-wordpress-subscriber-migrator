@@ -236,21 +236,37 @@
                             </div>
                         </div>
                     </div><div class="lp_layout__item lp_1/4">
-                        <div class="lp_mt++">
-                            <textarea name="sitenotice_message" class="lp_input lp_1" rows="2"><?php echo $laterpay['sitenotice_message'] !== false ? $laterpay['sitenotice_message'] :  __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?></textarea>
-                        </div>
-                        <div>
-                            <label><?php _e( 'Button Text', 'laterpay_migrator' ); ?></label>
-                            <input type="text" class="lp_input" name="sitenotice_button_text" value="<?php echo $laterpay['sitenotice_button_text']; ?>">
-                        </div>
-                        <div>
-                            <label><?php _e( 'Background Color', 'laterpay_migrator' ); ?></label>
-                            <input type="text" class="lp_input" name="sitenotice_bg_color" value="<?php echo $laterpay['sitenotice_bg_color']; ?>">
-                        </div>
-                        <div>
-                            <label><?php _e( 'Text Color', 'laterpay_migrator' ); ?></label>
-                            <input type="text" class="lp_input" name="sitenotice_text_color" value="<?php echo $laterpay['sitenotice_text_color']; ?>">
-                        </div>
+                        <table class="lp_table--layout lp_mt++">
+                            <tr>
+                                <td colspan="2">
+                                    <textarea name="sitenotice_message" class="lp_input lp_1" rows="2"><?php echo $laterpay['sitenotice_message'] !== false ? $laterpay['sitenotice_message'] :  __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label><?php _e( 'Button Text', 'laterpay_migrator' ); ?></label>
+                                </td>
+                                <td>
+                                    <input type="text" class="lp_input" name="sitenotice_button_text" value="<?php echo $laterpay['sitenotice_button_text']; ?>">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label><?php _e( 'Background Color', 'laterpay_migrator' ); ?></label>
+                                </td>
+                                <td>
+                                    <input type="text" class="lp_input" name="sitenotice_bg_color" value="<?php echo $laterpay['sitenotice_bg_color']; ?>">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label><?php _e( 'Text Color', 'laterpay_migrator' ); ?></label>
+                                </td>
+                                <td>
+                                    <input type="text" class="lp_input" name="sitenotice_text_color" value="<?php echo $laterpay['sitenotice_text_color']; ?>">
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

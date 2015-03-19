@@ -1,6 +1,7 @@
 @import 'objects/_variables';
 @import 'objects/_layout';
 @import 'objects/_lists';
+@import 'objects/_tables';
 
 
 /* Status indicator ------------------------------------------------------------------------------------------------- */
@@ -53,29 +54,6 @@
     position: absolute;
     right: 0;
     top: 0;
-}
-
-
-/* Subscription mapping table --------------------------------------------------------------------------------------- */
-.lp_table {
-    border-collapse: collapse;
-    margin: $fs 0;
-
-    .lp_table__heading {
-        border-bottom: 1px solid $border;
-        color: $text--lighter;
-        font-style: normal;
-        font-weight: normal;
-        padding: $fs--05;
-        text-align: left;
-        vertical-align: bottom;
-    }
-
-    tbody td {
-        padding: $fs--05;
-        text-align: left;
-        vertical-align: middle;
-    }
 }
 
 
