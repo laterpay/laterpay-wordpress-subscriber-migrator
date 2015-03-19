@@ -96,7 +96,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Set a passed value to the passed flag.
+     * Set a given value to the given flag.
      *
      * @param  [type] $flag [description]
      * @param  [type] $value [description]
@@ -130,7 +130,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Get time pass id from mapping
+     * Get time pass id from mapping.
      *
      * @param  [type] $data [description]
      *

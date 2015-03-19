@@ -20,7 +20,7 @@ class LaterPay_Migrator_Parse
     public static function parse_csv() {
         $config  = get_laterpay_migrator_config();
 
-        // create upload directory if no exist
+        // create upload directory, if it does not exist
         wp_mkdir_p( $config->get( 'upload_dir' ) );
 
         $csvFile = null;
@@ -97,6 +97,7 @@ class LaterPay_Migrator_Parse
 
         // save products in options
         update_option( 'laterpay_migrator_products', $products );
+
         // reset mapping
         update_option( 'laterpay_migrator_products_mapping', false );
 
@@ -130,7 +131,7 @@ class LaterPay_Migrator_Parse
 
         $config = get_laterpay_migrator_config();
 
-        // create upload directory if no exist
+        // create upload directory, if it does not exist
         wp_mkdir_p( $config->get( 'upload_dir' ) );
 
         // clear upload folder from .csv files
