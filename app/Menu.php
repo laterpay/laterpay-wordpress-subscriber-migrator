@@ -89,6 +89,6 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
         );
 
         $this->assign( 'laterpay', $view_args );
-        $this->render( 'migration' );
+        $this->render( 'backend/migration' );
     }
 }
