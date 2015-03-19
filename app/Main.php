@@ -116,8 +116,8 @@ class LaterPay_Migrator_Main {
             $client_options['token_name']
         );
 
-        $subscription_data = LaterPay_Migrator_Subscription::get_subscription_data();
-        $time_pass         = LaterPay_Migrator_Subscription::get_time_pass_by_subscription( $subscription_data );
+        $subscription_data = LaterPay_Migrator_Subscription::get_current_user_subscription_data();
+        $time_pass         = LaterPay_Migrator_Subscription::get_time_pass( $subscription_data );
 
         if ( ! $time_pass || ! $subscription_data ) {
             return false;
@@ -201,7 +201,7 @@ class LaterPay_Migrator_Main {
 
         if ( $has_access ) {
             // mark user as migrated to LaterPay
-            LaterPay_Migrator_Subscription::mark_user( 'migrated_to_laterpay' );
+            LaterPay_Migrator_Subscription::mark_user( 'is_migrated_to_laterpay' );
 
             // remove role 'subscriber' from user, if he has already migrated to using LaterPay time passes
             // TODO: Should we really remove this role from the user?

@@ -139,58 +139,62 @@
 
             <div>
                 <h2><?php _e( 'Subscription Mapping', 'laterpay_migrator' ); ?></h2>
-                <table class="lp_table">
-                    <thead class="lp_table__header-row">
-                    <th class="lp_table__heading">
-                        <?php _e( 'Subscribed Product', 'laterpay_migrator' ); ?>
-                    </th>
-                    <th class="lp_table__heading">
-                        &#10142;
-                    </th>
-                    <th class="lp_table__heading">
-                        <?php _e( 'Time Pass to Offer', 'laterpay_migrator' ); ?>
-                    </th>
-                    <th class="lp_table__heading">
-                        <?php _e( 'Role to Assign', 'laterpay_migrator' ); ?>
-                    </th>
-                    <th class="lp_table__heading">
-                        <?php _e( 'Role to Remove', 'laterpay_migrator' ); ?>
-                    </th>
-                    </thead>
-                    <tbody>
-                    <!-- for each unique 'Subscribed Product' from the CSV import -->
-                    <tr>
-                        <td>
-                            <strong>NAME HERE</strong>
-                        </td>
-                        <td>
+                <?php if ( ! $laterpay['products'] ) : ?>
+                    <!-- Message here -->
+                <?php else : ?>
+                    <table class="lp_table">
+                        <thead class="lp_table__header-row">
+                        <th class="lp_table__heading">
+                            <?php _e( 'Subscribed Product', 'laterpay_migrator' ); ?>
+                        </th>
+                        <th class="lp_table__heading">
                             &#10142;
-                        </td>
-                        <td>
-                            <select class="lp_input">
-                                <option>TIME PASS HERE</option>
-                                <option>TIME PASS HERE</option>
-                                <option>TIME PASS HERE</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="lp_input">
-                                <option>ROLE HERE</option>
-                                <option>ROLE HERE</option>
-                                <option>ROLE HERE</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="lp_input">
-                                <option>ROLE HERE</option>
-                                <option>ROLE HERE</option>
-                                <option>ROLE HERE</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <!-- end loop -->
-                    </tbody>
-                </table>
+                        </th>
+                        <th class="lp_table__heading">
+                            <?php _e( 'Time Pass to Offer', 'laterpay_migrator' ); ?>
+                        </th>
+                        <th class="lp_table__heading">
+                            <?php _e( 'Role to Assign', 'laterpay_migrator' ); ?>
+                        </th>
+                        <th class="lp_table__heading">
+                            <?php _e( 'Role to Remove', 'laterpay_migrator' ); ?>
+                        </th>
+                        </thead>
+                        <tbody>
+                        <?php foreach ( $laterpay['products'] as $product ) : ?>
+                            <tr>
+                                <td>
+                                    <strong><?php echo $product; ?></strong>
+                                </td>
+                                <td>
+                                    &#10142;
+                                </td>
+                                <td>
+                                    <select class="lp_input">
+                                        <option>TIME PASS HERE</option>
+                                        <option>TIME PASS HERE</option>
+                                        <option>TIME PASS HERE</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="lp_input">
+                                        <option>ROLE HERE</option>
+                                        <option>ROLE HERE</option>
+                                        <option>ROLE HERE</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="lp_input">
+                                        <option>ROLE HERE</option>
+                                        <option>ROLE HERE</option>
+                                        <option>ROLE HERE</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
             </div>
             <hr class="lp_form-group-separator">
 
