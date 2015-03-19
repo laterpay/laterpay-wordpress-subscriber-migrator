@@ -58,10 +58,10 @@ class LaterPay_Migrator_Main
             if ( LaterPay_Migrator_Subscription::is_active() ) {
                 // assign variables to the view template
                 $view_args = array(
-                    'sitenotice_message'        => get_option( 'laterpay_migrator_sitenotice_message' ),
-                    'sitenotice_button_text'    => get_option( 'laterpay_migrator_sitenotice_button_text' ),
-                    'sitenotice_bg_color'       => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
-                    'sitenotice_text_color'     => get_option( 'laterpay_migrator_sitenotice_text_color' ),
+                    'message'        => get_option( 'laterpay_migrator_sitenotice_message' ),
+                    'button_text'    => get_option( 'laterpay_migrator_sitenotice_button_text' ),
+                    'bg_color'       => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
+                    'text_color'     => get_option( 'laterpay_migrator_sitenotice_text_color' ),
                 );
 
                 // render sitenotice with LaterPay purchase button
