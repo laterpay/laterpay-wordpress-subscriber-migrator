@@ -13,8 +13,6 @@ class LaterPay_Migrator_Install {
         // create table for storing parsed subscriber data
         $this->create_migration_table();
 
-        // only allow time pass purchases and no purchases of individual posts
-        update_option( 'laterpay_only_time_pass_purchases_allowed', 1 );
         update_option( 'laterpay_migrator_limit', 200 );
         update_option( 'laterpay_migrator_expiry_modifier', '2 week' );
     }
