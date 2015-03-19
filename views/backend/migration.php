@@ -307,23 +307,21 @@
                                 name="mailchimp_api_key"
                                 value="<?php echo $laterpay['mailchimp_api_key']; ?>"
                                 placeholder="<?php _e( 'See Account -> API Keys and Authorized Apps', 'laterpay_migrator' ); ?>">
+                    </div><div class="lp_layout__item lp_ml-">
+                        <label><?php _e( 'This site uses SSL', 'laterpay' ); ?></label>
+                    </div><div class="lp_layout__item">
+                        <div class="lp_toggle">
+                            <label class="lp_toggle__label">
+                                <input type="checkbox"
+                                        class="lp_toggle__input"
+                                        name="mailchimp_ssl_connection"
+                                        value="1"
+                                        <?php if ( $laterpay['mailchimp_ssl_connection'] ) { echo 'checked'; } ?>>
+                                <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
+                                <span class="lp_toggle__handle"></span>
+                            </label>
+                        </div>
                     </div>
-                </div>
-
-                <div>
-                    <?php _e( 'This site uses SSL', 'laterpay' ); ?>
-                    <div class="lp_toggle">
-                        <label class="lp_toggle__label">
-                            <input type="checkbox"
-                                    class="lp_toggle__input"
-                                    name="mailchimp_ssl_connection"
-                                    value="1"
-                                    <?php if ( $laterpay['mailchimp_ssl_connection'] ) { echo 'checked'; } ?>>
-                            <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
-                            <span class="lp_toggle__handle"></span>
-                        </label>
-                    </div>
-
                 </div>
             </div>
 

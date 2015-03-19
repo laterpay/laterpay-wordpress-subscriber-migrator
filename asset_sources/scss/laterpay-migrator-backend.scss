@@ -153,7 +153,20 @@
     padding-left: $fs--3 !important;
 }
 
-
 h3 {
     margin-bottom: $fs--025;
+}
+
+// a direct fix for the alignment of the labels and hint texts:
+.lp_layout__item {
+
+    label,
+    dfn {
+        display: inline-block;
+        margin-top: $fs--05;
+    }
+
+    input[type=text] {
+        line-height: 1.3;
+    }
 }
