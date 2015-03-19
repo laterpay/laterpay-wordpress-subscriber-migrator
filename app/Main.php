@@ -117,8 +117,9 @@ class LaterPay_Migrator_Main
             $client_options['token_name']
         );
 
-        $subscription_data = LaterPay_Migrator_Subscription::get_current_user_subscription_data();
-        $time_pass         = LaterPay_Migrator_Subscription::get_time_pass( $subscription_data );
+        $subscription_data = LaterPay_Migrator_Subscription::get_user_subscription_data();
+        $time_pass_id      = LaterPay_Migrator_Subscription::get_time_pass_id( $subscription_data );
+        $time_pass         = (array) LaterPay_Helper_TimePass::get_time_pass_by_id( $time_pass_id );
 
         if ( ! $time_pass || ! $subscription_data ) {
             return false;
@@ -203,9 +204,7 @@ class LaterPay_Migrator_Main
         if ( $has_access ) {
             // mark user as migrated to LaterPay
             LaterPay_Migrator_Subscription::mark_user( 'is_migrated_to_laterpay' );
-
-            // remove role 'subscriber' from user, if he has already migrated to using LaterPay time passes
-            // ...
+            LaterPay_Migrator_Subscription::change_user_role();
         }
 
         wp_redirect( $redirect_url );

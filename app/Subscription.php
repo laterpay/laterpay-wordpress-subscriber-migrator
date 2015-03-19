@@ -25,7 +25,7 @@ class LaterPay_Migrator_Subscription
      */
     public static function get_expiry_time( $data = null ) {
         if ( ! $data ) {
-            $data = self::get_current_user_subscription_data();
+            $data = self::get_user_subscription_data();
 
             if ( ! $data ) {
                 return null;
@@ -36,21 +36,23 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_current_user_subscription_data description]
+     * [get_user_subscription_data description]
+     *
+     * @param null|object $user user instanse
      *
      * @return array|null $result
      */
-    public static function get_current_user_subscription_data() {
+    public static function get_user_subscription_data( $user = null ) {
         global $wpdb;
 
-        $table     = LaterPay_Migrator_Install::get_migration_table_name();
-        $user_data = self::get_current_user_data();
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
+        $user  = $user ? $user : self::get_current_user_data();
 
-        if ( ! $user_data ) {
+        if ( ! $user instanceof WP_User ) {
             return null;
         }
 
-        $email = $user_data->user_email;
+        $email = $user->user_email;
 
         $sql = "
             SELECT
@@ -79,7 +81,7 @@ class LaterPay_Migrator_Subscription
      */
     public static function is_active( $data = null ) {
         if ( ! $data ) {
-            $data = self::get_current_user_subscription_data();
+            $data = self::get_user_subscription_data();
 
             if ( ! $data ) {
                 return false;
@@ -94,7 +96,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Set a flag in the migration table to mark the status of a user within the migration process.
+     * Set a passed value to the passed flag.
      *
      * @param  [type] $flag [description]
      * @param  [type] $value [description]
@@ -104,10 +106,10 @@ class LaterPay_Migrator_Subscription
     public static function mark_user( $flag, $value = true ) {
         global $wpdb;
 
-        $table      = LaterPay_Migrator_Install::get_migration_table_name();
-        $user_data  = self::get_current_user_subscription_data();
-        $email      = $user_data->user_email;
-        $value      = (int) $value;
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
+        $user  = self::get_user_subscription_data();
+        $email = $user->user_email;
+        $value = (int) $value;
 
         $sql   = "
             UPDATE
@@ -128,15 +130,28 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_time_pass description]
+     * Get time pass id from mapping
      *
      * @param  [type] $data [description]
      *
-     * @return array|null $result
+     * @return bool|int false on error or time pass id
      */
-    public static function get_time_pass() {
-        // TODO: implement get time pass
-        return null;
+    public static function get_time_pass_id( $data = null ) {
+        if ( ! $data ) {
+            $data = self::get_user_subscription_data();
+
+            if ( ! $data ) {
+                return false;
+            }
+        }
+
+        $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+            return false;
+        }
+        $map = $products_mapping[$data['product']];
+
+        return isset( $map['timepass'] ) ? $map['timepass'] : 0;
     }
 
     /**
@@ -306,5 +321,41 @@ class LaterPay_Migrator_Subscription
                 'message' => __( 'Migration successfully activated.', 'laterpay_migrator' ),
             )
         );
+    }
+
+    /**
+     * [change_user_role description]
+     *
+     * @param string $email user email
+     *
+     * @return bool result of operation
+     */
+    public static function change_user_role( $email = null ) {
+        if ( ! $email ) {
+            $user = self::get_current_user_data();
+            $data = self::get_user_subscription_data();
+        } else {
+            $user = get_user_by( 'email', $email );
+            $data = self::get_user_subscription_data( $user );
+        }
+
+        if ( ! $user || ! $data ) {
+            return false;
+        }
+
+        $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+            return false;
+        }
+        $map = $products_mapping[$data['product']];
+        if ( ! isset( $map['assign'] ) || ! isset( $map['remove'] ) ) {
+            return false;
+        }
+
+        // change roles
+        $user->remove_role( $map['remove'] );
+        $user->add_role( $map['assign'] );
+
+        return true;
     }
 }

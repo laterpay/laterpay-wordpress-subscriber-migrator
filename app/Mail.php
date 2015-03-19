@@ -16,6 +16,7 @@ class LaterPay_Migrator_Mail
             foreach ( $expired_subscriptions as $subscription ) {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
+                LaterPay_Migrator_Subscription::change_user_role( $subscription['email'] );
 
                 // set flag to mark user as notified after expiration of subscription
                 LaterPay_Migrator_Subscription::mark_user( 'was_notified_after_expiry' );
@@ -32,7 +33,7 @@ class LaterPay_Migrator_Mail
     }
 
     /**
-     * Notify user that his subscription has already expired.
+     * Send notification emails to the users.
      *
      * @param string $campaign_name mailchimp campaign name
      * @param array  $data          array of emails
@@ -111,8 +112,10 @@ class LaterPay_Migrator_Mail
         $mailchimp = new Mailchimp( $api_key );
 
         // disable SSL verification
-        curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0);
+        if ( ! get_option( 'laterpay_migrator_mailchimp_ssl_connection' ) ) {
+            curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
 
         return $mailchimp;
     }
