@@ -119,8 +119,8 @@
                     <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>
                     <ul class="lp_list--bulleted">
                         <li class="lp_list__item"><?php _e( 'Text qualified by double quotes', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Fields delimited by commas', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'UTF-8 encoding', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Fields delimited by semicolons', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'File encoded in UTF-8', 'laterpay_migrator' ); ?></li>
                         <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
                     </ul>
                 </div><div class="lp_layout__item lp_1/4">
