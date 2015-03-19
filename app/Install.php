@@ -18,7 +18,7 @@ class LaterPay_Migrator_Install {
     }
 
     /**
-     * [create_custom_table description]
+     * Create a table for managing all the user and process data required for the migration.
      *
      * @return [type] [description]
      */
@@ -32,9 +32,10 @@ class LaterPay_Migrator_Install {
                 expiry                      DATE          NOT NULL,
                 product                     varchar(255)  NOT NULL,
                 email                       varchar(255)  NOT NULL,
+                subscriber_name             varchar(255)  NOT NULL,
                 is_migrated_to_laterpay     tinyint(1)    NOT NULL DEFAULT 0,
-                is_notified_before_expired  tinyint(1)    NOT NULL DEFAULT 0,
-                is_notified_after_expired   tinyint(1)    NOT NULL DEFAULT 0,
+                was_notified_before_expiry  tinyint(1)    NOT NULL DEFAULT 0,
+                was_notified_after_expiry   tinyint(1)    NOT NULL DEFAULT 0,
                 PRIMARY KEY  (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -42,7 +43,7 @@ class LaterPay_Migrator_Install {
     }
 
     /**
-     * Get migration table name
+     * Get migration table name.
      *
      * @return string
      */

@@ -15,7 +15,7 @@ class LaterPay_Migrator_Mail {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
                 // set user notified about subscription expired flag
-                LaterPay_Migrator_Subscription::mark_user( 'is_notified_after_expired' );
+                LaterPay_Migrator_Subscription::mark_user( 'was_notified_after_expiry' );
             }
             if ( $data ) {
                 // notify user that his subscription expired
@@ -83,7 +83,7 @@ class LaterPay_Migrator_Mail {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
                 // set user notified about subscription expired flag
-                LaterPay_Migrator_Subscription::mark_user( 'is_notified_before_expired' );
+                LaterPay_Migrator_Subscription::mark_user( 'was_notified_before_expiry' );
             }
             if ( $data ) {
                 // notify user that his subscription expired

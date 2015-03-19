@@ -208,7 +208,7 @@ class LaterPay_Migrator_Subscription {
             // set valid
             $state['valid'] += 1;
             // set ignored
-            if ( $data['is_notified_after_expired'] && ! $data['is_migrated_to_laterpay'] ) {
+            if ( $data['was_notified_after_expiry'] && ! $data['is_migrated_to_laterpay'] ) {
                 $state['ignored'] += 1;
             }
             // set migrated
