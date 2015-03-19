@@ -57,7 +57,7 @@ function get_laterpay_migrator_config() {
     $config->set( 'plugin_url',         plugins_url( '/', __FILE__ ) );
     $config->set( 'view_dir',           $plugin_dir_path . 'views/' );
 
-    // laterpay plugin paths
+    // 'laterpay' plugin paths
     $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
     $laterpay_plugin_dir  = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/';
     $laterpay_plugin_data = get_plugin_data( $laterpay_plugin_dir . 'laterpay.php' );

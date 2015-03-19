@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Main {
+class LaterPay_Migrator_Main
+{
 
     /**
      * Init WP hooks.
@@ -204,7 +205,7 @@ class LaterPay_Migrator_Main {
             LaterPay_Migrator_Subscription::mark_user( 'is_migrated_to_laterpay' );
 
             // remove role 'subscriber' from user, if he has already migrated to using LaterPay time passes
-            // TODO: Should we really remove this role from the user?
+            // ...
         }
 
         wp_redirect( $redirect_url );
@@ -213,7 +214,7 @@ class LaterPay_Migrator_Main {
     }
 
     /**
-     * Add migration tab to the menu
+     * Add 'migration' tab to the 'laterpay' plugin backend.
      *
      * @param $menu
      *
@@ -224,9 +225,9 @@ class LaterPay_Migrator_Main {
 
         $menu[ 'migration' ] = array(
             'url'   => 'laterpay-migration-tab',
-            'title' => __( 'Migration', 'laterpay' ),
+            'title' => __( 'Migration', 'laterpay_migrator' ),
             'cap'   => 'activate_plugins',
-            'run'   => array( $menu_page, 'render_page' )
+            'run'   => array( $menu_page, 'render_page' ),
         );
 
         return $menu;
@@ -244,7 +245,7 @@ class LaterPay_Migrator_Main {
         $install = new LaterPay_Migrator_Install;
         $install->install();
 
-        // register mail sending cron jobs
+        // register cron jobs for email sending
         wp_schedule_event( time(), 'daily', 'notify_subscription_expired' );
         wp_schedule_event( time(), 'daily', 'notify_subscription_about_to_expiry' );
     }

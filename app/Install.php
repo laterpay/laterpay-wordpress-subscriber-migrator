@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Install {
+class LaterPay_Migrator_Install
+{
 
     public static $subscriptions_table_name = 'laterpay_subscriber_migrations';
 

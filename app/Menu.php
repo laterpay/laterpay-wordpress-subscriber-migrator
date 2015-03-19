@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
+class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
+{
 
     /**
      * Load assets.
@@ -55,14 +56,14 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract {
     }
 
     /**
-     * Render page
+     * Render page.
      *
      * @return void
      */
     public function render_page() {
         $this->load_assets();
 
-        // assign variables to the template
+        // assign variables to the view template
         $view_args = array(
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
             'top_nav'                           => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),

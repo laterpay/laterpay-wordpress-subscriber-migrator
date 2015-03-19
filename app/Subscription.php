@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Subscription {
+class LaterPay_Migrator_Subscription
+{
 
     /**
      * Get WP user.
@@ -16,7 +17,7 @@ class LaterPay_Migrator_Subscription {
     }
 
     /**
-     * Get expiry time of a subscription.
+     * Get the expiry time of a subscription.
      *
      * @param  [type] $data [description]
      *
@@ -93,7 +94,7 @@ class LaterPay_Migrator_Subscription {
     }
 
     /**
-     * [mark_user description]
+     * Set a flag in the migration table to mark the status of a user within the migration process.
      *
      * @param  [type] $flag [description]
      * @param  [type] $value [description]
@@ -196,7 +197,9 @@ class LaterPay_Migrator_Subscription {
             SELECT
                 *
             FROM
-                {$table};";
+                {$table}
+            ;"
+        ;
 
         $results = $wpdb->get_results( $sql, ARRAY_A );
 
@@ -207,14 +210,17 @@ class LaterPay_Migrator_Subscription {
         foreach ( $results as $data ) {
             // set valid
             $state['valid'] += 1;
+
             // set ignored
             if ( $data['was_notified_after_expiry'] && ! $data['is_migrated_to_laterpay'] ) {
                 $state['ignored'] += 1;
             }
+
             // set migrated
             if ( $data['is_migrated_to_laterpay'] ) {
                 $state['migrated'] += 1;
             }
+
             // set last_expiry
             if ( ! $state['expiry'] || strtotime( $data['expiry'] ) > strtotime( $state['expiry'] ) ) {
                 $state['expiry'] = date( 'm-d-Y', strtotime( $data['expiry'] ) );
@@ -234,7 +240,7 @@ class LaterPay_Migrator_Subscription {
      */
     public static function activate_subscription() {
         $post_form = $_POST;
-        // TODO: validate post data via Laterpay Form and send false if no valid
+        // TODO: validate post data via LaterPay Form and send false if invalid
 
         update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
         update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
@@ -244,7 +250,7 @@ class LaterPay_Migrator_Subscription {
         update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
         update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
 
-        // parse uploaded csv file
+        // parse uploaded CSV file
         if ( ! LaterPay_Migrator_Parse::check_migration_table_data() ) {
             wp_send_json(
                 array(

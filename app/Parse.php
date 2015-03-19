@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Parse {
+class LaterPay_Migrator_Parse
+{
 
     public static $column_mapping = array(
         'date'      => 'Nächste Zahlung am',
@@ -18,7 +19,7 @@ class LaterPay_Migrator_Parse {
         $config  = get_laterpay_migrator_config();
 
         $csvFile = null;
-        // search csv file in upload folder
+        // search CSV file in upload folder
         $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
         foreach ( $files as $file ) {
             if ( substr( $file, -4, 4 ) === '.csv' ) {
@@ -35,7 +36,7 @@ class LaterPay_Migrator_Parse {
         // array of products
         $products = array();
 
-        // export all data from file into the array
+        // extract all data from file into an array
         $data = array();
         foreach ( $csvFile as $line ) {
             $data[] = str_getcsv( $line );
@@ -43,11 +44,12 @@ class LaterPay_Migrator_Parse {
 
         // array to store mapped data
         $final_data = array();
+
         // get column names
         $columns    = array_shift( $data );
         $columns    = explode( ';', $columns[0] );
 
-        // check if data has necessary columns and at least 1 row
+        // check, if data has required columns and at least 1 row
         if ( ! $data || array_diff( array_intersect( self::$column_mapping, $columns ), self::$column_mapping ) ) {
             return 0;
         }
@@ -66,7 +68,8 @@ class LaterPay_Migrator_Parse {
             }
 
             // check data and ignore non-active subscriptions
-            // TODO: need standartize this
+// TODO: need standartize this
+// "aktiv" is German... should we check for both "aktiv" and "active" for increased fault tolerance?
             $status = strpos( $final_row['status'], 'aktiv' ) !== false ? 1 : 0;
             if ( ! $status || ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
@@ -92,7 +95,7 @@ class LaterPay_Migrator_Parse {
     }
 
     /**
-     * Upload file
+     * Upload CSV file with subscriber data.
      *
      * @return void
      */
@@ -138,7 +141,7 @@ class LaterPay_Migrator_Parse {
             }
         }
 
-        // parse csv file
+        // parse CSV file
         $result = self::parse_csv();
 
         if ( $result === false ) {
@@ -152,7 +155,7 @@ class LaterPay_Migrator_Parse {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'File contains wrong data.', 'laterpay_migrator' ),
+                    'message' => __( 'File contains invalid data.', 'laterpay_migrator' ),
                 )
             );
         }
@@ -166,7 +169,7 @@ class LaterPay_Migrator_Parse {
     }
 
     /**
-     * Clear migration table
+     * Clear migration table.
      *
      * @return void
      */
@@ -175,11 +178,12 @@ class LaterPay_Migrator_Parse {
 
         $table = LaterPay_Migrator_Install::get_migration_table_name();
         $sql   = "TRUNCATE TABLE {$table};";
+
         $wpdb->query( $sql );
     }
 
     /**
-     * Clear migration table
+     * Write data extracted from CSV file to database.
      *
      * @return bool|int false on mysql error or total rows affected
      */
@@ -237,7 +241,7 @@ class LaterPay_Migrator_Parse {
     }
 
     /**
-     * Check if data exists in migration table
+     * Check, if migration table has data (at least one row).
      *
      * @return bool
      */

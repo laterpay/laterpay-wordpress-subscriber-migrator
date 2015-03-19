@@ -1,24 +1,28 @@
 <?php
 
-class LaterPay_Migrator_Mail {
+class LaterPay_Migrator_Mail
+{
 
     /**
-     * Notify users about their subscriptions expired
+     * Notify users that their subscription has expired.
      *
      * @return array $expired_subscriptions
      */
     public static function notify_subscription_expired() {
         $expired_subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry( true );
+
         if ( $expired_subscriptions ) {
             $data = array();
             foreach ( $expired_subscriptions as $subscription ) {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
-                // set user notified about subscription expired flag
+
+                // set flag to mark user as notified after expiration of subscription
                 LaterPay_Migrator_Subscription::mark_user( 'was_notified_after_expiry' );
             }
+
             if ( $data ) {
-                // notify user that his subscription expired
+                // send email to notify user that his subscription has expired
                 $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
                 self::send_notification_email( $campaign_name, $data );
             }
@@ -28,7 +32,7 @@ class LaterPay_Migrator_Mail {
     }
 
     /**
-     * Notify user that his subscription expired already
+     * Notify user that his subscription has already expired.
      *
      * @param string $campaign_name mailchimp campaign name
      * @param array  $data          array of emails
@@ -50,7 +54,7 @@ class LaterPay_Migrator_Mail {
             $campaign_id  = $campaign['data'][0]['id'];
             $list_id      = $campaign['data'][0]['list_id'];
 
-            // subsribe users from $data to this list
+            // subscribe users from $data to this list
             $subscribe_data = array();
             foreach ( $data as $email ) {
                 $subscribe_data[] = array( 'email' => $email );
@@ -64,7 +68,6 @@ class LaterPay_Migrator_Mail {
 
             // unsubscribe users from $data
             $mailchimp->lists->batchUnsubscribe( $list_id, $data, false, false );
-
         } catch ( Exception $e ) {
             return $e->getMessage();
         }
@@ -73,20 +76,23 @@ class LaterPay_Migrator_Mail {
     }
 
     /**
-     * Notify users about their subscriptions about to expiry ( 2 weeks )
+     * Notify users that their subscriptions are about to expiry (2 weeks in advance).
      */
     public static function notify_subscription_about_to_expiry() {
         $subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry();
+
         if ( $subscriptions ) {
             $data = array();
             foreach ( $subscriptions as $subscription ) {
                 // set user email to data
                 $data[] = array( 'email' => $subscription['email'] );
-                // set user notified about subscription expired flag
+
+                // set flag to mark user as notified before expiration of subscription
                 LaterPay_Migrator_Subscription::mark_user( 'was_notified_before_expiry' );
             }
+
             if ( $data ) {
-                // notify user that his subscription expired
+                // send email to notify user that his subscription is about to expire
                 $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
                 self::send_notification_email( $campaign_name, $data );
             }
@@ -96,14 +102,15 @@ class LaterPay_Migrator_Mail {
     }
 
     /**
-     * Init mailchimp
+     * Init MailChimp.
      *
      * @return Mailchimp
      */
     public static function init_mailchimp() {
         $api_key   = get_option( 'laterpay_migrator_mailchimp_api_key' );
         $mailchimp = new Mailchimp( $api_key );
-        // disable ssl verification
+
+        // disable SSL verification
         curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0);
 
