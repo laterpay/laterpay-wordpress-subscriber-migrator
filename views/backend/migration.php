@@ -82,7 +82,9 @@
                     </label>
                 </div>
 
-                <a href="#" id="lp_js_startMigration" class="button button-primary">
+                <a href="#"
+                    id="lp_js_startMigration"
+                    class="button button-primary"<?php if ( ! $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
                     <?php _e( 'Start Migration', 'laterpay_migrator' ); ?>
                 </a>
             </div>
@@ -293,9 +295,9 @@
                 <dfn>
                     <?php _e( 'The plugin will send every subscriber who has not yet switched up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
                     <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
-                    <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients ', 'laterpay_migrator' ); ?>
+                    <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?>
                 </dfn>
-                <div class="lp_layout">
+                <div class="lp_layout lp_mt-">
                     <div class="lp_layout__item lp_1/6">
                         <label><?php _e( 'MailChimp API Key', 'laterpay_migrator' ); ?></label>
                     </div><div class="lp_layout__item lp_1/4">
