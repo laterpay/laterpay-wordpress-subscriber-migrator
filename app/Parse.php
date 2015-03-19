@@ -4,10 +4,12 @@ class LaterPay_Migrator_Parse
 {
 
     public static $column_mapping = array(
-        'date'      => 'Nächste Zahlung am',
-        'product'   => 'Produkt',
-        'status'    => 'Zahlungsstatus',
-        'email'     => 'E-Mail',
+        'date'        => 'Nächste Zahlung am',
+        'product'     => 'Produkt',
+        'first_name'  => 'Vorname',
+        'second_name' => 'Nachname',
+        'status'      => 'Zahlungsstatus',
+        'email'       => 'E-Mail',
     );
 
     /**
@@ -17,6 +19,9 @@ class LaterPay_Migrator_Parse
      */
     public static function parse_csv() {
         $config  = get_laterpay_migrator_config();
+
+        // create upload directory if no exist
+        wp_mkdir_p( $config->get( 'upload_dir' ) );
 
         $csvFile = null;
         // search CSV file in upload folder
@@ -68,8 +73,7 @@ class LaterPay_Migrator_Parse
             }
 
             // check data and ignore non-active subscriptions
-// TODO: need standartize this
-// "aktiv" is German... should we check for both "aktiv" and "active" for increased fault tolerance?
+            // TODO: standartize this, better use multilingual values like '1'
             $status = strpos( $final_row['status'], 'aktiv' ) !== false ? 1 : 0;
             if ( ! $status || ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
@@ -79,16 +83,22 @@ class LaterPay_Migrator_Parse
                 $products[] = $final_row['product'];
             }
 
+            $first_name  = isset( $final_row['first_name'] ) ? $final_row['first_name'] : '';
+            $second_name = isset( $final_row['second_name'] ) ? $final_row['second_name'] : '';
+
             // prepare data and set as final
             $final_data[] = array(
-                'expiry'  => date( 'Y-m-d', strtotime( $final_row['date'] ) ),
-                'product' => $final_row['product'],
-                'email'   => $final_row['email'],
+                'expiry'          => date( 'Y-m-d', strtotime( $final_row['date'] ) ),
+                'product'         => $final_row['product'],
+                'email'           => $final_row['email'],
+                'subscriber_name' => trim( $first_name . ' ' . $second_name ),
             );
         }
 
         // save products in options
         update_option( 'laterpay_migrator_products', $products );
+        // reset mapping
+        update_option( 'laterpay_migrator_products_mapping', false );
 
         // import data into database
         return self::import_data_into_migration_table( $final_data );
@@ -119,6 +129,9 @@ class LaterPay_Migrator_Parse
         }
 
         $config = get_laterpay_migrator_config();
+
+        // create upload directory if no exist
+        wp_mkdir_p( $config->get( 'upload_dir' ) );
 
         // clear upload folder from .csv files
         $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
@@ -203,7 +216,7 @@ class LaterPay_Migrator_Parse
 
                 $sql        = "
                     INSERT INTO
-                        {$table} (expiry, product, email)
+                        {$table} (expiry, product, email, subscriber_name)
                     VALUES
                 ";
 

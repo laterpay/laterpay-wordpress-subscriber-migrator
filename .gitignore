@@ -1,6 +1,7 @@
 .idea/
 .sublime-gulp.cache
 built_assets/
+upload/
 sftp-config.json
 nbproject/
 node_modules/

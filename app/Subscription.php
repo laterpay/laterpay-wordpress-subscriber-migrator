@@ -128,13 +128,13 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_time_pass_by_subscription description]
+     * [get_time_pass description]
      *
      * @param  [type] $data [description]
      *
      * @return array|null $result
      */
-    public static function get_time_pass( ) {
+    public static function get_time_pass() {
         // TODO: implement get time pass
         return null;
     }
@@ -242,13 +242,53 @@ class LaterPay_Migrator_Subscription
         $post_form = $_POST;
         // TODO: validate post data via LaterPay Form and send false if invalid
 
+        // save usual options
         update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
         update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
         update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form['mailchimp_campaign_after_expired'] );
+        update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form['mailchimp_ssl_connection'] );
         update_option( 'laterpay_migrator_sitenotice_message',                $post_form['sitenotice_message'] );
         update_option( 'laterpay_migrator_sitenotice_button_text',            $post_form['sitenotice_button_text'] );
         update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
         update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
+
+        // save product mapping
+        $products     = get_option( 'laterpay_migrator_products' );
+        $timepasses   = $post_form['timepasses'];
+        $assign_roles = $post_form['assign_roles'];
+        $remove_roles = $post_form['remove_roles'];
+
+        if ( count( $timepasses )   != count( $products ) ||
+             count( $assign_roles ) != count( $products ) ||
+             count( $remove_roles ) != count( $products ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Wrong product mapping params.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        if ( ! $products || ! is_array( $products ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'There are no products in system, try to reupload file with correct products.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        $products_mapping = array();
+        foreach( $products as $key => $product_name ) {
+            $map = array(
+                'timepass' => $timepasses[$key],
+                'assign'   => $assign_roles[$key],
+                'remove'   => $remove_roles[$key],
+            );
+            $products_mapping[$product_name] = $map;
+        }
+
+        update_option( 'laterpay_migrator_products_mapping', $products_mapping );
 
         // parse uploaded CSV file
         if ( ! LaterPay_Migrator_Parse::check_migration_table_data() ) {

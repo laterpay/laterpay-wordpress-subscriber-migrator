@@ -161,6 +161,12 @@
                         </thead>
                         <tbody>
                         <?php foreach ( $laterpay['products'] as $product ) : ?>
+                            <?php
+                                $mapping = false;
+                                if ( $laterpay['products_mapping'] && isset( $laterpay['products_mapping'][$product] ) ) {
+                                    $mapping = $laterpay['products_mapping'][$product];
+                                }
+                            ?>
                             <tr>
                                 <td>
                                     <strong><?php echo $product; ?></strong>
@@ -169,24 +175,29 @@
                                     &#10142;
                                 </td>
                                 <td>
-                                    <select class="lp_input">
-                                        <option>TIME PASS HERE</option>
-                                        <option>TIME PASS HERE</option>
-                                        <option>TIME PASS HERE</option>
+                                    <select name="timepasses[]" class="lp_input">
+                                        <option value="0" <?php if ( ! $mapping ) echo 'selected'; ?>><?php echo '- ' . __( 'select a time pass', 'laterpay_migrator' ) . ' -'; ?></option>
+                                        <?php if ( $laterpay['timepasses'] ) : ?>
+                                            <?php foreach ( $laterpay['timepasses'] as $timepass ) : ?>
+                                                <option value="<?php echo $timepass->pass_id; ?>" <?php if ( $mapping && $timepass->pass_id == $mapping['timepass'] ) echo 'selected'; ?>><?php echo $timepass->title; ?></option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="lp_input">
-                                        <option>ROLE HERE</option>
-                                        <option>ROLE HERE</option>
-                                        <option>ROLE HERE</option>
+                                    <select name="assign_roles[]" class="lp_input">
+                                        <option value="0" <?php if ( ! $mapping ) echo 'selected'; ?>><?php echo '- ' . __( 'none', 'laterpay_migrator' ) . ' -'; ?></option>
+                                        <?php foreach ( $laterpay['roles'] as $role => $role_data ) : ?>
+                                            <option value="<?php echo $role; ?>" <?php if ( $mapping && $role == $mapping['assign'] ) echo 'selected'; ?>><?php echo $role_data['name']; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="lp_input">
-                                        <option>ROLE HERE</option>
-                                        <option>ROLE HERE</option>
-                                        <option>ROLE HERE</option>
+                                    <select name="remove_roles[]" class="lp_input">
+                                        <option value="0" <?php if ( ! $mapping ) echo 'selected'; ?>><?php echo '- ' . __( 'none', 'laterpay_migrator' ) . ' -'; ?></option>
+                                        <?php foreach ( $laterpay['roles'] as $role => $role_data ) : ?>
+                                            <option value="<?php echo $role; ?>" <?php if ( $mapping && $role == $mapping['remove'] ) echo 'selected'; ?>><?php echo $role_data['name']; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </td>
                             </tr>
@@ -272,9 +283,9 @@
                         <label class="lp_toggle__label">
                             <input type="checkbox"
                                     class="lp_toggle__input"
-                                    name="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                    name="mailchimp_ssl_connection"
                                     value="1"
-                                    <?php echo 'checked'; ?>>
+                                    <?php if ( $laterpay['mailchimp_ssl_connection'] ) { echo 'checked'; } ?>>
                             <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
                             <span class="lp_toggle__handle"></span>
                         </label>

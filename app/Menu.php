@@ -63,6 +63,11 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
     public function render_page() {
         $this->load_assets();
 
+        global $wp_roles;
+
+        $timepasses = LaterPay_Helper_TimePass::get_all_time_passes();
+        $roles      = $wp_roles->roles;
+
         // assign variables to the view template
         $view_args = array(
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
@@ -72,11 +77,15 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'mailchimp_api_key'                 => get_option( 'laterpay_migrator_mailchimp_api_key' ),
             'mailchimp_campaign_before_expired' => get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' ),
             'mailchimp_campaign_after_expired'  => get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' ),
+            'mailchimp_ssl_connection'          => get_option( 'laterpay_migrator_mailchimp_ssl_connection' ),
             'sitenotice_message'                => get_option( 'laterpay_migrator_sitenotice_message' ),
             'sitenotice_button_text'            => get_option( 'laterpay_migrator_sitenotice_button_text' ),
             'sitenotice_bg_color'               => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
             'sitenotice_text_color'             => get_option( 'laterpay_migrator_sitenotice_text_color' ),
             'products'                          => get_option( 'laterpay_migrator_products' ),
+            'timepasses'                        => $timepasses,
+            'roles'                             => $roles,
+            'products_mapping'                  => get_option( 'laterpay_migrator_products_mapping' ),
         );
 
         $this->assign( 'laterpay', $view_args );
