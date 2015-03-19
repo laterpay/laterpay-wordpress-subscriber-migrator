@@ -6,9 +6,48 @@
 
 /* Status indicator ------------------------------------------------------------------------------------------------- */
 .lp_status-indicator {
+    background: $background--darker;
+    border-radius: 999px; // pill shape
     display: inline-block;
-    line-height: 2em;
     margin-right: $fs;
+    position: relative;
+
+    input[type=radio] {
+        display: none;
+    }
+
+    .lp_status-indicator__label {
+        color: $text--lighter;
+        display: inline-block;
+        line-height: $fs--2;
+        padding: 0 $fs--05;
+        text-align: center;
+        width: ($fs * 5);
+
+        &:hover,
+        &:focus,
+        &:active {
+            cursor: default;
+        }
+
+        &.lp_is-active {
+            color: $laterpay-brand;
+        }
+    }
+
+    &:before {
+        border: 2px solid $laterpay-brand;
+        border-radius: 999px; // pill shape
+        content: '';
+        display: block;
+        left: -2px; // compensate border-width
+        height: $fs--2;
+        padding: 0 $fs--05;
+        position: absolute;
+        top: -2px; // compensate border-width
+        transition: left 0.2s ease-in-out;
+        width: ($fs * 5);
+    }
 }
 
 
@@ -91,7 +130,7 @@
 .lp_browser__sitenotice-text,
 .lp_browser__sitenotice-button {
     display: inline-block;
-    font-size: $fs--075;
+    font-size: round($fs * 0.6);
     line-height: 1;
 }
 

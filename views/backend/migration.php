@@ -68,15 +68,15 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator">
-                    <label>
+                    <label class="lp_status-indicator__label lp_is-active">
                         <input type="radio" name="laterpay_migrator_status" value="setup" checked>
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </label>
-                    <label>
+                    <label class="lp_status-indicator__label">
                         <input type="radio" name="laterpay_migrator_status" value="migrating">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </label>
-                    <label>
+                    <label class="lp_status-indicator__label">
                         <input type="radio" name="laterpay_migrator_status" value="complete">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </label>
@@ -226,11 +226,11 @@
                                 <div class="lp_browser__omnibar-dot"></div>
                                 <div class="lp_browser__omnibar-dot"></div>
                             </div>
-                            <div id="lp_browser__sitenotice" class="lp_browser__sitenotice">
-                                <div id="lp_browser__sitenotice-text" class="lp_browser__sitenotice-text">
+                            <div id="lp_js_browserSitenotice" class="lp_browser__sitenotice">
+                                <div id="lp_js_browserSitenoticeText" class="lp_browser__sitenotice-text">
                                     <?php _e( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?>
                                 </div>
-                                <div id="lp_browser__sitenotice-button" class="lp_browser__sitenotice-button">
+                                <div id="lp_js_browserSitenoticeButton" class="lp_browser__sitenotice-button">
                                     <?php _e( 'Switch Now', 'laterpay_migrator' ); ?>
                                 </div>
                             </div>
@@ -239,7 +239,10 @@
                         <table class="lp_table--layout lp_mt++">
                             <tr>
                                 <td colspan="2">
-                                    <textarea name="sitenotice_message" class="lp_input lp_1" rows="2"><?php echo $laterpay['sitenotice_message'] !== false ? $laterpay['sitenotice_message'] :  __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?></textarea>
+                                    <textarea id="lp_js_sitenoticeTextInput"
+                                        class="lp_js_sitenoticeInput lp_input lp_1"
+                                        name="sitenotice_message"
+                                        rows="2"><?php echo $laterpay['sitenotice_message'] !== false ? $laterpay['sitenotice_message'] :  __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -247,7 +250,11 @@
                                     <label><?php _e( 'Button Text', 'laterpay_migrator' ); ?></label>
                                 </td>
                                 <td>
-                                    <input type="text" class="lp_input" name="sitenotice_button_text" value="<?php echo $laterpay['sitenotice_button_text']; ?>">
+                                    <input type="text"
+                                        id="lp_js_sitenoticeButtonTextInput"
+                                        class="lp_js_sitenoticeInput lp_input"
+                                        name="sitenotice_button_text"
+                                        value="<?php echo $laterpay['sitenotice_button_text']; ?>">
                                 </td>
                             </tr>
                             <tr>
@@ -255,7 +262,12 @@
                                     <label><?php _e( 'Background Color', 'laterpay_migrator' ); ?></label>
                                 </td>
                                 <td>
-                                    <input type="text" class="lp_input" name="sitenotice_bg_color" value="<?php echo $laterpay['sitenotice_bg_color']; ?>">
+                                    <input type="text"
+                                        id="lp_js_sitenoticeBgColorInput"
+                                        class="lp_js_sitenoticeInput lp_input"
+                                        name="sitenotice_bg_color"
+                                        value="<?php echo $laterpay['sitenotice_bg_color']; ?>"
+                                        placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
                                 </td>
                             </tr>
                             <tr>
@@ -263,7 +275,12 @@
                                     <label><?php _e( 'Text Color', 'laterpay_migrator' ); ?></label>
                                 </td>
                                 <td>
-                                    <input type="text" class="lp_input" name="sitenotice_text_color" value="<?php echo $laterpay['sitenotice_text_color']; ?>">
+                                    <input type="text"
+                                        id="lp_js_sitenoticeTextColorInput"
+                                        class="lp_js_sitenoticeInput lp_input"
+                                        name="sitenotice_text_color"
+                                        value="<?php echo $laterpay['sitenotice_text_color']; ?>"
+                                        placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
                                 </td>
                             </tr>
                         </table>
