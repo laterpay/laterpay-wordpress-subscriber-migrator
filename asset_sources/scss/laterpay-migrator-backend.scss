@@ -1,10 +1,13 @@
 @import 'objects/_variables';
+@import 'objects/_layout';
+
 
 /* File upload ------------------------------------------------------------------------------------------------------ */
 .lp_upload {
     border: 0 none;
     border-collapse: collapse;
     border-spacing: 0;
+    margin-bottom: $fs;
 
     td {
         padding: 0;
