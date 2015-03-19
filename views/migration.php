@@ -266,6 +266,22 @@
                         </dfn>
                     </div>
                 </div>
+
+                <div>
+                    <?php _e( 'This site uses SSL', 'laterpay' ); ?>
+                    <div class="lp_toggle">
+                        <label class="lp_toggle__label">
+                            <input type="checkbox"
+                                    class="lp_toggle__input"
+                                    name="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                    value="1"
+                                    <?php echo 'checked'; ?>>
+                            <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
+                            <span class="lp_toggle__handle"></span>
+                        </label>
+                    </div>
+
+                </div>
             </div>
 
             <div class="lp_mb+">
