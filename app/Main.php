@@ -116,8 +116,8 @@ class LaterPay_Migrator_Main {
             $client_options['token_name']
         );
 
-        $subscription_data = LaterPay_Migrator_Subscription::get_subscription_data();
-        $time_pass         = LaterPay_Migrator_Subscription::get_time_pass_by_subscription( $subscription_data );
+        $subscription_data = LaterPay_Migrator_Subscription::get_current_user_subscription_data();
+        $time_pass         = LaterPay_Migrator_Subscription::get_time_pass( $subscription_data );
 
         if ( ! $time_pass || ! $subscription_data ) {
             return false;

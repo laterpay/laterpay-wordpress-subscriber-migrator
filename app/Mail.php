@@ -33,11 +33,11 @@ class LaterPay_Migrator_Mail {
      * @param string $campaign_name mailchimp campaign name
      * @param array  $data          array of emails
      *
-     * @return bool|string          true or error message
+     * @return bool|string          bool or error message
      */
     public static function send_notification_email( $campaign_name, $data = array() ) {
         if ( ! $data || ! is_array( $data ) || ! $campaign_name ) {
-            return;
+            return false;
         }
 
         // wrap in try catch block

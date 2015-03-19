@@ -135,6 +135,7 @@ class LaterPay_Migrator_Subscription {
      */
     public static function get_time_pass( ) {
         // TODO: implement get time pass
+        return null;
     }
 
     /**

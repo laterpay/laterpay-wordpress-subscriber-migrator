@@ -244,12 +244,12 @@ class LaterPay_Migrator_Parse {
     public static function check_migration_table_data() {
         global $wpdb;
 
-        $table_subscriber_migrations = LaterPay_Migrator_Install::get_migration_table_name();
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
         $sql = "
             SELECT
                 *
             FROM
-                {$table_subscriber_migrations}
+                {$table}
             LIMIT
                 1
             ;";
