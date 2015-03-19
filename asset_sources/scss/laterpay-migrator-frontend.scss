@@ -11,5 +11,13 @@ body {
     text-align: center;
     top: 0;
     width: 100%;
-    z-index: 1000000;
+    z-index: $zindex--topmost-1;
+
+    .lp_sitenotice__message {
+
+    }
+
+    .lp_sitenotice__button {
+
+    }
 }

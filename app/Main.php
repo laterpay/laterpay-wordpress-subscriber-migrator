@@ -56,15 +56,17 @@ class LaterPay_Migrator_Main
     public function render_migration_sitenotice() {
         if ( is_user_logged_in() ) {
             if ( LaterPay_Migrator_Subscription::is_active() ) {
-                $sitenotice = '
-                    <div class="lp_sitenotice">
-                        <a href="#" id="lp_buySubscription">Purchase</a>
-                        <a href="#" id="lp_fakeButton" class="lp_js_doPurchase" style="display:none;" data-laterpay=""></a>
-                    </div>
-                ';
+                // assign variables to the view template
+                $view_args = array(
+                    'sitenotice_message'        => get_option( 'laterpay_migrator_sitenotice_message' ),
+                    'sitenotice_button_text'    => get_option( 'laterpay_migrator_sitenotice_button_text' ),
+                    'sitenotice_bg_color'       => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
+                    'sitenotice_text_color'     => get_option( 'laterpay_migrator_sitenotice_text_color' ),
+                );
 
                 // render sitenotice with LaterPay purchase button
-                echo $sitenotice;
+                $this->assign( 'laterpay_migrator', $view_args );
+                $this->render( 'frontend/partials/sitenotice' );
             }
         }
 
