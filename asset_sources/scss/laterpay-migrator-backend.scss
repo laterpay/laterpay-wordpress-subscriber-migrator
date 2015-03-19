@@ -11,6 +11,7 @@
     margin-right: $fs;
 }
 
+
 /* File upload ------------------------------------------------------------------------------------------------------ */
 .lp_upload {
     border: 0 none;
@@ -63,7 +64,7 @@
     border: 3px solid $border;
     border-radius: 3px;
     height: ($fs * 20);
-    margin: $fs $fs $fs 0;
+    margin: $fs--05 $fs $fs 0;
     position: relative;
     width: 400px;
 }
@@ -111,4 +112,9 @@
 /* Email notification configuration --------------------------------------------------------------------------------- */
 .lp_api-credentials__input {
     padding-left: $fs--3 !important;
+}
+
+
+h3 {
+    margin-bottom: $fs--025;
 }

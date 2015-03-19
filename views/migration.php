@@ -274,22 +274,20 @@
             <div class="lp_mb+">
                 <h3><?php _e( 'Email Notifications', 'laterpay_migrator' ); ?></h3>
                 <dfn>
-                    <?php _e( 'The plugin will send every subscriber who has not yet switched up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?>
-                    <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?>
+                    <?php _e( 'The plugin will send every subscriber who has not yet switched up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
+                    <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
+                    <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients ', 'laterpay_migrator' ); ?>
                 </dfn>
                 <div class="lp_layout">
-                    <div class="lp_layout__item lp_1/4">
+                    <div class="lp_layout__item lp_1/6">
                         <label><?php _e( 'MailChimp API Key', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item">
+                    </div><div class="lp_layout__item lp_1/4">
                         <span class="lp_iconized-input" data-icon="j"></span>
                         <input type="text"
-                                class="lp_input lp_api-credentials__input"
+                                class="lp_input lp_api-credentials__input lp_1"
                                 name="mailchimp_api_key"
                                 value="<?php echo $laterpay['mailchimp_api_key']; ?>"
                                 placeholder="<?php _e( 'See Account -> API Keys and Authorized Apps', 'laterpay_migrator' ); ?>">
-                        <dfn>
-                            <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients ', 'laterpay_migrator' ); ?>
-                        </dfn>
                     </div>
                 </div>
 
@@ -313,14 +311,15 @@
             <div class="lp_mb+">
                 <h3><?php _e( 'Email Notification 1, sent 14 days before the subscription expires', 'laterpay_migrator' ); ?></h3>
                 <div class="lp_layout">
-                    <div class="lp_layout__item lp_1/4">
+                    <div class="lp_layout__item lp_1/6">
                         <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item">
+                    </div><div class="lp_layout__item lp_1/4">
                         <input type="text"
-                                class="lp_input"
+                                class="lp_input lp_1"
                                 name="mailchimp_campaign_before_expired"
                                 value="<?php echo $laterpay['mailchimp_campaign_before_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
+                    </div><div class="lp_layout__item lp_ml-">
                         <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
                     </div>
                 </div>
@@ -329,14 +328,15 @@
             <div class="lp_mb+">
                 <h3><?php _e( 'Email Notification 2, sent on the day the subscription expires', 'laterpay_migrator' ); ?></h3>
                 <div class="lp_layout">
-                    <div class="lp_layout__item lp_1/4">
+                    <div class="lp_layout__item lp_1/6">
                         <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item">
+                    </div><div class="lp_layout__item lp_1/4">
                         <input type="text"
-                                class="lp_input"
+                                class="lp_input lp_1"
                                 name="mailchimp_campaign_after_expired"
                                 value="<?php echo $laterpay['mailchimp_campaign_after_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
+                    </div><div class="lp_layout__item lp_ml-">
                         <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
                     </div>
                 </div>
