@@ -4,12 +4,11 @@ class LaterPay_Migrator_Parse
 {
 
     public static $column_mapping = array(
-        'date'        => 'Nächste Zahlung am',
-        'product'     => 'Produkt',
-        'first_name'  => 'Vorname',
-        'second_name' => 'Nachname',
-        'status'      => 'Zahlungsstatus',
-        'email'       => 'E-Mail',
+        0 => 'email',
+        1 => 'first_name',
+        2 => 'second_name',
+        3 => 'date',
+        4 => 'product',
     );
 
     /**
@@ -50,12 +49,8 @@ class LaterPay_Migrator_Parse
         // array to store mapped data
         $final_data = array();
 
-        // get column names
-        $columns    = array_shift( $data );
-        $columns    = explode( ';', $columns[0] );
-
-        // check, if data has required columns and at least 1 row
-        if ( ! $data || array_diff( array_intersect( self::$column_mapping, $columns ), self::$column_mapping ) ) {
+        // check, if data has at least 1 row
+        if ( ! $data ) {
             return 0;
         }
 
@@ -67,15 +62,11 @@ class LaterPay_Migrator_Parse
             $final_row = array();
             $values    = explode( ';', $row[0] );
             foreach ( $values as $key => $value ) {
-                if ( in_array( $columns[$key], self::$column_mapping ) ) {
-                    $final_row[array_search( $columns[$key], self::$column_mapping )] = $value;
-                }
+                $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
             }
 
-            // check data and ignore non-active subscriptions
-            // TODO: standartize this, better use multilingual values like '1'
-            $status = strpos( $final_row['status'], 'aktiv' ) !== false ? 1 : 0;
-            if ( ! $status || ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
+            // check data
+            if ( ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
             }
 

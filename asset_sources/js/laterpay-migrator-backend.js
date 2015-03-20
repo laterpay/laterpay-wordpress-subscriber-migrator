@@ -62,7 +62,11 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        // message
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            // message
+                        }
                     }
                 });
             },

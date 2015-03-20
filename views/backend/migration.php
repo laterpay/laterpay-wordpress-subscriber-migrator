@@ -131,11 +131,12 @@
                         <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
                         <li class="lp_list__item"><?php _e( 'First Name', 'laterpay_migrator' ); ?></li>
                         <li class="lp_list__item"><?php _e( 'Family Name', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Expiry Date of Subscription (mm-dd-yyyy)', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Expiry Date of Subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
                         <li class="lp_list__item"><?php _e( 'Subscribed Product', 'laterpay_migrator' ); ?></li>
                     </ul>
                 </div><div class="lp_layout__item lp_1/4">
-                    <?php _e( 'You can <a href="">download a template CSV file</a> here that you can fill with your real data.', 'laterpay_migrator' ); ?>
+                    <?php _e( 'You can download a template CSV file here that you can fill with your real data:', 'laterpay_migrator' ); ?>
+                    <?php echo '<a href="' . $laterpay['example_url'] . '">' . 'example.csv' . '</a>'; ?>
                 </div>
             </div>
             <hr class="lp_form-group-separator">
