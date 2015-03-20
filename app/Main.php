@@ -21,13 +21,8 @@ class LaterPay_Migrator_Main
 
         // include styles and scripts only if user is logged in and not in admin area
         if ( ! is_admin() && is_user_logged_in() ) {
-            add_action( 'wp_footer', array( $this, 'render_migration_sitenotice' ) );
-
-            wp_register_style(
-                'laterpay-migrator-frontend',
-                $config->get( 'css_url' ) . 'laterpay-migrator-frontend.css'
-            );
-            wp_enqueue_style( 'laterpay-migrator-frontend' );
+            $sitenotice = new LaterPay_Migrator_Sitenotice( $config );
+            add_action( 'wp_footer', array( $sitenotice, 'render_page' ) );
 
             wp_register_script(
                 'laterpay-migrator-frontend',
@@ -50,30 +45,6 @@ class LaterPay_Migrator_Main
             );
         }
     }
-
-    /**
-     * Display sitenotice with LatePay purchase link for existing subscribers.
-     *
-     * @return [type] [description]
-     */
-    public function render_migration_sitenotice() {
-        if ( is_user_logged_in() ) {
-            if ( LaterPay_Migrator_Subscription::is_active() ) {
-                // assign variables to the view template
-                $view_args = array(
-                    'message'        => get_option( 'laterpay_migrator_sitenotice_message' ),
-                    'button_text'    => get_option( 'laterpay_migrator_sitenotice_button_text' ),
-                    'bg_color'       => get_option( 'laterpay_migrator_sitenotice_bg_color' ),
-                    'text_color'     => get_option( 'laterpay_migrator_sitenotice_text_color' ),
-                );
-
-                // render sitenotice with LaterPay purchase button
-                $this->assign( 'laterpay_migrator', $view_args );
-                $this->render( 'frontend/partials/sitenotice' );
-            }
-        }
-
-        return;
     }
 
     /**

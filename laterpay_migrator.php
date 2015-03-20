@@ -31,6 +31,7 @@ require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Main.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Menu.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Parse.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Subscription.php' );
+require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Sitenotice.php' );
 require_once( $directory . 'library/mailchimp/src/' . 'Mailchimp.php' );
 
 $main = new LaterPay_Migrator_Main();
