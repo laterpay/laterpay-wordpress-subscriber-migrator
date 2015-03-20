@@ -69,8 +69,10 @@ class LaterPay_Migrator_Parse
                 break;
             }
 
-            // TODO: validate data
+            // validate data
             if ( ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
+                continue;
+            } else if ( ! strtotime( $final_row['date'] ) ) {
                 continue;
             }
 
