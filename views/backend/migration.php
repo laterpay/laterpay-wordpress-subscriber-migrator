@@ -296,7 +296,9 @@
                 <dfn>
                     <?php _e( 'The plugin will send every subscriber who has not yet switched to LaterPay up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
                     <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
-                    <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?>
+                    <?php if ( $laterpay['mailchimp_api_key'] == '' ): ?>
+                        <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?>
+                    <?php endif; ?>
                 </dfn>
                 <div class="lp_layout lp_mt-">
                     <div class="lp_layout__item lp_1/6">
@@ -338,7 +340,9 @@
                                 value="<?php echo $laterpay['mailchimp_campaign_before_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
                     </div><div class="lp_layout__item lp_ml-">
-                        <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
+                        <?php if ( $laterpay['mailchimp_campaign_before_expired'] == '' ): ?>
+                            <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -355,7 +359,9 @@
                                 value="<?php echo $laterpay['mailchimp_campaign_after_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
                     </div><div class="lp_layout__item lp_ml-">
-                        <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
+                        <?php if ( $laterpay['mailchimp_campaign_after_expired'] == '' ): ?>
+                            <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
