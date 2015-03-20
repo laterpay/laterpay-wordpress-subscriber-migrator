@@ -89,6 +89,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'example_url'                       => $this->config->get( 'plugin_url' ) . 'example.csv',
         );
 
+        // render 'migration' tab in 'laterpay' plugin backend
         $this->assign( 'laterpay', $view_args );
         $this->render( 'backend/migration' );
     }
