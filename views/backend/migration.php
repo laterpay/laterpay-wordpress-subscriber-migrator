@@ -129,10 +129,10 @@
                     <h3><?php _e( 'Required Data per Record (in that order)', 'laterpay_migrator' ); ?></h3>
                     <ul class="lp_list--bulleted">
                         <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'First Name', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Family Name', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Expiry Date of Subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Subscribed Product', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Family name', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Expiry date of subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Subscribed product', 'laterpay_migrator' ); ?></li>
                     </ul>
                 </div><div class="lp_layout__item lp_1/4">
                     <?php _e( 'You can download a template CSV file here that you can fill with your real data:', 'laterpay_migrator' ); ?>
