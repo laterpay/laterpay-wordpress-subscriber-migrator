@@ -45,7 +45,6 @@ class LaterPay_Migrator_Main
             );
         }
     }
-    }
 
     /**
      * Ajax method to get purchase URL.
