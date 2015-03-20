@@ -88,6 +88,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'products_mapping'                  => get_option( 'laterpay_migrator_products_mapping' ),
         );
 
+        // render 'migration' tab in 'laterpay' plugin backend
         $this->assign( 'laterpay', $view_args );
         $this->render( 'backend/migration' );
     }
