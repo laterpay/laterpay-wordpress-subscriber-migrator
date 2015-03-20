@@ -65,7 +65,7 @@
                         if (data.success) {
                             location.reload();
                         } else {
-                            // message
+                            setMessage(lpMigratorVars.i18nUploadFailed, false);
                         }
                     }
                 });
@@ -76,8 +76,9 @@
                     lpMigratorVars.ajaxUrl,
                     $o.mainForm.serializeArray(),
                     function(data) {
-                        // message
-                        // refresh block with state etc.
+console.log(data);
+                        setMessage(lpMigratorVars.i18nSetupModeActivated, false);
+// TODO: refresh block with state etc.
                     },
                     'json'
                 );

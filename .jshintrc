@@ -84,6 +84,7 @@
 
     // Custom Globals
     "globals"       : {
-        "lpMigratorVars"    : true
+        "lpMigratorVars"    : true,
+        "setMessage"        : true
     }
 }

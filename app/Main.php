@@ -42,7 +42,10 @@ class LaterPay_Migrator_Main
                 'laterpay-migrator-frontend',
                 'lpMigratorVars',
                 array(
-                    'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                    'ajaxUrl'                       => admin_url( 'admin-ajax.php' ),
+                    'i18nUploadFailed'              => __( 'The file you tried to upload did not conform to the required format.', 'laterpay_migrator' ),
+                    'i18nMigrationModeActivated'    => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay_migrator' ),
+                    'i18nSetupModeActivated'        => __( 'The migration process is paused now.', 'laterpay_migrator' ),
                 )
             );
         }

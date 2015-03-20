@@ -229,12 +229,12 @@
                                 <div class="lp_browser__omnibar-dot"></div>
                                 <div class="lp_browser__omnibar-dot"></div>
                             </div>
-                            <div id="lp_js_browserSitenotice" class="lp_browser__sitenotice">
-                                <div id="lp_js_browserSitenoticeText" class="lp_browser__sitenotice-text">
-                                    <?php _e( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?>
+                            <div id="lp_js_browserSitenotice" class="lp_browser__sitenotice" style="background:<?php echo $laterpay['sitenotice_bg_color']; ?>;">
+                                <div id="lp_js_browserSitenoticeText" class="lp_browser__sitenotice-text" style="color:<?php echo $laterpay['sitenotice_text_color']; ?>;">
+                                    <?php echo $laterpay['sitenotice_message']; ?>
                                 </div>
                                 <div id="lp_js_browserSitenoticeButton" class="lp_browser__sitenotice-button">
-                                    <?php _e( 'Switch Now', 'laterpay_migrator' ); ?>
+                                    <?php echo $laterpay['sitenotice_button_text']; ?>
                                 </div>
                             </div>
                         </div>
@@ -245,7 +245,7 @@
                                     <textarea id="lp_js_sitenoticeTextInput"
                                         class="lp_js_sitenoticeInput lp_input lp_1"
                                         name="sitenotice_message"
-                                        rows="2"><?php echo $laterpay['sitenotice_message'] !== false ? $laterpay['sitenotice_message'] :  __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ); ?></textarea>
+                                        rows="2"><?php echo $laterpay['sitenotice_message']; ?></textarea>
                                 </td>
                             </tr>
                             <tr>

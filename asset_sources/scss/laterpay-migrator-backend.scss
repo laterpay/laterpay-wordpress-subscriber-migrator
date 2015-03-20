@@ -6,7 +6,7 @@
 
 /* Status indicator ------------------------------------------------------------------------------------------------- */
 .lp_status-indicator {
-    background: $background--darker;
+    border: 2px solid $background--darker;
     border-radius: 999px; // pill shape
     display: inline-block;
     margin-right: $fs;
