@@ -10,6 +10,7 @@
                 files                       : undefined,
                 fileUploadForm              : $('#lp_js_uploadForm'),
                 fileInput                   : $('#lp_js_fileInput'),
+                fileUploadButton            : $('#lp_js_uploadButton'),
 
                 // sitenotice configuration inputs
                 sitenoticeInputs            : $('.lp_js_sitenoticeInput'),
@@ -27,7 +28,7 @@
             bindEvents = function() {
                 // bind file upload
                 $o.fileInput
-                .on('change', function() {
+                .change(function() {
                     $o.files = event.target.files;
                     uploadFile();
                 });
@@ -54,20 +55,28 @@
                 data.append('file', $o.files[0]);
 
                 $.ajax({
-                    url: lpMigratorVars.ajaxUrl,
-                    type: 'POST',
-                    data: data,
-                    cache: false,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            setMessage(lpMigratorVars.i18nUploadFailed, false);
-                        }
-                    }
+                    url         : lpMigratorVars.ajaxUrl,
+                    type        : 'POST',
+                    data        : data,
+                    cache       : false,
+                    dataType    : 'json',
+                    processData : false,
+                    contentType : false,
+                    beforeSend  : function() {
+                                    $o.fileUploadButton
+                                    .attr('data', $o.fileUploadButton.text())
+                                    .html('<div class="lp_loading-indicator"></div>');
+                                },
+                    success     : function(data) {
+                                    if (data.success) {
+                                        location.reload();
+                                    } else {
+                                        setMessage(lpMigratorVars.i18nUploadFailed, false);
+                                    }
+                                },
+                    complete    : function() {
+                                    $o.fileUploadButtonPgul.text($o.fileUploadButton.attr('data'));
+                                },
                 });
             },
 
@@ -75,10 +84,8 @@
                 $.post(
                     lpMigratorVars.ajaxUrl,
                     $o.mainForm.serializeArray(),
-                    function(data) {
-console.log(data);
+                    function() {
                         setMessage(lpMigratorVars.i18nSetupModeActivated, false);
-// TODO: refresh block with state etc.
                     },
                     'json'
                 );

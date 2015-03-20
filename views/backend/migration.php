@@ -103,7 +103,7 @@
                                     <span class="lp_upload__input-value"></span>
                                 </div>
                                 <span class="lp_upload__input-wrapper">
-                                    <span class="lp_upload__button button button-primary"><?php _e( 'Select CSV File to Upload', 'laterpay_migrator' ); ?></span>
+                                    <span id="lp_js_uploadButton" class="lp_upload__button button button-primary"><?php _e( 'Select CSV File to Upload', 'laterpay_migrator' ); ?></span>
                                     <input type="file" id="lp_js_fileInput" class="lp_upload__input" name="file" size="10" accept=".csv">
                                 </span>
                             </td>
@@ -309,7 +309,7 @@
                                 class="lp_input lp_api-credentials__input lp_1"
                                 name="mailchimp_api_key"
                                 value="<?php echo $laterpay['mailchimp_api_key']; ?>"
-                                placeholder="<?php _e( 'See Account -> API Keys and Authorized Apps', 'laterpay_migrator' ); ?>">
+                                placeholder="<?php _e( 'Account Settings &#10142; Extras &#10142; API keys', 'laterpay_migrator' ); ?>">
                     </div><div class="lp_layout__item lp_ml-">
                         <label><?php _e( 'This site uses SSL', 'laterpay' ); ?></label>
                     </div><div class="lp_layout__item">

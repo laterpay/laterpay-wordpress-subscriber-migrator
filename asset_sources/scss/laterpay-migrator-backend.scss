@@ -11,6 +11,7 @@
     display: inline-block;
     margin-right: $fs;
     position: relative;
+    top: -2px; // compensate border-width
 
     input[type=radio] {
         display: none;
@@ -83,7 +84,13 @@
 }
 
 .lp_upload__button {
+    transition: left 0.2s ease-in-out;
 
+    .lp_loading-indicator {
+        height: $fs--15;
+        margin: 2px auto;
+        width: $fs--15;
+    }
 }
 
 .lp_upload__input {
@@ -150,7 +157,7 @@
 
 /* Email notification configuration --------------------------------------------------------------------------------- */
 .lp_api-credentials__input {
-    padding-left: $fs--3 !important;
+    padding-left: 38px !important;
 }
 
 h3 {
