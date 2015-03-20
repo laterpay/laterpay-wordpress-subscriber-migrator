@@ -50,7 +50,7 @@ class LaterPay_Migrator_Parse
         $final_data = array();
 
         // check, if data has at least 1 row
-        if ( ! $data ) {
+        if ( ! $data  ) {
             return 0;
         }
 
@@ -62,10 +62,14 @@ class LaterPay_Migrator_Parse
             $final_row = array();
             $values    = explode( ';', $row[0] );
             foreach ( $values as $key => $value ) {
-                $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
+                if ( isset( self::$column_mapping[$key] ) ) {
+                    $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
+                    continue;
+                }
+                break;
             }
 
-            // check data
+            // TODO: validate data
             if ( ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
             }
