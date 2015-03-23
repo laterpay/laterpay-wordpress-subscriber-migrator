@@ -29,27 +29,27 @@
             <div class="lp_statistics-row lp_right">
                 <ul class="lp_statistics-row__list">
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of valid subscriber records in imported CSV file', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['valid']; ?></big>
                         <?php _e( 'Valid', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of incomplete subscriber records in imported CSV file', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['invalid']; ?></big>
                         <?php _e( 'Invalid', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of subscribers who were offered to switch to LaterPay', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['offered']; ?></big>
                         <?php _e( 'Offered', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of subscribers who did not yet follow the switching offer', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['ignored']; ?></big>
                         <?php _e( 'Ignored', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of subscribers who have already switched to LaterPay', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['migrated']; ?></big>
                         <?php _e( 'Migrated', 'laterpay_migrator' ); ?>
                     </li>
@@ -59,7 +59,7 @@
                         <?php _e( 'Remaining', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Latest renewal date in imported subscriber records', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['expiry'] ? $laterpay['subscriptions_state']['expiry'] : __( 'n/a', 'laterpay_migrator' ); ?></big>
                         <?php _e( 'Last Expiry', 'laterpay_migrator' ); ?>
                     </li>
@@ -296,6 +296,8 @@
                 <dfn>
                     <?php _e( 'The plugin will send every subscriber who has not yet switched to LaterPay up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
                     <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
+                    <?php _e( 'For every email type you have to create a campaign and a list on MailChimp.', 'laterpay_migrator' ); ?>
+                    <?php _e( 'The campaign defines the email layout to be used and the subscriber list the campaign is sent to.', 'laterpay_migrator' ); ?>
                     <?php if ( $laterpay['mailchimp_api_key'] == '' ): ?>
                         <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?>
                     <?php endif; ?>
@@ -339,10 +341,6 @@
                                 name="mailchimp_campaign_before_expired"
                                 value="<?php echo $laterpay['mailchimp_campaign_before_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
-                    </div><div class="lp_layout__item lp_ml-">
-                        <?php if ( $laterpay['mailchimp_campaign_before_expired'] == '' ): ?>
-                            <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -358,10 +356,6 @@
                                 name="mailchimp_campaign_after_expired"
                                 value="<?php echo $laterpay['mailchimp_campaign_after_expired']; ?>"
                                 placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
-                    </div><div class="lp_layout__item lp_ml-">
-                        <?php if ( $laterpay['mailchimp_campaign_after_expired'] == '' ): ?>
-                            <dfn><?php _e( 'You have to set up a “Campaign” at MailChimp, which defines the layout and text for this email', 'laterpay_migrator' ); ?></dfn>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>
