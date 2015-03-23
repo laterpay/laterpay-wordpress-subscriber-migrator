@@ -425,7 +425,9 @@ class LaterPay_Migrator_Subscription
             ;"
         ;
 
-        if ( ! $wpdb->get_results( $sql )) {
+        $result = $wpdb->get_results( $sql );
+
+        if ( ! $result && LaterPay_Migrator_Parse::check_migration_table_data() ) {
             return true;
         }
 
