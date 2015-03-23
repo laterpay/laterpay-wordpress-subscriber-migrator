@@ -7,7 +7,7 @@
 
 <div class="lp_page wp-core-ui">
 
-    <div id="lp_js_flashMessage" class="lp_flash-Message" style="display:none;">
+    <div id="lp_js_flashMessage" class="lp_flash-message" style="display:none;">
         <p></p>
     </div>
 
