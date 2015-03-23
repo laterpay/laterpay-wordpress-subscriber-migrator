@@ -68,15 +68,18 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <label class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                        <input type="radio" name="laterpay_migrator_status" value="setup" checked>
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
-                    </span>
-                    <span class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
+                    </label>
+                    <label class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
+                        <input type="radio" name="laterpay_migrator_status" value="migrating">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
-                    </span>
-                    <span class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    </label>
+                    <label class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                        <input type="radio" name="laterpay_migrator_status" value="complete">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
-                    </span>
+                    </label>
                 </div>
 
                 <?php if ( $laterpay['products'] ): ?>

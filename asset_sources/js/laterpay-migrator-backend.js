@@ -102,11 +102,11 @@ console.log(response.data.value);
                                 .parent()
                                     .find('lp_status--' + response.data.value)
                                     .addClass($o.active);
-                            // if (response.data.value === 'setup') {
-                            //     $('input[name=migration_is_active]').val(0);
-                            // } else {
-                            //     $('input[name=migration_is_active]').val(1);
-                            // }
+                            if (response.data.value === 'setup') {
+                                $('input[name=migration_is_active]').val(0);
+                            } else {
+                                $('input[name=migration_is_active]').val(1);
+                            }
                         }
                     },
                     'json'
