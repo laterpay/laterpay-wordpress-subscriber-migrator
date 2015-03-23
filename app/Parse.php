@@ -134,8 +134,7 @@ class LaterPay_Migrator_Parse
         }
 
         // upload file
-        foreach($_FILES as $file)
-        {
+        foreach ( $_FILES as $file ) {
             if ( substr( $file['name'], -4, 4 ) !== '.csv' ) {
                 wp_send_json(
                     array(

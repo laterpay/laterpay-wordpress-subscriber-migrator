@@ -333,7 +333,7 @@ class LaterPay_Migrator_Subscription
         }
 
         $products_mapping = array();
-        foreach( $products as $key => $product_name ) {
+        foreach ( $products as $key => $product_name ) {
             $map = array(
                 'timepass' => $timepasses[$key],
                 'assign'   => $assign_roles[$key],
