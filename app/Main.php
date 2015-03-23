@@ -15,34 +15,17 @@ class LaterPay_Migrator_Main
         add_action( 'wp_ajax_laterpay_migrator_file_upload',        array( 'LaterPay_Migrator_Parse', 'file_upload' ) );
         add_action( 'wp_ajax_laterpay_migrator_activate',           array( 'LaterPay_Migrator_Subscription', 'activate_subscription' ) );
         add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role' ) );
-        add_action( 'notify_subscription_expired',                  array( 'LaterPay_Migrator_Mail', 'notify_subscription_expired' ) );
-        add_action( 'notify_subscription_about_to_expiry',          array( 'LaterPay_Migrator_Mail', 'notify_subscription_about_to_expiry' ) );
         add_filter( 'modify_menu',                                  array( $this, 'add_menu' ) );
 
-        // include styles and scripts only if user is logged in and not in admin area
-        if ( ! is_admin() && is_user_logged_in() ) {
-            $sitenotice = new LaterPay_Migrator_Sitenotice( $config );
-            add_action( 'wp_footer', array( $sitenotice, 'render_page' ) );
+        if ( get_option( 'laterpay_migrator_is_active' ) && ! LaterPay_Migrator_Subscription::is_migration_completed() ) {
+            add_action( 'notify_subscription_expired',              array( 'LaterPay_Migrator_Mail', 'notify_subscription_expired' ) );
+            add_action( 'notify_subscription_about_to_expiry',      array( 'LaterPay_Migrator_Mail', 'notify_subscription_about_to_expiry' ) );
 
-            wp_register_script(
-                'laterpay-migrator-frontend',
-                $config->get( 'js_url' ) . 'laterpay-migrator-frontend.js',
-                array( 'jquery' ),
-                false,
-                true
-            );
-            wp_enqueue_script( 'laterpay-migrator-frontend' );
-
-            wp_localize_script(
-                'laterpay-migrator-frontend',
-                'lpMigratorVars',
-                array(
-                    'ajaxUrl'                       => admin_url( 'admin-ajax.php' ),
-                    'i18nUploadFailed'              => __( 'The file you tried to upload did not conform to the required format.', 'laterpay_migrator' ),
-                    'i18nMigrationModeActivated'    => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay_migrator' ),
-                    'i18nSetupModeActivated'        => __( 'The migration process is paused now.', 'laterpay_migrator' ),
-                )
-            );
+            // include styles and scripts only if user is logged in and not in admin area
+            if ( ! is_admin() && is_user_logged_in() ) {
+                $sitenotice = new LaterPay_Migrator_Sitenotice( $config );
+                add_action( 'wp_footer', array( $sitenotice, 'render_page' ) );
+            }
         }
     }
 

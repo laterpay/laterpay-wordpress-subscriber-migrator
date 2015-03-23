@@ -4,6 +4,7 @@
         var $o = {
                 // activation
                 activateButton              : $('#lp_js_startMigration'),
+                statusLabels                : $('.lp_status-indicator__label'),
                 mainForm                    : $('#lp_js_migratorMainForm'),
 
                 // file upload
@@ -71,11 +72,11 @@
                                     if (data.success) {
                                         location.reload();
                                     } else {
-                                        setMessage(lpMigratorVars.i18nUploadFailed, false);
+                                        setMessage(data.message, false);
                                     }
                                 },
                     complete    : function() {
-                                    $o.fileUploadButtonPgul.text($o.fileUploadButton.attr('data'));
+                                    $o.fileUploadButton.text($o.fileUploadButton.attr('data'));
                                 },
                 });
             },
@@ -84,8 +85,22 @@
                 $.post(
                     lpMigratorVars.ajaxUrl,
                     $o.mainForm.serializeArray(),
-                    function() {
-                        setMessage(lpMigratorVars.i18nSetupModeActivated, false);
+                    function(response) {
+                        setMessage(response.message, response.success);
+                        if ( response.data ) {
+                            // switch button text and input value
+                            // TODO: dirty code to make switcher work, need to refactor
+                            var button = $('input[type=radio][name=laterpay_migrator_status][value="' + response.data.value + '"]');
+                            $o.activateButton.text(response.data.text);
+                            button.prop('checked', true);
+                            $o.statusLabels.removeClass('lp_is-active');
+                            button.parent('label').addClass('lp_is-active');
+                            if ( response.data.value == 'setup' ) {
+                                $('input[name=migration_active]').val(0);
+                            } else {
+                                $('input[name=migration_active]').val(1);
+                            }
+                        }
                     },
                     'json'
                 );

@@ -19,9 +19,6 @@ class LaterPay_Migrator_Parse
     public static function parse_csv() {
         $config  = get_laterpay_migrator_config();
 
-        // create upload directory, if it does not exist
-        wp_mkdir_p( $config->get( 'upload_dir' ) );
-
         $csvFile = null;
         // search CSV file in upload folder
         $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
@@ -128,9 +125,6 @@ class LaterPay_Migrator_Parse
 
         $config = get_laterpay_migrator_config();
 
-        // create upload directory, if it does not exist
-        wp_mkdir_p( $config->get( 'upload_dir' ) );
-
         // clear upload folder from .csv files
         $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
         foreach ( $files as $file ) {
@@ -142,6 +136,15 @@ class LaterPay_Migrator_Parse
         // upload file
         foreach($_FILES as $file)
         {
+            if ( substr( $file['name'], -4, 4 ) !== '.csv' ) {
+                wp_send_json(
+                    array(
+                        'success' => false,
+                        'message' => __( 'The file you tried to upload did not conform to the required format.', 'laterpay_migrator' ),
+                    )
+                );
+            }
+
             if ( ! move_uploaded_file( $file['tmp_name'], $config->get( 'upload_dir' ) . basename( $file['name'] ) ) ) {
                 wp_send_json(
                     array(

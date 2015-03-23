@@ -11,14 +11,21 @@ class LaterPay_Migrator_Install
      * @return [type] [description]
      */
     public function install() {
+        $config  = get_laterpay_migrator_config();
+
         // create table for storing parsed subscriber data
         $this->create_migration_table();
+
+        // create upload directory, if it does not exist and set write access
+        wp_mkdir_p( $config->get( 'upload_dir' ) );
+        @chown( $config->get( 'upload_dir' ), 0777 );
 
         // add options
         add_option( 'laterpay_migrator_products', '' );
         add_option( 'laterpay_migrator_products_mapping', '' );
         add_option( 'laterpay_migrator_limit', 200 );
         add_option( 'laterpay_migrator_expiry_modifier', '2 week' );
+        add_option( 'laterpay_migrator_is_active', 0 );
 
         add_option( 'laterpay_migrator_sitenotice_message', __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ) );
         add_option( 'laterpay_migrator_sitenotice_button_text', __( 'Switch for Free Now', 'laterpay_migrator' ) );

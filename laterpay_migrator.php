@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/laterpay/laterpay-wordpress-subscriber-migrator
  * Description: Extension for LaterPay plugin to migrate existing subscribers to LaterPay.
  * Author: LaterPay GmbH and Aliaksandr Vahura
- * Version: 0.1
+ * Version: 0.2.0
  * Author URI: https://laterpay.net/
  * Textdomain: laterpay_migrator
  * Domain Path: /languages
@@ -23,6 +23,7 @@ register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'deactiva
 if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
     require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay' . DIRECTORY_SEPARATOR . 'laterpay_load.php' );
     require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/application/Controller/' . 'Abstract.php' );
+    require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/application/Form/' . 'Abstract.php' );
 }
 
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Install.php' );
@@ -32,6 +33,7 @@ require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Menu.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Parse.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Subscription.php' );
 require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Sitenotice.php' );
+require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Validation.php' );
 
 require_once( 'vendor/autoload.php' );
 
