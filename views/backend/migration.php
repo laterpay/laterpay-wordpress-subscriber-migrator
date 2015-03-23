@@ -68,20 +68,23 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
                     <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </span>
                 </div>
 
                 <a href="#"
                     id="lp_js_startMigration"
-                    class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>>
+                    class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>
+                    data-setup="<?php echo __( 'Start Migration', 'laterpay_migrator' ); ?>"
+                    data-migrating="<?php echo __( 'Pause Migration', 'laterpay_migrator' ); ?>"
+                    <?php if ( $laterpay['migration_is_completed'] ) { echo 'style="display:none;"'; } ?>>
                     <?php if ( ! $laterpay['migration_is_active'] ) {
                             _e( 'Start Migration', 'laterpay_migrator' );
                           } elseif ( $laterpay['migration_is_active'] ) {
