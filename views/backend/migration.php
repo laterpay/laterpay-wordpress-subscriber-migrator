@@ -130,7 +130,7 @@
                     <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
                 </ul>
             </div><div class="lp_layout__item lp_1/4">
-                <h3><?php _e( 'Required Data per Record (in that order)', 'laterpay_migrator' ); ?></h3>
+                <h3><?php _e( 'Required Data per Record (in that order!)', 'laterpay_migrator' ); ?></h3>
                 <ul class="lp_list--bulleted">
                     <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
                     <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
