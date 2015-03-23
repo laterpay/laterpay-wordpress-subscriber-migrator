@@ -90,12 +90,13 @@
                         if ( response.data ) {
                             // switch button text and input value
                             // TODO: dirty code to make switcher work, need to refactor
-                            var button = $('input[type=radio][name=laterpay_migrator_status][value="' + response.data.value + '"]');
+                            var button = $('input[type=radio][name=laterpay_migrator_status][value="' +
+                                           response.data.value + '"]');
                             $o.activateButton.text(response.data.text);
                             button.prop('checked', true);
                             $o.statusLabels.removeClass('lp_is-active');
                             button.parent('label').addClass('lp_is-active');
-                            if ( response.data.value == 'setup' ) {
+                            if ( response.data.value === 'setup' ) {
                                 $('input[name=migration_active]').val(0);
                             } else {
                                 $('input[name=migration_active]').val(1);
