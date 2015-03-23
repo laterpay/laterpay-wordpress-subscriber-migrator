@@ -9,6 +9,10 @@ class LaterPay_Migrator_Main
      * @return [type] [description]
      */
     public function init() {
+        if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
+            return;
+        }
+
         // register Ajax actions
         $config = get_laterpay_migrator_config();
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
@@ -198,6 +202,12 @@ class LaterPay_Migrator_Main
      * @return void
      */
     public static function activate() {
+        // check if LaterPay plugin installed
+        if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
+            _e( 'LaterPay plugin should be installed and activated.', 'laterpay_migrator');
+            exit;
+        }
+
         // install table for storing users to be migrated and their respective migration status
         $install = new LaterPay_Migrator_Install;
         $install->install();
@@ -215,6 +225,9 @@ class LaterPay_Migrator_Main
      * @return void
      */
     public static function deactivate() {
+        // pause migration process on deacttivation
+        add_option( 'laterpay_migrator_is_active', 0 );
+
         wp_clear_scheduled_hook( 'notify_subscription_expired' );
         wp_clear_scheduled_hook( 'notify_subscription_about_to_expiry' );
     }
