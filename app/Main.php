@@ -226,7 +226,7 @@ class LaterPay_Migrator_Main
      */
     public static function deactivate() {
         // pause migration process on deacttivation
-        add_option( 'laterpay_migrator_is_active', 0 );
+        update_option( 'laterpay_migrator_is_active', 0 );
 
         wp_clear_scheduled_hook( 'notify_subscription_expired' );
         wp_clear_scheduled_hook( 'notify_subscription_about_to_expiry' );
