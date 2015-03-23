@@ -22,6 +22,7 @@ delete_option( 'laterpay_migrator_products' );
 delete_option( 'laterpay_migrator_products_mapping' );
 delete_option( 'laterpay_migrator_limit' );
 delete_option( 'laterpay_migrator_expiry_modifier' );
+delete_option( 'laterpay_migrator_is_active' );
 
 delete_option( 'laterpay_migrator_sitenotice_message' );
 delete_option( 'laterpay_migrator_sitenotice_button_text' );
