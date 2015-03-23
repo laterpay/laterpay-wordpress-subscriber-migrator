@@ -258,14 +258,14 @@ class LaterPay_Migrator_Subscription
      */
     public static function activate_subscription() {
         // check if migration active already
-        if ( isset( $_POST['migration_is_active'] ) && $_POST['migration_is_active'] ) {
+        if ( get_option( 'laterpay_migrator_is_active' ) ) {
             update_option( 'laterpay_migrator_is_active', 0 );
 
             wp_send_json(
                 array(
                     'success' => true,
                     'message' => __( 'The migration process is paused now.', 'laterpay_migrator' ),
-                    'data'    => array(
+                    'mode'    => array(
                         'text'  => __( 'Start Migration', 'laterpay_migrator' ),
                         'value' => 'setup',
                     ),
@@ -394,7 +394,7 @@ class LaterPay_Migrator_Subscription
             array(
                 'success' => true,
                 'message' => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay_migrator' ),
-                'data'    => array(
+                'mode'    => array(
                     'text'  => __( 'Pause Migration', 'laterpay_migrator' ),
                     'value' => 'migrating',
                 ),

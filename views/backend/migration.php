@@ -68,18 +68,15 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <label class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
-                        <input type="radio" name="laterpay_migrator_status" value="setup" checked>
+                    <span class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
-                    </label>
-                    <label class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
-                        <input type="radio" name="laterpay_migrator_status" value="migrating">
+                    </span>
+                    <span class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
-                    </label>
-                    <label class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
-                        <input type="radio" name="laterpay_migrator_status" value="complete">
+                    </span>
+                    <span class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
-                    </label>
+                    </span>
                 </div>
 
                 <?php if ( $laterpay['products'] ): ?>
@@ -152,7 +149,6 @@
 
             <form id="lp_js_migratorMainForm" method="post">
                 <input type="hidden" name="action" value="laterpay_migrator_activate">
-                <input type="hidden" name="migration_is_active" value="<?php echo $laterpay['migration_is_active']; ?>">
                 <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
 
                 <div>

@@ -13,10 +13,6 @@
     position: relative;
     top: -2px; // compensate border-width
 
-    input[type=radio] {
-        display: none;
-    }
-
     .lp_status-indicator__label {
         color: $text--lighter;
         display: inline-block;
