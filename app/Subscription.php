@@ -311,22 +311,22 @@ class LaterPay_Migrator_Subscription
         // check mailchimp data
         $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
         try {
-            // campaign before check
-            $campaign_before = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
-            if ( ! $campaign_before['data'] ) {
-                throw new Exception( __( 'Wrong campaign-before name.', 'laterpay_migrator' ) );
+            // pre-expiry campaign validation
+            $pre_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+            if ( ! $pre_expiry_campaign['data'] ) {
+                throw new Exception( sprintf ( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             } else {
-                $list_id = $campaign_before['data'][0]['list_id'];
+                $list_id = $pre_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
                 // TODO: add fields to the list
             }
 
-            // campaign after check
-            $campaign_after = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
-            if ( ! $campaign_after['data'] ) {
-                throw new Exception( __( 'Wrong campaign-after name.', 'laterpay_migrator' ) );
+            // post-expiry campaign validation
+            $post_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
+            if ( ! $post_expiry_campaign['data'] ) {
+                throw new Exception( sprintf( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             } else {
-                $list_id = $campaign_after['data'][0]['list_id'];
+                $list_id = $post_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
                 // TODO: add fields to the list
             }
