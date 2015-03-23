@@ -67,21 +67,11 @@
             </div>
 
             <div class="lp_mt+">
-                <?php
-                    // TODO: this should better be done in the controller
-                    if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) {
-                        $status_class = 'lp_is-setting-up';
-                    } else if ( $laterpay['migrator_is_active'] ) {
-                        $status_class = 'lp_is-migrating';
-                    } else if ( $laterpay['migration_completed'] ) {
-                        $status_class = 'lp_is-completed';
-                    }
-                ?>
-                <div class="lp_status-indicator <?php echo $status_class; ?>">
-                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
+                <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
+                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migrator_is_active'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
                     <span class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
@@ -92,9 +82,9 @@
                 <a href="#"
                     id="lp_js_startMigration"
                     class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>>
-                    <?php if ( ! $laterpay['migrator_is_active'] ) {
+                    <?php if ( ! $laterpay['migration_is_active'] ) {
                             _e( 'Start Migration', 'laterpay_migrator' );
-                          } elseif ( $laterpay['migrator_is_active'] ) {
+                          } elseif ( $laterpay['migration_is_active'] ) {
                             _e( 'Pause Migration', 'laterpay_migrator' );
                           }
                     ?>

@@ -68,6 +68,16 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
         $timepasses = LaterPay_Helper_TimePass::get_all_time_passes();
         $roles      = $wp_roles->roles;
 
+        $migration_is_active = get_option( 'laterpay_migrator_is_active' );
+        $migration_completed = LaterPay_Migrator_Subscription::is_migration_completed();
+        $status_class        = 'lp_is-setting-up';
+
+        if ( $migration_is_active ) {
+            $status_class = 'lp_is-migrating';
+        } else if ( $migration_completed ) {
+            $status_class = 'lp_is-completed';
+        }
+
         // assign variables to the view template
         $view_args = array(
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
@@ -87,8 +97,9 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'roles'                             => $roles,
             'products_mapping'                  => get_option( 'laterpay_migrator_products_mapping' ),
             'example_url'                       => $this->config->get( 'plugin_url' ) . 'example.csv',
-            'migrator_is_active'                => get_option( 'laterpay_migrator_is_active' ),
-            'migration_completed'               => LaterPay_Migrator_Subscription::is_migration_completed(),
+            'migration_is_active'               => $migration_is_active,
+            'migration_completed'               => $migration_completed,
+            'status_class'                      => $status_class,
         );
 
         // render 'migration' tab in 'laterpay' plugin backend
