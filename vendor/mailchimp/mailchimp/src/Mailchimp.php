@@ -152,7 +152,6 @@ class Mailchimp {
             $this->debug = true;
         }
 
-
         $this->ch = curl_init();
 
         if (isset($opts['CURLOPT_FOLLOWLOCATION']) && $opts['CURLOPT_FOLLOWLOCATION'] === true) {

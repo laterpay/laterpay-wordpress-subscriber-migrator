@@ -297,14 +297,47 @@ class LaterPay_Migrator_Subscription
         }
 
         // save common options
+        update_option( 'laterpay_migrator_sitenotice_message',     $post_form->get_field_value( 'sitenotice_message' ) );
+        update_option( 'laterpay_migrator_sitenotice_button_text', $post_form->get_field_value( 'sitenotice_button_text' ) );
+        update_option( 'laterpay_migrator_sitenotice_bg_color',    $post_form->get_field_value( 'sitenotice_bg_color' ) );
+        update_option( 'laterpay_migrator_sitenotice_text_color',  $post_form->get_field_value( 'sitenotice_text_color' ) );
+
+        // save mailchimp data
         update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form->get_field_value( 'mailchimp_api_key' ) );
         update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) );
         update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) );
         update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
-        update_option( 'laterpay_migrator_sitenotice_message',                $post_form->get_field_value( 'sitenotice_message' ) );
-        update_option( 'laterpay_migrator_sitenotice_button_text',            $post_form->get_field_value( 'sitenotice_button_text' ) );
-        update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form->get_field_value( 'sitenotice_bg_color' ) );
-        update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form->get_field_value( 'sitenotice_text_color' ) );
+
+        // check mailchimp data
+        $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
+        try {
+            // campaign before check
+            $campaign_before = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+            if ( ! $campaign_before['data'] ) {
+                throw new Exception( __( 'Wrong campaign-before name.', 'laterpay_migrator' ) );
+            } else {
+                $list_id = $campaign_before['data'][0]['list_id'];
+                // set new fields to the list
+                // TODO: add fields to the list
+            }
+
+            // campaign after check
+            $campaign_after = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+            if ( ! $campaign_after['data'] ) {
+                throw new Exception( __( 'Wrong campaign-after name.', 'laterpay_migrator' ) );
+            } else {
+                $list_id = $campaign_after['data'][0]['list_id'];
+                // set new fields to the list
+                // TODO: add fields to the list
+            }
+        } catch ( Exception $e ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Mailchimp error: ', 'laterpay_migrator' ) . $e->getMessage(),
+                )
+            );
+        }
 
         // save product mapping
         $products     = get_option( 'laterpay_migrator_products' );
@@ -344,7 +377,7 @@ class LaterPay_Migrator_Subscription
 
         update_option( 'laterpay_migrator_products_mapping', $products_mapping );
 
-        // parse uploaded CSV file
+        // check if data present in migration table
         if ( ! LaterPay_Migrator_Parse::check_migration_table_data() ) {
             wp_send_json(
                 array(
