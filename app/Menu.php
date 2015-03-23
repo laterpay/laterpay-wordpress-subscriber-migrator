@@ -87,6 +87,8 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'roles'                             => $roles,
             'products_mapping'                  => get_option( 'laterpay_migrator_products_mapping' ),
             'example_url'                       => $this->config->get( 'plugin_url' ) . 'example.csv',
+            'migrator_is_active'                => get_option( 'laterpay_migrator_is_active' ),
+            'migration_completed'               => LaterPay_Migrator_Subscription::is_migration_completed(),
         );
 
         // render 'migration' tab in 'laterpay' plugin backend

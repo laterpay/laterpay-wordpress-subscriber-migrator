@@ -258,6 +258,22 @@ class LaterPay_Migrator_Subscription
      */
     public static function activate_subscription() {
         $post_form = $_POST;
+
+        if ( isset( $post_form['migration_active'] ) && $post_form['migration_active'] ) {
+            update_option( 'laterpay_migrator_is_active', 0 );
+
+            wp_send_json(
+                array(
+                    'success' => true,
+                    'message' => __( 'The migration process is paused now.', 'laterpay_migrator' ),
+                    'data'    => array(
+                        'text'  => __( 'Start Migration', 'laterpay_migrator' ),
+                        'value' => 'setup',
+                    ),
+                )
+            );
+        }
+
         // TODO: validate post data via LaterPay Form and send false if invalid
 
         // save usual options
@@ -318,10 +334,17 @@ class LaterPay_Migrator_Subscription
             );
         }
 
+        // activate migration
+        update_option( 'laterpay_migrator_is_active', 1 );
+
         wp_send_json(
             array(
                 'success' => true,
-                'message' => __( 'Migration successfully activated.', 'laterpay_migrator' ),
+                'message' => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay_migrator' ),
+                'data'    => array(
+                    'text'  => __( 'Pause Migration', 'laterpay_migrator' ),
+                    'value' => 'migrating',
+                ),
             )
         );
     }
@@ -360,5 +383,32 @@ class LaterPay_Migrator_Subscription
         $user->add_role( $map['assign'] );
 
         return true;
+    }
+
+    /**
+     * [is_migration_completed description]
+     *
+     * @return bool
+     */
+    public static function is_migration_completed() {
+        global $wpdb;
+
+        $table = LaterPay_Migrator_Install::get_migration_table_name();
+        $sql   = "
+            SELECT
+                *
+            FROM
+                {$table}
+            WHERE
+                is_migrated_to_laterpay = 0 AND
+                expiry >= CURDATE()
+            ;"
+        ;
+
+        if ( ! $wpdb->get_results( $sql )) {
+            return true;
+        }
+
+        return false;
     }
 }

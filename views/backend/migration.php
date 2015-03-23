@@ -68,24 +68,29 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator">
-                    <label class="lp_status-indicator__label lp_is-active">
-                        <input type="radio" name="laterpay_migrator_status" value="setup" checked>
+                    <label class="lp_status-indicator__label<?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
+                        <input type="radio" name="laterpay_migrator_status" value="setup" <?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo 'checked'; } ?>>
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </label>
-                    <label class="lp_status-indicator__label">
-                        <input type="radio" name="laterpay_migrator_status" value="migrating">
+                    <label class="lp_status-indicator__label<?php if ( $laterpay['migrator_is_active'] ) { echo ' lp_is-active'; } ?>"">
+                        <input type="radio" name="laterpay_migrator_status" value="migrating" <?php if ( $laterpay['migrator_is_active'] ) { echo 'checked'; } ?>>
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </label>
-                    <label class="lp_status-indicator__label">
-                        <input type="radio" name="laterpay_migrator_status" value="complete">
+                    <label class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>"">
+                        <input type="radio" name="laterpay_migrator_status" value="complete" <?php if ( $laterpay['migration_completed'] ) { echo 'checked'; } ?>>
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </label>
                 </div>
 
                 <a href="#"
                     id="lp_js_startMigration"
-                    class="button button-primary"<?php if ( ! $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
-                    <?php _e( 'Start Migration', 'laterpay_migrator' ); ?>
+                    class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>>
+                    <?php if ( ! $laterpay['migrator_is_active'] ) {
+                            _e( 'Start Migration', 'laterpay_migrator' );
+                          } elseif ( $laterpay['migrator_is_active'] ) {
+                            _e( 'Pause Migration', 'laterpay_migrator' );
+                          }
+                    ?>
                 </a>
             </div>
         </div>
@@ -115,6 +120,7 @@
 
         <form id="lp_js_migratorMainForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_activate">
+            <input type="hidden" name="migration_active" value="<?php echo $laterpay['migrator_is_active']; ?>">
             <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator_form' ); } ?>
             <div class="lp_layout">
                 <div class="lp_layout__item lp_1/4">
