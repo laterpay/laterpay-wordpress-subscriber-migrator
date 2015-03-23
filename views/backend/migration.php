@@ -67,19 +67,26 @@
             </div>
 
             <div class="lp_mt+">
-                <div class="lp_status-indicator">
-                    <label class="lp_status-indicator__label<?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
-                        <input type="radio" name="laterpay_migrator_status" value="setup" <?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo 'checked'; } ?>>
+                <?php
+                    // TODO: this should better be done in the controller
+                    if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) {
+                        $status_class = 'lp_is-setting-up';
+                    } else if ( $laterpay['migrator_is_active'] ) {
+                        $status_class = 'lp_is-migrating';
+                    } else if ( $laterpay['migration_completed'] ) {
+                        $status_class = 'lp_is-completed';
+                    }
+                ?>
+                <div class="lp_status-indicator <?php echo $status_class; ?>">
+                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migrator_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
-                    </label>
-                    <label class="lp_status-indicator__label<?php if ( $laterpay['migrator_is_active'] ) { echo ' lp_is-active'; } ?>"">
-                        <input type="radio" name="laterpay_migrator_status" value="migrating" <?php if ( $laterpay['migrator_is_active'] ) { echo 'checked'; } ?>>
+                    </span>
+                    <span class="lp_status-indicator__label<?php if ( $laterpay['migrator_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
-                    </label>
-                    <label class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>"">
-                        <input type="radio" name="laterpay_migrator_status" value="complete" <?php if ( $laterpay['migration_completed'] ) { echo 'checked'; } ?>>
+                    </span>
+                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
-                    </label>
+                    </span>
                 </div>
 
                 <a href="#"
