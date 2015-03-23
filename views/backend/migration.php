@@ -68,19 +68,19 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </span>
                 </div>
 
                 <a href="#"
-                    id="lp_js_startMigration"
+                    id="lp_js_switchPluginStatus"
                     class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>
                     data-setup="<?php echo __( 'Start Migration', 'laterpay_migrator' ); ?>"
                     data-migrating="<?php echo __( 'Pause Migration', 'laterpay_migrator' ); ?>"
@@ -120,7 +120,7 @@
 
         <form id="lp_js_migratorMainForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_activate">
-            <input type="hidden" name="migration_active" value="<?php echo $laterpay['migration_is_active']; ?>">
+            <input type="hidden" name="migration_is_active" value="<?php echo $laterpay['migration_is_active']; ?>">
             <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
             <div class="lp_layout">
                 <div class="lp_layout__item lp_1/4">
@@ -306,7 +306,7 @@
                         <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?><br>
                     <?php endif; ?>
                     <?php _e( 'For every email type you have to create a <strong>campaign</strong> and a <strong>list</strong> on MailChimp.', 'laterpay_migrator' ); ?>
-                    <?php _e( 'The campaign defines the email layout to be used as well as the subscriber list the campaign is sent to.', 'laterpay_migrator' ); ?><br>
+                    <?php _e( 'The campaign defines the email layout to be used as well as the subscriber list, the campaign is sent to.', 'laterpay_migrator' ); ?><br>
                 </dfn>
                 <div class="lp_layout lp_mt-">
                     <div class="lp_layout__item lp_1/6">

@@ -2,8 +2,9 @@
 
     function laterpayMigratorBackend() {
         var $o = {
-                // activation
-                activateButton              : $('#lp_js_startMigration'),
+                // plugin status
+                statusIndicator             : $('.lp_status-indicator'),
+                statusButton                : $('#lp_js_switchPluginStatus'),
                 statusLabels                : $('.lp_status-indicator__label'),
                 mainForm                    : $('#lp_js_migratorMainForm'),
 
@@ -24,20 +25,23 @@
                 sitenotice                  : $('#lp_js_browserSitenotice'),
                 sitenoticeText              : $('#lp_js_browserSitenoticeText'),
                 sitenoticeButton            : $('#lp_js_browserSitenoticeButton'),
+
+                // state classes
+                active                      : 'lp_is-active',
             },
 
             bindEvents = function() {
-                // bind file upload
+                // file upload
                 $o.fileInput
                 .change(function() {
                     $o.files = event.target.files;
                     uploadFile();
                 });
 
-                // bind activation
-                $o.activateButton
+                // plugin status
+                $o.statusButton
                 .mousedown(function() {
-                    activateMigration();
+                    switchPluginStatus();
                 })
                 .click(function(e) {e.preventDefault();});
 
@@ -81,28 +85,28 @@
                 });
             },
 
-            activateMigration = function() {
+            switchPluginStatus = function() {
                 $.post(
                     lpMigratorVars.ajaxUrl,
                     $o.mainForm.serializeArray(),
                     function(response) {
                         setMessage(response.message, response.success);
-                        if ( response.data ) {
-                            // switch button text and input value
-                            // TODO: dirty code to make switcher work, need to refactor
-                            var button = $('input[type=radio][name=laterpay_migrator_status][value="' +
-                                           response.data.value + '"]');
-                            $o.activateButton.text(response.data.text);
-                            button.prop('checked', true);
-                            $o.statusLabels.removeClass('lp_is-active');
-                            button.parent('label').addClass('lp_is-active');
-                            if ( response.data.value ) {
-                                if ( response.data.value === 'setup' ) {
-                                    $('input[name=migration_active]').val(0);
-                                } else {
-                                    $('input[name=migration_active]').val(1);
-                                }
-                            }
+                        if (response.data) {
+                            // switch button text
+                            $o.statusButton.text(response.data.text);
+
+console.log(response.data.value);
+
+                            $o.statusLabels
+                            .removeClass($o.active)
+                                .parent()
+                                    .find('lp_status--' + response.data.value)
+                                    .addClass($o.active);
+                            // if (response.data.value === 'setup') {
+                            //     $('input[name=migration_is_active]').val(0);
+                            // } else {
+                            //     $('input[name=migration_is_active]').val(1);
+                            // }
                         }
                     },
                     'json'

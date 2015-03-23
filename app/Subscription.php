@@ -258,7 +258,7 @@ class LaterPay_Migrator_Subscription
      */
     public static function activate_subscription() {
         // check if migration active already
-        if ( isset( $_POST['migration_active'] ) && $_POST['migration_active'] ) {
+        if ( isset( $_POST['migration_is_active'] ) && $_POST['migration_is_active'] ) {
             update_option( 'laterpay_migrator_is_active', 0 );
 
             wp_send_json(
@@ -288,7 +288,7 @@ class LaterPay_Migrator_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Invalid data.', 'laterpay_migrator' ),
+                    'message' => __( 'You have to configure the Subscription Mapping and Subscriber Communication sections before you can start the migration process.', 'laterpay_migrator' ),
                     'data'    => array(
                         'errors' => $post_form->get_errors(),
                     ),
@@ -296,7 +296,7 @@ class LaterPay_Migrator_Subscription
             );
         }
 
-        // save usual options
+        // save common options
         update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form->get_field_value( 'mailchimp_api_key' ) );
         update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) );
         update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) );

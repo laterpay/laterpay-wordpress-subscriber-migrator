@@ -149,7 +149,7 @@ class LaterPay_Migrator_Parse
                 wp_send_json(
                     array(
                         'success' => false,
-                        'message' => __( 'Can\'t upload file.', 'laterpay_migrator' ),
+                        'message' => __( 'Can\'t upload file. Please make sure the upload folder is writable.', 'laterpay_migrator' ),
                     )
                 );
             }
