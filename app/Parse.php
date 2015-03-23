@@ -134,8 +134,7 @@ class LaterPay_Migrator_Parse
         }
 
         // upload file
-        foreach($_FILES as $file)
-        {
+        foreach ( $_FILES as $file ) {
             if ( substr( $file['name'], -4, 4 ) !== '.csv' ) {
                 wp_send_json(
                     array(
@@ -149,7 +148,7 @@ class LaterPay_Migrator_Parse
                 wp_send_json(
                     array(
                         'success' => false,
-                        'message' => __( 'Can\'t upload file.', 'laterpay_migrator' ),
+                        'message' => __( 'Can\'t upload file. Please make sure the upload folder is writable.', 'laterpay_migrator' ),
                     )
                 );
             }

@@ -258,7 +258,7 @@ class LaterPay_Migrator_Subscription
      */
     public static function activate_subscription() {
         // check if migration active already
-        if ( isset( $_POST['migration_active'] ) && $_POST['migration_active'] ) {
+        if ( isset( $_POST['migration_is_active'] ) && $_POST['migration_is_active'] ) {
             update_option( 'laterpay_migrator_is_active', 0 );
 
             wp_send_json(
@@ -288,7 +288,7 @@ class LaterPay_Migrator_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Invalid data.', 'laterpay_migrator' ),
+                    'message' => __( 'You have to configure the Subscription Mapping and Subscriber Communication sections before you can start the migration process.', 'laterpay_migrator' ),
                     'data'    => array(
                         'errors' => $post_form->get_errors(),
                     ),
@@ -296,7 +296,7 @@ class LaterPay_Migrator_Subscription
             );
         }
 
-        // save usual options
+        // save common options
         update_option( 'laterpay_migrator_sitenotice_message',     $post_form->get_field_value( 'sitenotice_message' ) );
         update_option( 'laterpay_migrator_sitenotice_button_text', $post_form->get_field_value( 'sitenotice_button_text' ) );
         update_option( 'laterpay_migrator_sitenotice_bg_color',    $post_form->get_field_value( 'sitenotice_bg_color' ) );
@@ -366,7 +366,7 @@ class LaterPay_Migrator_Subscription
         }
 
         $products_mapping = array();
-        foreach( $products as $key => $product_name ) {
+        foreach ( $products as $key => $product_name ) {
             $map = array(
                 'timepass' => $timepasses[$key],
                 'assign'   => $assign_roles[$key],

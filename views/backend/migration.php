@@ -68,30 +68,32 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </span>
                 </div>
 
-                <a href="#"
-                    id="lp_js_startMigration"
-                    class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>
-                    data-setup="<?php echo __( 'Start Migration', 'laterpay_migrator' ); ?>"
-                    data-migrating="<?php echo __( 'Pause Migration', 'laterpay_migrator' ); ?>"
-                    <?php if ( $laterpay['migration_is_completed'] ) { echo 'style="display:none;"'; } ?>>
-                    <?php if ( ! $laterpay['migration_is_active'] ) {
-                            _e( 'Start Migration', 'laterpay_migrator' );
-                          } elseif ( $laterpay['migration_is_active'] ) {
-                            _e( 'Pause Migration', 'laterpay_migrator' );
-                          }
-                    ?>
-                </a>
+                <?php if ( $laterpay['products'] ): ?>
+                    <a href="#"
+                        id="lp_js_switchPluginStatus"
+                        class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>
+                        data-setup="<?php echo __( 'Start Migration', 'laterpay_migrator' ); ?>"
+                        data-migrating="<?php echo __( 'Pause Migration', 'laterpay_migrator' ); ?>"
+                        <?php if ( $laterpay['migration_is_completed'] ) { echo 'style="display:none;"'; } ?>>
+                        <?php if ( ! $laterpay['migration_is_active'] ) {
+                                _e( 'Start Migration', 'laterpay_migrator' );
+                              } elseif ( $laterpay['migration_is_active'] ) {
+                                _e( 'Pause Migration', 'laterpay_migrator' );
+                              }
+                        ?>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -118,36 +120,38 @@
             </div>
         </form>
 
-        <form id="lp_js_migratorMainForm" method="post">
-            <input type="hidden" name="action" value="laterpay_migrator_activate">
-            <input type="hidden" name="migration_active" value="<?php echo $laterpay['migration_is_active']; ?>">
-            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
-            <div class="lp_layout">
-                <div class="lp_layout__item lp_1/4">
-                    <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>
-                    <ul class="lp_list--bulleted">
-                        <li class="lp_list__item"><?php _e( 'Text qualified by double quotes', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Fields delimited by semicolons', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'File encoded in UTF-8', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
-                    </ul>
-                </div><div class="lp_layout__item lp_1/4">
-                    <h3><?php _e( 'Required Data per Record (in that order)', 'laterpay_migrator' ); ?></h3>
-                    <ul class="lp_list--bulleted">
-                        <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Family name', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Expiry date of subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
-                        <li class="lp_list__item"><?php _e( 'Subscribed product', 'laterpay_migrator' ); ?></li>
-                    </ul>
-                </div><div class="lp_layout__item lp_1/4">
-                    <?php _e( 'You can download a template CSV file here that you can fill with your real data:', 'laterpay_migrator' ); ?>
-                    <?php echo '<a href="' . $laterpay['example_url'] . '">' . 'example.csv' . '</a>'; ?>
-                </div>
+        <div class="lp_layout lp_empty-state"<?php if ( $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
+            <div class="lp_layout__item lp_1/4">
+                <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>
+                <ul class="lp_list--bulleted">
+                    <li class="lp_list__item"><?php _e( 'Text qualified by double quotes', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'Fields delimited by semicolons', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'File encoded in UTF-8', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
+                </ul>
+            </div><div class="lp_layout__item lp_1/4">
+                <h3><?php _e( 'Required Data per Record (in that order)', 'laterpay_migrator' ); ?></h3>
+                <ul class="lp_list--bulleted">
+                    <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'Family name', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'Expiry date of subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
+                    <li class="lp_list__item"><?php _e( 'Subscribed product', 'laterpay_migrator' ); ?></li>
+                </ul>
+            </div><div class="lp_layout__item lp_1/4">
+                <?php _e( 'You can download a template CSV file here that you can fill with your real data:', 'laterpay_migrator' ); ?>
+                <?php echo '<a href="' . $laterpay['example_url'] . '">' . 'example.csv' . '</a>'; ?>
             </div>
+        </div>
+        <?php if ( $laterpay['products'] ): ?>
             <hr class="lp_form-group-separator">
 
-            <?php if ( $laterpay['products'] ): ?>
+
+            <form id="lp_js_migratorMainForm" method="post">
+                <input type="hidden" name="action" value="laterpay_migrator_activate">
+                <input type="hidden" name="migration_is_active" value="<?php echo $laterpay['migration_is_active']; ?>">
+                <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
+
                 <div>
                     <h2><?php _e( 'Subscription Mapping', 'laterpay_migrator' ); ?></h2>
                     <table class="lp_table">
@@ -215,156 +219,156 @@
                     </table>
                 </div>
                 <hr class="lp_form-group-separator">
+
+
+                <div>
+                    <h2><?php _e( 'Subscriber Communication', 'laterpay_migrator' ); ?></h2>
+                </div>
+
+                <div class="lp_mb+">
+                    <h3><?php _e( 'Sitenotice', 'laterpay_migrator' ); ?></h3>
+                    <dfn>
+                        <?php _e( 'During migration, the plugin renders a sitenotice bar for subscribers asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?>
+                    </dfn>
+                    <div class="lp_layout">
+                        <div class="lp_layout__item">
+                            <div class="lp_browser">
+                                <div class="lp_browser__omnibar lp_clearfix">
+                                    <div class="lp_browser__omnibar-dot"></div>
+                                    <div class="lp_browser__omnibar-dot"></div>
+                                    <div class="lp_browser__omnibar-dot"></div>
+                                </div>
+                                <div id="lp_js_browserSitenotice" class="lp_browser__sitenotice" style="background:<?php echo $laterpay['sitenotice_bg_color']; ?>;">
+                                    <div id="lp_js_browserSitenoticeText" class="lp_browser__sitenotice-text" style="color:<?php echo $laterpay['sitenotice_text_color']; ?>;">
+                                        <?php echo $laterpay['sitenotice_message']; ?>
+                                    </div>
+                                    <div id="lp_js_browserSitenoticeButton" class="lp_browser__sitenotice-button">
+                                        <?php echo $laterpay['sitenotice_button_text']; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><div class="lp_layout__item lp_1/4">
+                            <table class="lp_table--layout lp_mt++">
+                                <tr>
+                                    <td colspan="2">
+                                        <textarea id="lp_js_sitenoticeTextInput"
+                                            class="lp_js_sitenoticeInput lp_input lp_1"
+                                            name="sitenotice_message"
+                                            rows="2"><?php echo $laterpay['sitenotice_message']; ?></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label><?php _e( 'Button Text', 'laterpay_migrator' ); ?></label>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                            id="lp_js_sitenoticeButtonTextInput"
+                                            class="lp_js_sitenoticeInput lp_input"
+                                            name="sitenotice_button_text"
+                                            value="<?php echo $laterpay['sitenotice_button_text']; ?>">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label><?php _e( 'Background Color', 'laterpay_migrator' ); ?></label>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                            id="lp_js_sitenoticeBgColorInput"
+                                            class="lp_js_sitenoticeInput lp_input"
+                                            name="sitenotice_bg_color"
+                                            value="<?php echo $laterpay['sitenotice_bg_color']; ?>"
+                                            placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label><?php _e( 'Text Color', 'laterpay_migrator' ); ?></label>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                            id="lp_js_sitenoticeTextColorInput"
+                                            class="lp_js_sitenoticeInput lp_input"
+                                            name="sitenotice_text_color"
+                                            value="<?php echo $laterpay['sitenotice_text_color']; ?>"
+                                            placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lp_mb+">
+                    <h3><?php _e( 'Email Notifications', 'laterpay_migrator' ); ?></h3>
+                    <dfn>
+                        <?php _e( 'The plugin will send every subscriber who has not yet switched to LaterPay up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
+                        <?php if ( $laterpay['mailchimp_api_key'] == '' ): ?>
+                            <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
+                            <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?><br>
+                        <?php endif; ?>
+                        <?php _e( 'For every email type you have to create a <strong>campaign</strong> and a <strong>list</strong> on MailChimp.', 'laterpay_migrator' ); ?>
+                        <?php _e( 'The campaign defines the email layout to be used as well as the subscriber list, the campaign is sent to.', 'laterpay_migrator' ); ?><br>
+                    </dfn>
+                    <div class="lp_layout lp_mt-">
+                        <div class="lp_layout__item lp_1/6">
+                            <label><?php _e( 'MailChimp API Key', 'laterpay_migrator' ); ?></label>
+                        </div><div class="lp_layout__item lp_1/4">
+                            <span class="lp_iconized-input" data-icon="j"></span>
+                            <input type="text"
+                                    class="lp_input lp_api-credentials__input lp_1"
+                                    name="mailchimp_api_key"
+                                    value="<?php echo $laterpay['mailchimp_api_key']; ?>"
+                                    placeholder="<?php _e( 'Account Settings &#10142; Extras &#10142; API keys', 'laterpay_migrator' ); ?>">
+                        </div><div class="lp_layout__item lp_ml-">
+                            <label><?php _e( 'This site uses SSL', 'laterpay' ); ?></label>
+                        </div><div class="lp_layout__item">
+                            <div class="lp_toggle">
+                                <label class="lp_toggle__label">
+                                    <input type="checkbox"
+                                            class="lp_toggle__input"
+                                            name="mailchimp_ssl_connection"
+                                            value="1"
+                                            <?php if ( $laterpay['mailchimp_ssl_connection'] ) { echo 'checked'; } ?>>
+                                    <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
+                                    <span class="lp_toggle__handle"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lp_mb+">
+                    <h3><?php _e( 'Email Notification 1, sent 14 days before the subscription expires', 'laterpay_migrator' ); ?></h3>
+                    <div class="lp_layout">
+                        <div class="lp_layout__item lp_1/6">
+                            <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
+                        </div><div class="lp_layout__item lp_1/4">
+                            <input type="text"
+                                    class="lp_input lp_1"
+                                    name="mailchimp_campaign_before_expired"
+                                    value="<?php echo $laterpay['mailchimp_campaign_before_expired']; ?>"
+                                    placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lp_mb+">
+                    <h3><?php _e( 'Email Notification 2, sent on the day the subscription expires', 'laterpay_migrator' ); ?></h3>
+                    <div class="lp_layout">
+                        <div class="lp_layout__item lp_1/6">
+                            <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
+                        </div><div class="lp_layout__item lp_1/4">
+                            <input type="text"
+                                    class="lp_input lp_1"
+                                    name="mailchimp_campaign_after_expired"
+                                    value="<?php echo $laterpay['mailchimp_campaign_after_expired']; ?>"
+                                    placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
+                        </div>
+                    </div>
+                </div>
             <?php endif; ?>
-
-
-            <div>
-                <h2><?php _e( 'Subscriber Communication', 'laterpay_migrator' ); ?></h2>
-            </div>
-
-            <div class="lp_mb+">
-                <h3><?php _e( 'Sitenotice', 'laterpay_migrator' ); ?></h3>
-                <dfn>
-                    <?php _e( 'During migration, the plugin renders a sitenotice bar for subscribers asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?>
-                </dfn>
-                <div class="lp_layout">
-                    <div class="lp_layout__item">
-                        <div class="lp_browser">
-                            <div class="lp_browser__omnibar lp_clearfix">
-                                <div class="lp_browser__omnibar-dot"></div>
-                                <div class="lp_browser__omnibar-dot"></div>
-                                <div class="lp_browser__omnibar-dot"></div>
-                            </div>
-                            <div id="lp_js_browserSitenotice" class="lp_browser__sitenotice" style="background:<?php echo $laterpay['sitenotice_bg_color']; ?>;">
-                                <div id="lp_js_browserSitenoticeText" class="lp_browser__sitenotice-text" style="color:<?php echo $laterpay['sitenotice_text_color']; ?>;">
-                                    <?php echo $laterpay['sitenotice_message']; ?>
-                                </div>
-                                <div id="lp_js_browserSitenoticeButton" class="lp_browser__sitenotice-button">
-                                    <?php echo $laterpay['sitenotice_button_text']; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div><div class="lp_layout__item lp_1/4">
-                        <table class="lp_table--layout lp_mt++">
-                            <tr>
-                                <td colspan="2">
-                                    <textarea id="lp_js_sitenoticeTextInput"
-                                        class="lp_js_sitenoticeInput lp_input lp_1"
-                                        name="sitenotice_message"
-                                        rows="2"><?php echo $laterpay['sitenotice_message']; ?></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label><?php _e( 'Button Text', 'laterpay_migrator' ); ?></label>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="lp_js_sitenoticeButtonTextInput"
-                                        class="lp_js_sitenoticeInput lp_input"
-                                        name="sitenotice_button_text"
-                                        value="<?php echo $laterpay['sitenotice_button_text']; ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label><?php _e( 'Background Color', 'laterpay_migrator' ); ?></label>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="lp_js_sitenoticeBgColorInput"
-                                        class="lp_js_sitenoticeInput lp_input"
-                                        name="sitenotice_bg_color"
-                                        value="<?php echo $laterpay['sitenotice_bg_color']; ?>"
-                                        placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label><?php _e( 'Text Color', 'laterpay_migrator' ); ?></label>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="lp_js_sitenoticeTextColorInput"
-                                        class="lp_js_sitenoticeInput lp_input"
-                                        name="sitenotice_text_color"
-                                        value="<?php echo $laterpay['sitenotice_text_color']; ?>"
-                                        placeholder="<?php _e( 'Enter a valid CSS color', 'laterpay_migrator' ); ?>">
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lp_mb+">
-                <h3><?php _e( 'Email Notifications', 'laterpay_migrator' ); ?></h3>
-                <dfn>
-                    <?php _e( 'The plugin will send every subscriber who has not yet switched to LaterPay up to two emails asking them to switch to a free time pass for the rest of their subscription period.', 'laterpay_migrator' ); ?><br>
-                    <?php if ( $laterpay['mailchimp_api_key'] == '' ): ?>
-                        <?php _e( 'To ensure smooth delivery and rendering of the emails, we send these emails with <a href="http://mailchimp.com/" class="lp_inline" target="_blank">MailChimp</a>.', 'laterpay_migrator' ); ?><br>
-                        <?php _e( 'If you don’t have a MailChimp account, you can subscribe to the free <a href="http://mailchimp.com/pricing/" class="lp_inline" target="_blank">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 recipients.', 'laterpay_migrator' ); ?><br>
-                    <?php endif; ?>
-                    <?php _e( 'For every email type you have to create a <strong>campaign</strong> and a <strong>list</strong> on MailChimp.', 'laterpay_migrator' ); ?>
-                    <?php _e( 'The campaign defines the email layout to be used as well as the subscriber list the campaign is sent to.', 'laterpay_migrator' ); ?><br>
-                </dfn>
-                <div class="lp_layout lp_mt-">
-                    <div class="lp_layout__item lp_1/6">
-                        <label><?php _e( 'MailChimp API Key', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item lp_1/4">
-                        <span class="lp_iconized-input" data-icon="j"></span>
-                        <input type="text"
-                                class="lp_input lp_api-credentials__input lp_1"
-                                name="mailchimp_api_key"
-                                value="<?php echo $laterpay['mailchimp_api_key']; ?>"
-                                placeholder="<?php _e( 'Account Settings &#10142; Extras &#10142; API keys', 'laterpay_migrator' ); ?>">
-                    </div><div class="lp_layout__item lp_ml-">
-                        <label><?php _e( 'This site uses SSL', 'laterpay' ); ?></label>
-                    </div><div class="lp_layout__item">
-                        <div class="lp_toggle">
-                            <label class="lp_toggle__label">
-                                <input type="checkbox"
-                                        class="lp_toggle__input"
-                                        name="mailchimp_ssl_connection"
-                                        value="1"
-                                        <?php if ( $laterpay['mailchimp_ssl_connection'] ) { echo 'checked'; } ?>>
-                                <span class="lp_toggle__text" data-on="ON" data-off="OFF"></span>
-                                <span class="lp_toggle__handle"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lp_mb+">
-                <h3><?php _e( 'Email Notification 1, sent 14 days before the subscription expires', 'laterpay_migrator' ); ?></h3>
-                <div class="lp_layout">
-                    <div class="lp_layout__item lp_1/6">
-                        <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item lp_1/4">
-                        <input type="text"
-                                class="lp_input lp_1"
-                                name="mailchimp_campaign_before_expired"
-                                value="<?php echo $laterpay['mailchimp_campaign_before_expired']; ?>"
-                                placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="lp_mb+">
-                <h3><?php _e( 'Email Notification 2, sent on the day the subscription expires', 'laterpay_migrator' ); ?></h3>
-                <div class="lp_layout">
-                    <div class="lp_layout__item lp_1/6">
-                        <label><?php _e( 'MailChimp Campaign Name', 'laterpay_migrator' ); ?></label>
-                    </div><div class="lp_layout__item lp_1/4">
-                        <input type="text"
-                                class="lp_input lp_1"
-                                name="mailchimp_campaign_after_expired"
-                                value="<?php echo $laterpay['mailchimp_campaign_after_expired']; ?>"
-                                placeholder="<?php _e( 'Enter MailChimp campaign name', 'laterpay_migrator' ); ?>">
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
 
