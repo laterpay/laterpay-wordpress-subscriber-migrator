@@ -257,9 +257,8 @@ class LaterPay_Migrator_Subscription
      * @return void
      */
     public static function activate_subscription() {
-        $post_form = $_POST;
-
-        if ( isset( $post_form['migration_active'] ) && $post_form['migration_active'] ) {
+        // check if migration active already
+        if ( isset( $_POST['migration_active'] ) && $_POST['migration_active'] ) {
             update_option( 'laterpay_migrator_is_active', 0 );
 
             wp_send_json(
@@ -274,23 +273,44 @@ class LaterPay_Migrator_Subscription
             );
         }
 
-        // TODO: validate post data via LaterPay Form and send false if invalid
+        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator' ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Incorrect nonce.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
+        $post_form = new LaterPay_Migrator_Validation( $_POST );
+
+        if ( ! $post_form->is_valid() ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'Invalid data.', 'laterpay_migrator' ),
+                    'data'    => array(
+                        'errors' => $post_form->get_errors(),
+                    ),
+                )
+            );
+        }
 
         // save usual options
-        update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form['mailchimp_api_key'] );
-        update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form['mailchimp_campaign_before_expired'] );
-        update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form['mailchimp_campaign_after_expired'] );
-        update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form['mailchimp_ssl_connection'] );
-        update_option( 'laterpay_migrator_sitenotice_message',                $post_form['sitenotice_message'] );
-        update_option( 'laterpay_migrator_sitenotice_button_text',            $post_form['sitenotice_button_text'] );
-        update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form['sitenotice_bg_color'] );
-        update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form['sitenotice_text_color'] );
+        update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form->get_field_value( 'mailchimp_api_key' ) );
+        update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) );
+        update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) );
+        update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
+        update_option( 'laterpay_migrator_sitenotice_message',                $post_form->get_field_value( 'sitenotice_message' ) );
+        update_option( 'laterpay_migrator_sitenotice_button_text',            $post_form->get_field_value( 'sitenotice_button_text' ) );
+        update_option( 'laterpay_migrator_sitenotice_bg_color',               $post_form->get_field_value( 'sitenotice_bg_color' ) );
+        update_option( 'laterpay_migrator_sitenotice_text_color',             $post_form->get_field_value( 'sitenotice_text_color' ) );
 
         // save product mapping
         $products     = get_option( 'laterpay_migrator_products' );
-        $timepasses   = $post_form['timepasses'];
-        $assign_roles = $post_form['assign_roles'];
-        $remove_roles = $post_form['remove_roles'];
+        $timepasses   = $post_form->get_field_value( 'timepasses' );
+        $assign_roles = $post_form->get_field_value( 'assign_roles' );
+        $remove_roles = $post_form->get_field_value( 'remove_roles' );
 
         if ( count( $timepasses )   != count( $products ) ||
              count( $assign_roles ) != count( $products ) ||

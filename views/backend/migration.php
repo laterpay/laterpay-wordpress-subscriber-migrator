@@ -68,10 +68,10 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label<?php if ( ! $laterpay['migration_active'] && ! $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label<?php if ( $laterpay['migration_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
                     <span class="lp_status-indicator__label<?php if ( $laterpay['migration_completed'] ) { echo ' lp_is-active'; } ?>">
@@ -82,9 +82,9 @@
                 <a href="#"
                     id="lp_js_startMigration"
                     class="button button-primary" <?php if ( ! $laterpay['products'] ) { echo 'disabled'; } ?>>
-                    <?php if ( ! $laterpay['migration_is_active'] ) {
+                    <?php if ( ! $laterpay['migration_active'] ) {
                             _e( 'Start Migration', 'laterpay_migrator' );
-                          } elseif ( $laterpay['migration_is_active'] ) {
+                          } elseif ( $laterpay['migration_active'] ) {
                             _e( 'Pause Migration', 'laterpay_migrator' );
                           }
                     ?>
@@ -95,7 +95,7 @@
         <h2><?php _e( 'Subscriber Data CSV Import', 'laterpay_migrator' ); ?></h2>
         <form id="lp_js_uploadForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_file_upload">
-            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator_form' ); } ?>
+            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
             <div>
                 <table class="lp_upload">
                     <tbody>
@@ -117,8 +117,8 @@
 
         <form id="lp_js_migratorMainForm" method="post">
             <input type="hidden" name="action" value="laterpay_migrator_activate">
-            <input type="hidden" name="migration_active" value="<?php echo $laterpay['migrator_is_active']; ?>">
-            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator_form' ); } ?>
+            <input type="hidden" name="migration_active" value="<?php echo $laterpay['migration_active']; ?>">
+            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
             <div class="lp_layout">
                 <div class="lp_layout__item lp_1/4">
                     <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>

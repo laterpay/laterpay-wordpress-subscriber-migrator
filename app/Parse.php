@@ -105,7 +105,7 @@ class LaterPay_Migrator_Parse
      * @return void
      */
     public static function file_upload() {
-        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator_form' ) ) {
+        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator' ) ) {
             wp_send_json(
                 array(
                     'success' => false,

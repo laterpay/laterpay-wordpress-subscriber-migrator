@@ -96,10 +96,12 @@
                             button.prop('checked', true);
                             $o.statusLabels.removeClass('lp_is-active');
                             button.parent('label').addClass('lp_is-active');
-                            if ( response.data.value === 'setup' ) {
-                                $('input[name=migration_active]').val(0);
-                            } else {
-                                $('input[name=migration_active]').val(1);
+                            if ( response.data.value ) {
+                                if ( response.data.value === 'setup' ) {
+                                    $('input[name=migration_active]').val(0);
+                                } else {
+                                    $('input[name=migration_active]').val(1);
+                                }
                             }
                         }
                     },
