@@ -267,7 +267,7 @@ class LaterPay_Migrator_Subscription
                     'message' => __( 'The migration process is paused now.', 'laterpay_migrator' ),
                     'mode'    => array(
                         'text'  => __( 'Start Migration', 'laterpay_migrator' ),
-                        'value' => 'setup',
+                        'value' => 'setting-up',
                     ),
                 )
             );

@@ -91,13 +91,8 @@
                     $o.mainForm.serializeArray(),
                     function(response) {
                         setMessage(response.message, response.success);
+
                         if (response.mode) {
-                            var newStatusClass = 'lp_is-setting-up';
-
-                            if (response.mode.value === 'migrating') {
-                                newStatusClass = 'lp_is-migrating';
-                            }
-
                             // switch button text
                             $o.statusButton.text(response.mode.text);
 
@@ -105,8 +100,8 @@
                             $o.statusLabels
                             .removeClass($o.active)
                                 .parent()
-                                .removeClass('lp_is-setting-up lp_is-migrating')
-                                .addClass(newStatusClass)
+                                .removeClass()
+                                .addClass('lp_status-indicator lp_is-' + response.mode.value)
                                     .find('.lp_status--' + response.mode.value)
                                     .addClass($o.active);
                         }

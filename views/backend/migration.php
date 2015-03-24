@@ -68,13 +68,13 @@
 
             <div class="lp_mt+">
                 <div class="lp_status-indicator <?php echo $laterpay['status_class']; ?>">
-                    <span class="lp_status-indicator__label lp_status--setup<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--setting-up<?php if ( ! $laterpay['migration_is_active'] && ! $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Setup', 'laterpay_migrator' ); ?>
                     </span>
                     <span class="lp_status-indicator__label lp_status--migrating<?php if ( $laterpay['migration_is_active'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Migrating', 'laterpay_migrator' ); ?>
                     </span>
-                    <span class="lp_status-indicator__label lp_status--complete<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
+                    <span class="lp_status-indicator__label lp_status--completed<?php if ( $laterpay['migration_is_completed'] ) { echo ' lp_is-active'; } ?>">
                         <?php _e( 'Complete', 'laterpay_migrator' ); ?>
                     </span>
                 </div>
