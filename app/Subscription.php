@@ -17,7 +17,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Get the expiry time of a subscription.
+     * Get expiry time of a subscription.
      *
      * @param  array $data subscription data
      *
@@ -36,7 +36,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Get user subscription data
+     * Get user subscription data.
      *
      * @param null|object $user user instanse
      *
@@ -61,7 +61,8 @@ class LaterPay_Migrator_Subscription
                 {$table}
             WHERE
                 email = '$email'
-            ;";
+            ;"
+        ;
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
 
@@ -75,7 +76,7 @@ class LaterPay_Migrator_Subscription
     /**
      * Check, if subscription is active and not yet migrated to LaterPay.
      *
-     * @param  array   $data subscription data
+     * @param  array $data subscription data
      *
      * @return boolean
      */
@@ -96,7 +97,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Set a given value to the given flag.
+     * Set a given value to a given flag.
      *
      * @param  string $flag  flag field name
      * @param  bool   $value flag value
@@ -155,13 +156,13 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Get about to expire or expired subscriptions (depends from param usage)
+     * Get about to expire or already expired subscriptions (depends on param usage).
      *
-     * @param  bool       $is_expired need to get expired subscriptions
+     * @param  bool $is_expired need to get expired subscriptions
      *
      * @return array|null $result
      */
-    public static function get_subsriptions_by_expiry( $is_expired = false ) {
+    public static function get_subscriptions_by_expiry( $is_expired = false ) {
         global $wpdb;
 
         $modifier     = get_option( 'laterpay_migrator_expiry_modifier' );
@@ -192,18 +193,16 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Get migration status
+     * Get status of migration process.
      *
      * @return array $state
      */
-    public static function get_subscriptions_state() {
+    public static function get_migration_status() {
         global $wpdb;
 
-        $state = array(
+        $status = array(
             'valid'     => 0,
             'invalid'   => 0,
-            'offered'   => 0,
-            'ignored'   => 0,
             'migrated'  => 0,
             'remaining' => 0,
             'expiry'    => 0,
@@ -221,46 +220,41 @@ class LaterPay_Migrator_Subscription
         $results = $wpdb->get_results( $sql, ARRAY_A );
 
         if ( ! $results ) {
-            return $state;
+            return $status;
         }
 
         foreach ( $results as $data ) {
-            // set valid
-            $state['valid'] += 1;
+            // increase valid subscriber data count
+            $status['valid'] += 1;
 
-            // set ignored
-            if ( $data['was_notified_after_expiry'] && ! $data['is_migrated_to_laterpay'] ) {
-                $state['ignored'] += 1;
-            }
-
-            // set migrated
+            // increase migrated subscribers count
             if ( $data['is_migrated_to_laterpay'] ) {
-                $state['migrated'] += 1;
+                $status['migrated'] += 1;
             }
 
-            // set last_expiry
-            if ( ! $state['expiry'] || strtotime( $data['expiry'] ) > strtotime( $state['expiry'] ) ) {
-                $state['expiry'] = $data['expiry'];
+            // set last expiry date
+            if ( ! $status['expiry'] || strtotime( $data['expiry'] ) > strtotime( $status['expiry'] ) ) {
+                $status['expiry'] = $data['expiry'];
             }
         }
 
         // format expiry date
         $localized_date_format = substr( get_locale(), 0, 2 ) == 'de' ? 'd.m.Y' : 'm-d-Y';
-        $state['expiry'] = date_i18n( $localized_date_format, strtotime( $state['expiry'] ) );
+        $status['expiry'] = date_i18n( $localized_date_format, strtotime( $status['expiry'] ) );
 
-        // set remaining
-        $state['remaining'] = $state['valid'] - ( $state['ignored'] + $state['migrated'] );
+        // calculate remaining subscribers to be migrated count
+        $status['remaining'] = $status['valid'] - $status['migrated'];
 
-        return $state;
+        return $status;
     }
 
     /**
-     * Activate subscription
+     * Activate migration process. The plugin will now render sitenotices and send email notifications.
      *
      * @return void
      */
-    public static function activate_subscription() {
-        // check if migration active already
+    public static function activate_migration_process() {
+        // check, if migration is active already
         if ( get_option( 'laterpay_migrator_is_active' ) ) {
             update_option( 'laterpay_migrator_is_active', 0 );
 
@@ -299,22 +293,23 @@ class LaterPay_Migrator_Subscription
             );
         }
 
-        // save common options
-        update_option( 'laterpay_migrator_sitenotice_message',     $post_form->get_field_value( 'sitenotice_message' ) );
-        update_option( 'laterpay_migrator_sitenotice_button_text', $post_form->get_field_value( 'sitenotice_button_text' ) );
-        update_option( 'laterpay_migrator_sitenotice_bg_color',    $post_form->get_field_value( 'sitenotice_bg_color' ) );
-        update_option( 'laterpay_migrator_sitenotice_text_color',  $post_form->get_field_value( 'sitenotice_text_color' ) );
+        // save sitenotice settings
+        update_option( 'laterpay_migrator_sitenotice_message',                  $post_form->get_field_value( 'sitenotice_message' ) );
+        update_option( 'laterpay_migrator_sitenotice_button_text',              $post_form->get_field_value( 'sitenotice_button_text' ) );
+        update_option( 'laterpay_migrator_sitenotice_bg_color',                 $post_form->get_field_value( 'sitenotice_bg_color' ) );
+        update_option( 'laterpay_migrator_sitenotice_text_color',               $post_form->get_field_value( 'sitenotice_text_color' ) );
 
-        // save mailchimp data
-        update_option( 'laterpay_migrator_mailchimp_api_key',                 $post_form->get_field_value( 'mailchimp_api_key' ) );
-        update_option( 'laterpay_migrator_mailchimp_campaign_before_expired', $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) );
-        update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',  $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) );
-        update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
+        // save MailChimp settings
+        update_option( 'laterpay_migrator_mailchimp_api_key',                   $post_form->get_field_value( 'mailchimp_api_key' ) );
+        update_option( 'laterpay_migrator_mailchimp_campaign_before_expired',   $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) );
+        update_option( 'laterpay_migrator_mailchimp_campaign_after_expired',    $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) );
+        update_option( 'laterpay_migrator_mailchimp_ssl_connection',            $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
 
-        // check mailchimp data
+        // check MailChimp settings
         try {
             $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
-            // pre-expiry campaign validation
+
+            // validate settings for pre-expiry campaign
             $pre_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             if ( ! $pre_expiry_campaign['data'] ) {
                 throw new Exception( sprintf ( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
@@ -324,7 +319,7 @@ class LaterPay_Migrator_Subscription
                 LaterPay_Migrator_Mail::add_fields( $mailchimp, $list_id );
             }
 
-            // post-expiry campaign validation
+            // validate settings for post-expiry campaign
             $post_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             if ( ! $post_expiry_campaign['data'] ) {
                 throw new Exception( sprintf( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
@@ -363,7 +358,7 @@ class LaterPay_Migrator_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'There are no products in system, try to reupload file with correct products.', 'laterpay_migrator' ),
+                    'message' => __( 'There are no products in the system. Please upload a CSV file with correct products.', 'laterpay_migrator' ),
                 )
             );
         }
@@ -380,7 +375,7 @@ class LaterPay_Migrator_Subscription
 
         update_option( 'laterpay_migrator_products_mapping', $products_mapping );
 
-        // check if data present in migration table
+        // check, if migration table has data
         if ( ! LaterPay_Migrator_Parse::check_migration_table_data() ) {
             wp_send_json(
                 array(
@@ -390,7 +385,7 @@ class LaterPay_Migrator_Subscription
             );
         }
 
-        // activate migration
+        // activate migration process
         update_option( 'laterpay_migrator_is_active', 1 );
 
         wp_send_json(
@@ -406,7 +401,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * Change user role according to mapping
+     * Change user role according to subscriber data mapping.
      *
      * @param string $email user email
      *
@@ -429,20 +424,26 @@ class LaterPay_Migrator_Subscription
         if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
             return false;
         }
+
         $map = $products_mapping[$data['product']];
-        if ( ! isset( $map['assign'] ) || ! isset( $map['remove'] ) ) {
-            return false;
-        }
 
         // change roles
-        $user->remove_role( $map['remove'] );
-        $user->add_role( $map['assign'] );
+        if ( isset( $map['assign'] ) ) {
+            $user->add_role( $map['assign'] );
+        }
+        if ( isset( $map['remove'] ) ) {
+            $user->remove_role( $map['remove'] );
+        }
 
         return true;
     }
 
     /**
-     * Check if migration process completed
+     * Check, if the migration process is completed.
+     *
+     * We consider the migration process to be completed, if there are NO users left,
+     * - who have neither migrated to LaterPay yet,
+     * - nor expired (passed the renewal date of) their subscription.
      *
      * @return bool
      */
