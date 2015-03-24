@@ -97,7 +97,10 @@
                             $o.statusLabels
                             .removeClass($o.active)
                                 .parent()
-                                    .find('lp_status--' + response.mode.value)
+                                    .removeClass()
+                                    .addClass('lp_status-indicator')
+                                    .addClass('lp_is-' + response.mode.value)
+                                    .find('.lp_status--' + response.mode.value)
                                     .addClass($o.active);
                         }
                     },
