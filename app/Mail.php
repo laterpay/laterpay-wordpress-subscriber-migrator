@@ -2,6 +2,9 @@
 
 class LaterPay_Migrator_Mail
 {
+    /**
+     * @var array of mailchimp fields
+     */
     public static $fields = array(
         'EMAIL' => array(
             'name'       => 'Email',
@@ -117,6 +120,8 @@ class LaterPay_Migrator_Mail
 
     /**
      * Notify users that their subscriptions are about to expiry (2 weeks in advance).
+     *
+     * @return array $subscriptions
      */
     public static function notify_subscription_about_to_expiry() {
         $subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry();

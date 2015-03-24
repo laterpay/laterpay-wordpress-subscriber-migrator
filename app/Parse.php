@@ -2,7 +2,9 @@
 
 class LaterPay_Migrator_Parse
 {
-
+    /**
+     * @var array of column mapping
+     */
     public static $column_mapping = array(
         0 => 'email',
         1 => 'first_name',
@@ -105,6 +107,7 @@ class LaterPay_Migrator_Parse
      * @return void
      */
     public static function file_upload() {
+        // do not parse if migration process is active
         if ( get_option( 'laterpay_migrator_is_active' ) ) {
             wp_send_json(
                 array(
@@ -206,6 +209,8 @@ class LaterPay_Migrator_Parse
 
     /**
      * Write data extracted from CSV file to database.
+     *
+     * @param array $data
      *
      * @return bool|int false on mysql error or total rows affected
      */
