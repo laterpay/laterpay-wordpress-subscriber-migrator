@@ -6,7 +6,7 @@ class LaterPay_Migrator_Main
     /**
      * Init WP hooks.
      *
-     * @return [type] [description]
+     * @return void
      */
     public function init() {
         if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
@@ -62,9 +62,9 @@ class LaterPay_Migrator_Main
     }
 
     /**
-     * [get_purchase_url description]
+     * Get purchased url for user subscription leftover time
      *
-     * @return [type] [description]
+     * @return string
      */
     public function get_purchase_url() {
         $currency = get_option( 'laterpay_currency' );
@@ -113,7 +113,7 @@ class LaterPay_Migrator_Main
     }
 
     /**
-     * Remove role 'subscriber' from user, if he has already migrated to using LaterPay time passes.
+     * Process user migration to the LaterPay
      *
      * @wp-hook template_redirect
      *
@@ -213,8 +213,8 @@ class LaterPay_Migrator_Main
         $install->install();
 
         // register cron jobs for email sending
-        wp_schedule_event( time(), 'daily', 'notify_subscription_expired' );
-        wp_schedule_event( time(), 'daily', 'notify_subscription_about_to_expiry' );
+        wp_schedule_event( mktime( 23, 59, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'notify_subscription_expired' );
+        wp_schedule_event( mktime( 23, 58, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'notify_subscription_about_to_expiry' );
     }
 
     /**

@@ -6,9 +6,9 @@ class LaterPay_Migrator_Install
     public static $subscriptions_table_name = 'laterpay_subscriber_migrations';
 
     /**
-     * [install description]
+     * Install laterpay migration plugin
      *
-     * @return [type] [description]
+     * @return void
      */
     public function install() {
         $config  = get_laterpay_migrator_config();
@@ -42,7 +42,7 @@ class LaterPay_Migrator_Install
     /**
      * Create a table for managing all the user and process data required for the migration.
      *
-     * @return [type] [description]
+     * @return void
      */
     protected function create_migration_table() {
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

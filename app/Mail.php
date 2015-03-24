@@ -2,6 +2,36 @@
 
 class LaterPay_Migrator_Mail
 {
+    /**
+     * @var array of mailchimp fields
+     */
+    public static $fields = array(
+        'EMAIL' => array(
+            'name'       => 'Email',
+            'field_type' => 'text',
+            'req'        => true,
+        ),
+        'FNAME' => array(
+            'name'       => 'First Name',
+            'field_type' => 'text',
+            'req'        => true,
+        ),
+        'LNAME' => array(
+            'name'       => 'Last Name',
+            'field_type' => 'text',
+            'req'        => true,
+        ),
+        'EDATE' => array(
+            'name'       => 'Expiry Date',
+            'field_type' => 'date',
+            'req'        => true,
+        ),
+        'PROD' => array(
+            'name'       => 'Product',
+            'field_type' => 'text',
+            'req'        => true,
+        ),
+    );
 
     /**
      * Notify users that their subscription has expired.
@@ -14,8 +44,17 @@ class LaterPay_Migrator_Mail
         if ( $expired_subscriptions ) {
             $data = array();
             foreach ( $expired_subscriptions as $subscription ) {
+                list( $first_name, $last_name ) = explode( ' ', $subscription['subscriber_name'] );
                 // set user email to data
-                $data[] = array( 'email' => $subscription['email'] );
+                $data[] = array(
+                    'email' => $subscription['email'],
+                    'data'  => array(
+                        'FNAME' => $first_name,
+                        'LNAME' => $last_name,
+                        'EDATE' => $subscription['expiry'],
+                        'PROD'  => $subscription['product'],
+                    )
+                );
                 LaterPay_Migrator_Subscription::change_user_role( $subscription['email'] );
 
                 // set flag to mark user as notified after expiration of subscription
@@ -57,8 +96,11 @@ class LaterPay_Migrator_Mail
 
             // subscribe users from $data to this list
             $subscribe_data = array();
-            foreach ( $data as $email ) {
-                $subscribe_data[] = array( 'email' => $email );
+            foreach ( $data as $fields ) {
+                $subscribe_data[] = array(
+                    'email'      => array( 'email' => $fields['email'] ),
+                    'merge_vars' => $fields['data'],
+                );
             }
             $mailchimp->lists->batchSubscribe( $list_id, $subscribe_data, false );
 
@@ -78,6 +120,8 @@ class LaterPay_Migrator_Mail
 
     /**
      * Notify users that their subscriptions are about to expiry (2 weeks in advance).
+     *
+     * @return array $subscriptions
      */
     public static function notify_subscription_about_to_expiry() {
         $subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry();
@@ -85,8 +129,17 @@ class LaterPay_Migrator_Mail
         if ( $subscriptions ) {
             $data = array();
             foreach ( $subscriptions as $subscription ) {
+                list( $first_name, $last_name ) = explode( ' ', $subscription['subscriber_name'] );
                 // set user email to data
-                $data[] = array( 'email' => $subscription['email'] );
+                $data[] = array(
+                    'email' => $subscription['email'],
+                    'data'  => array(
+                        'FNAME' => $first_name,
+                        'LNAME' => $last_name,
+                        'EDATE' => $subscription['expiry'],
+                        'PROD'  => $subscription['product'],
+                    )
+                );
 
                 // set flag to mark user as notified before expiration of subscription
                 LaterPay_Migrator_Subscription::mark_user( 'was_notified_before_expiry' );
@@ -118,5 +171,37 @@ class LaterPay_Migrator_Mail
         }
 
         return $mailchimp;
+    }
+
+    /**
+     * Add fields to the list
+     *
+     * @param Mailchimp $mailchimp object
+     * @param int       $list_id   list id
+     *
+     * @return void
+     */
+    public static function add_fields( $mailchimp, $list_id ) {
+        // get list vars
+        $mergeVars = $mailchimp->lists->mergeVars( array( $list_id ) );
+        $vars      = array();
+        if ( $mergeVars['data'] ) {
+            $vars = $mergeVars['data'][0]['merge_vars'];
+        }
+
+        // filter vars that already exists by tags
+        $fields = LaterPay_Migrator_Mail::$fields;
+        foreach ( $vars as $var ) {
+            if ( isset( $fields[$var['tag']], $fields ) ) {
+                unset( $fields[$var['tag']] );
+            }
+        }
+
+        // set new fields to the list
+        if ( $fields ) {
+            foreach ( $fields as $tag => $data ) {
+                $mailchimp->lists->mergeVarAdd( $list_id, $tag, $data['name'], array( 'field_type' => $data['field_type'], 'req' => $data['req'] ) );
+            }
+        }
     }
 }

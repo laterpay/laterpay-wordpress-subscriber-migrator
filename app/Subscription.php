@@ -6,7 +6,7 @@ class LaterPay_Migrator_Subscription
     /**
      * Get WP user.
      *
-     * @return [type] [description]
+     * @return object WP_User
      */
     public static function get_current_user_data() {
         if ( ! is_user_logged_in() ) {
@@ -19,7 +19,7 @@ class LaterPay_Migrator_Subscription
     /**
      * Get the expiry time of a subscription.
      *
-     * @param  [type] $data [description]
+     * @param  array $data subscription data
      *
      * @return null|int
      */
@@ -36,7 +36,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_user_subscription_data description]
+     * Get user subscription data
      *
      * @param null|object $user user instanse
      *
@@ -75,7 +75,7 @@ class LaterPay_Migrator_Subscription
     /**
      * Check, if subscription is active and not yet migrated to LaterPay.
      *
-     * @param  [type]  $data [description]
+     * @param  array   $data subscription data
      *
      * @return boolean
      */
@@ -98,8 +98,8 @@ class LaterPay_Migrator_Subscription
     /**
      * Set a given value to the given flag.
      *
-     * @param  [type] $flag [description]
-     * @param  [type] $value [description]
+     * @param  string $flag  flag field name
+     * @param  bool   $value flag value
      *
      * @return boolean
      */
@@ -132,7 +132,7 @@ class LaterPay_Migrator_Subscription
     /**
      * Get time pass id from mapping.
      *
-     * @param  [type] $data [description]
+     * @param  array    $data subscription data
      *
      * @return bool|int false on error or time pass id
      */
@@ -155,7 +155,9 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_subsriptions_by_expiry description]
+     * Get about to expire or expired subscriptions (depends from param usage)
+     *
+     * @param  bool       $is_expired need to get expired subscriptions
      *
      * @return array|null $result
      */
@@ -190,7 +192,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [get_subscriptions_state description]
+     * Get migration status
      *
      * @return array $state
      */
@@ -253,7 +255,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [activate_subscription description]
+     * Activate subscription
      *
      * @return void
      */
@@ -310,26 +312,26 @@ class LaterPay_Migrator_Subscription
         update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
 
         // check mailchimp data
-        $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
         try {
+            $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
             // pre-expiry campaign validation
             $pre_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             if ( ! $pre_expiry_campaign['data'] ) {
-                throw new Exception( sprintf ( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+                throw new Exception( sprintf ( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             } else {
                 $list_id = $pre_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
-                // TODO: add fields to the list
+                LaterPay_Migrator_Mail::add_fields( $mailchimp, $list_id );
             }
 
             // post-expiry campaign validation
             $post_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             if ( ! $post_expiry_campaign['data'] ) {
-                throw new Exception( sprintf( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
+                throw new Exception( sprintf( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             } else {
                 $list_id = $post_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
-                // TODO: add fields to the list
+                LaterPay_Migrator_Mail::add_fields( $mailchimp, $list_id );
             }
         } catch ( Exception $e ) {
             wp_send_json(
@@ -404,7 +406,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [change_user_role description]
+     * Change user role according to mapping
      *
      * @param string $email user email
      *
@@ -440,7 +442,7 @@ class LaterPay_Migrator_Subscription
     }
 
     /**
-     * [is_migration_completed description]
+     * Check if migration process completed
      *
      * @return bool
      */
