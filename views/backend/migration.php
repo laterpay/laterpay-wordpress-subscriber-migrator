@@ -141,7 +141,7 @@
             </div>
         </div>
 
-        <a href="#" id="lp_js_toggleFileUploadVisibility" class="lp_upload-visibility-toggle lp_block lp_mt lp_mb+"<?php if ( ! $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
+        <a href="#" id="lp_js_toggleFileUploadVisibility" class="lp_upload-visibility-toggle lp_inline-block lp_mt lp_mb+"<?php if ( ! $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
             <?php _e( 'Delete existing and import new subscriber data', 'laterpay_migrator' ); ?>
         </a>
         <hr class="lp_form-group-separator<?php if ( $laterpay['products'] ) { echo ' lp_has-imported-data'; } ?>">
