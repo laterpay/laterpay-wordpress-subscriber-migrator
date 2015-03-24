@@ -103,6 +103,7 @@ class LaterPay_Migrator_Validation extends LaterPay_Form_Abstract
             array(
                 'validators' => array(
                     'is_string',
+                    'match' => '/^$|#?([A-Fa-f0-9]){3}(([A-Fa-f0-9]){3})?/',
                 ),
                 'filters' => array(
                     'to_string',
@@ -117,6 +118,7 @@ class LaterPay_Migrator_Validation extends LaterPay_Form_Abstract
             array(
                 'validators' => array(
                     'is_string',
+                    'match' => '/^$|#?([A-Fa-f0-9]){3}(([A-Fa-f0-9]){3})?/',
                 ),
                 'filters' => array(
                     'to_string',
