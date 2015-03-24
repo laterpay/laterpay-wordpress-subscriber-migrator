@@ -39,7 +39,7 @@ class LaterPay_Migrator_Parse
         // array of products
         $products = array();
 
-        // extract all data from file into an array
+        // extract all data from the uploaded file into an array
         $data = array();
         foreach ( $csvFile as $line ) {
             $data[] = str_getcsv( $line );
@@ -49,7 +49,7 @@ class LaterPay_Migrator_Parse
         $final_data = array();
 
         // check, if data has at least 1 row
-        if ( ! $data  ) {
+        if ( ! $data ) {
             return 0;
         }
 
@@ -79,15 +79,18 @@ class LaterPay_Migrator_Parse
                 $products[] = $final_row['product'];
             }
 
-            $first_name  = isset( $final_row['first_name'] ) ? $final_row['first_name'] : 'User';
-            $second_name = isset( $final_row['last_name'] ) ? $final_row['last_name'] : 'User';
+            // make sure we have a name we can address the subscriber with in emails
+            $subscriber_name = trim( $final_row['first_name'] . ' ' . $final_row['last_name'] );
+            if ( $subscriber_name == '' ) {
+                $subscriber_name = __( 'Subscriber', 'laterpay_migrator' );
+            }
 
             // prepare data and set as final
             $final_data[] = array(
                 'expiry'          => date( 'Y-m-d', strtotime( $final_row['date'] ) ),
                 'product'         => $final_row['product'],
                 'email'           => $final_row['email'],
-                'subscriber_name' => trim( $first_name . ' ' . $second_name ),
+                'subscriber_name' => $subscriber_name,
             );
         }
 
@@ -107,12 +110,12 @@ class LaterPay_Migrator_Parse
      * @return void
      */
     public static function file_upload() {
-        // do not parse if migration process is active
+        // do not parse, if migration process is active
         if ( get_option( 'laterpay_migrator_is_active' ) ) {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'You can\'t upload file while migration process is active.', 'laterpay_migrator' ),
+                    'message' => __( 'You have to pause the migration before you can upload new data.', 'laterpay_migrator' ),
                 )
             );
         }
@@ -173,7 +176,7 @@ class LaterPay_Migrator_Parse
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Error during writing to the database.', 'laterpay_migrator' ),
+                    'message' => __( 'Error when writing to the database.', 'laterpay_migrator' ),
                 )
             );
         } elseif ( $result === 0 ) {
@@ -224,7 +227,7 @@ class LaterPay_Migrator_Parse
 
         if ( $data && is_array( $data ) ) {
             while ( $total_rows > 0 ) {
-                // create SQL from final data
+                // create SQL statement from final data
                 $is_first   = true;
                 $count      = 0;
 
@@ -234,6 +237,7 @@ class LaterPay_Migrator_Parse
                     VALUES
                 ";
 
+                // construct values section of SQL statement
                 foreach ( $data as $key => $values ) {
                     if ( $key < $last_key ) {
                         continue;
@@ -253,6 +257,7 @@ class LaterPay_Migrator_Parse
                     }
                 }
 
+                // complete SQL statement
                 $sql .= ';';
 
                 $last_key   = $key + 1;
