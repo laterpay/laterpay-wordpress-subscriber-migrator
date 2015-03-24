@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: Tue Mar 17 2015 22:53:51 GMT+0100 (CET)\n"
-"PO-Revision-Date: Tue Mar 17 2015 22:54:53 GMT+0100 (CET)\n"
+"POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
+"PO-Revision-Date: Tue Mar 24 2015 21:20:34 GMT+0100 (CET)\n"
 "Last-Translator: tester <drodler@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -22,18 +22,383 @@ msgstr ""
 "X-Loco-Target-Locale: de_DE\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: /views/migration.php:19
+#: ../views/backend/migration.php:19
+#, fuzzy
 msgid "Test mode"
 msgstr "Test-Modus"
 
-#: /views/migration.php:20
+#: ../views/backend/migration.php:20
 msgid "Earn money in <i>live mode</i>"
-msgstr ""
+msgstr "Verdienen Sie Geld im <i>Live-Modus</i>"
 
-#: /views/migration.php:33
+#: ../views/backend/migration.php:32
+msgid "Number of valid subscriber records in imported CSV file"
+msgstr "Anzahl gültiger Abonnentendaten in der importierten CSV-Datei"
+
+#: ../views/backend/migration.php:34
+msgid "Valid"
+msgstr "Gültig"
+
+#: ../views/backend/migration.php:37
+msgid "Number of incomplete subscriber records in imported CSV file"
+msgstr "Anzahl unvollständiger Abonnentendaten in der importierten CSV-Datei"
+
+#: ../views/backend/migration.php:39
+msgid "Invalid"
+msgstr "Ungültig"
+
+#: ../views/backend/migration.php:42
+msgid "Number of subscribers who have already switched to LaterPay"
+msgstr "Anzahl der Abonnenten, die bereits zu LaterPay gewechselt sind"
+
+#: ../views/backend/migration.php:44
+msgid "Migrated"
+msgstr "Migriert"
+
+#: ../views/backend/migration.php:47
+msgid "Number of subscribers who have not switched to LaterPay yet"
+msgstr "Anzahl der Abonnentent, die noch nicht zu LaterPay gewechselt sind"
+
+#: ../views/backend/migration.php:49
+msgid "Remaining"
+msgstr "Verbleibend"
+
+#: ../views/backend/migration.php:52
+msgid "Latest renewal date in imported subscriber records"
+msgstr "Spätestes Verlängerungsdatum in den importierten Abonnentendaten"
+
+#: ../views/backend/migration.php:53
+msgid "n/a"
+msgstr "n/a"
+
+#: ../views/backend/migration.php:54
+msgid "Last Expiry"
+msgstr "Spätestes Ablaufdatum"
+
+#: ../views/backend/migration.php:62
+msgid "Setup"
+msgstr "Setup"
+
+#: ../views/backend/migration.php:65
+msgid "Migrating"
+msgstr "Migration"
+
+#: ../views/backend/migration.php:68
+msgid "Complete"
+msgstr "Abgeschlossen"
+
+#: ../views/backend/migration.php:76 ../views/backend/migration.php:80 ..
+#: app/Subscription.php:266
+msgid "Start Migration"
+msgstr "Migration beginnen"
+
+#: ../views/backend/migration.php:77 ../views/backend/migration.php:82 ..
+#: app/Subscription.php:396
+msgid "Pause Migration"
+msgstr "Migration pausieren"
+
+#: ../views/backend/migration.php:92
 msgid "Subscriber Data CSV Import"
 msgstr "Abonnentendaten CSV-Import"
 
-#: /app/Main.php:225
+#: ../views/backend/migration.php:105
+msgid "Select CSV File to Upload"
+msgstr "CSV-Datei zum Hochladen auswählen"
+
+#: ../views/backend/migration.php:117
+msgid "Required Data Format"
+msgstr "Erforderliches Datenformat"
+
+#: ../views/backend/migration.php:119
+msgid "Text qualified by double quotes"
+msgstr "Text in doppelten Anführungszeichen"
+
+#: ../views/backend/migration.php:120
+msgid "Fields delimited by semicolons"
+msgstr "Komma-getrennte Felder"
+
+#: ../views/backend/migration.php:121
+msgid "File encoded in UTF-8"
+msgstr "Datei kodiert in UFT-8"
+
+#: ../views/backend/migration.php:122
+msgid "No first line with field names"
+msgstr "Keine Zeilenüberschriften mit Feldnamen"
+
+#: ../views/backend/migration.php:125
+msgid "Required Data per Record (in that order!)"
+msgstr "Erforderliche Daten pro Eintrag (in dieser Reihenfolge!)"
+
+#: ../views/backend/migration.php:127
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+#: ../views/backend/migration.php:128
+msgid "First name"
+msgstr "Vorname"
+
+#: ../views/backend/migration.php:129
+msgid "Family name"
+msgstr "Familienname"
+
+#: ../views/backend/migration.php:130
+msgid "Expiry date of subscription (dd-mm-yyyy)"
+msgstr "Enddatum des Abos (tt-mm-jjjj)"
+
+#: ../views/backend/migration.php:131
+msgid "Subscribed product"
+msgstr "Abonniertes Produkt"
+
+#: ../views/backend/migration.php:135
+#, php-format
+msgid "You can %s and fill in your real data."
+msgstr "Sie können %s und Ihre echten Daten eintragen."
+
+#: ../views/backend/migration.php:137
+msgid "download a template CSV file here"
+msgstr "Vorlage für die CSV-Datei hier herunterladen"
+
+#: ../views/backend/migration.php:145
+msgid "Delete existing and import new subscriber data"
+msgstr "Bestehende Abonnentendaten löschen und neue importieren"
+
+#: ../views/backend/migration.php:156
+msgid "Subscription Mapping"
+msgstr "Abo-Zuordnung"
+
+#: ../views/backend/migration.php:160
+msgid "Subscribed Product"
+msgstr "Abonniertes Product"
+
+#: ../views/backend/migration.php:166
+msgid "Time Pass to Offer"
+msgstr "Diesen Zeitpass anbieten"
+
+#: ../views/backend/migration.php:169
+msgid "Role to Assign"
+msgstr "Diese Rolle zuweisen"
+
+#: ../views/backend/migration.php:172
+msgid "Role to Remove"
+msgstr "Diese Rolle entfernen"
+
+#: ../views/backend/migration.php:192
+msgid "select a time pass"
+msgstr "Zeitpass auswählen"
+
+#: ../views/backend/migration.php:202 ../views/backend/migration.php:210
+msgid "none"
+msgstr "keine"
+
+#: ../views/backend/migration.php:225
+msgid "Subscriber Communication"
+msgstr "Kommunikation mit Abonnenten"
+
+#: ../views/backend/migration.php:229
+msgid "Sitenotice"
+msgstr "Mitteilung auf Ihrer Website"
+
+#: ../views/backend/migration.php:231
+msgid ""
+"During migration, the plugin renders a sitenotice bar for subscribers asking "
+"them to switch to a free time pass for the rest of their subscription period."
+msgstr ""
+"Während der Migration zeigt das Plugin eine Meldung auf Ihrer Website an, "
+"die Abonnenten bittet, zu einem kostenfreien Zeitpass zu wechseln, der für "
+"die Restlaufzeit ihres Abos gültig ist."
+
+#: ../views/backend/migration.php:262
+msgid "Button Text"
+msgstr "Button-Text"
+
+#: ../views/backend/migration.php:274
+msgid "Background Color"
+msgstr "Hintergrundfarbe"
+
+#: ../views/backend/migration.php:282 ../views/backend/migration.php:295
+msgid "Enter a valid CSS color"
+msgstr "Geben Sie eine gültige CSS-Farbe ein"
+
+#: ../views/backend/migration.php:287
+msgid "Text Color"
+msgstr "Textfarbe"
+
+#: ../views/backend/migration.php:304
+msgid "Email Notifications"
+msgstr "E-Mail-Benachrichtigungen"
+
+#: ../views/backend/migration.php:306
+msgid ""
+"The plugin will send every subscriber who has not yet switched to LaterPay "
+"up to two emails asking them to switch to a free time pass for the rest of "
+"their subscription period."
+msgstr ""
+"Das Plugin wird jedem Abonnenten, der noch nicht zu LaterPay gewechselt ist, "
+"maximal zwei E-Mails senden, in denen er gebeten wird, zu einem kostenfreien "
+"Zeitpass zu wechslen, der für die Restlaufzeit seines Abos gültig ist."
+
+#: ../views/backend/migration.php:308
+msgid ""
+"To ensure smooth delivery and rendering of the emails, we send these emails "
+"with <a href=\"http://mailchimp.com/\" class=\"lp_inline\" "
+"target=\"_blank\">MailChimp</a>."
+msgstr ""
+"Um eine problemlose Zustellung und Anzeige der E-Mails sicherzustellen, "
+"senden wir diese E-Mails mit \n"
+"<a href=\"http://mailchimp.com/\" class=\"lp_inline\" "
+"target=\"_blank\">MailChimp</a>."
+
+#: ../views/backend/migration.php:309
+msgid ""
+"If you don’t have a MailChimp account, you can subscribe to the free <a "
+"href=\"http://mailchimp.com/pricing/\" class=\"lp_inline\" "
+"target=\"_blank\">MailChimp “Entrepreneur” plan</a>, which allows up to 2,000 "
+"recipients."
+msgstr ""
+"Wenn Sie nicht über einen MailChimp-Account verfügen, können Sie einen "
+"kostenlosen <a href=\"http://mailchimp.com/pricing/\" class=\"lp_inline\" "
+"target=\"_blank\">MailChimp “Entrepreneur” Plan</a> abschließen, mit dem Sie "
+"bis zu 2.000 Empfänger adressieren können."
+
+#: ../views/backend/migration.php:311
+msgid ""
+"For every email type you have to create a <strong>campaign</strong> and a "
+"<strong>list</strong> on MailChimp."
+msgstr ""
+"Für jede Art von E-Mail müssen Sie eine <strong>Kampagne</strong> und eine "
+"<strong>Liste</strong> in MailChimp anlegen."
+
+#: ../views/backend/migration.php:312
+msgid ""
+"The campaign defines the email layout to be used as well as the subscriber "
+"list, the campaign is sent to."
+msgstr ""
+"Die Kampagne definiert das E-Mail-Layout und die Liste der Abonnenten, an "
+"die die Kampagne gesendet wird."
+
+#: ../views/backend/migration.php:316
+msgid "MailChimp API Key"
+msgstr "MailChimp API-Key"
+
+#: ../views/backend/migration.php:323
+msgid "Account Settings &#10142; Extras &#10142; API keys"
+msgstr "Konto-Einstellungen &#10142; Extras &#10142; API-Keys"
+
+#: ../views/backend/migration.php:325
+msgid "This site uses SSL"
+msgstr "Diese Seite verwendet SSL"
+
+#: ../views/backend/migration.php:343
+msgid "Email Notification 1, sent 14 days before the subscription expires"
+msgstr "E-Mail-Benachrichtigung 1, wird 14 Tage vor Ablauf des Abos gesendet"
+
+#: ../views/backend/migration.php:346 ../views/backend/migration.php:361
+msgid "MailChimp Campaign Name"
+msgstr "MailChimp Kampagnen-Name"
+
+#: ../views/backend/migration.php:352 ../views/backend/migration.php:367
+msgid "Enter MailChimp campaign name"
+msgstr "MailChimp Kampagnen-Namen eingeben"
+
+#: ../views/backend/migration.php:358
+msgid "Email Notification 2, sent on the day the subscription expires"
+msgstr "E-Mail-Benachrichtigung 2, wird am Ablauftag des Abos gesendet"
+
+#: ../app/Subscription.php:264
+msgid "The migration process is paused now."
+msgstr "Die Migration ist nun pausiert."
+
+#: ../app/Subscription.php:277
+msgid "Incorrect nonce."
+msgstr "Ungültige Zeichenfolge."
+
+#: ../app/Subscription.php:288
+msgid ""
+"You have to configure the Subscription Mapping and Subscriber Communication "
+"sections before you can start the migration process."
+msgstr ""
+"Sie müssen die Abschnitte zur Abo-Zuordnung und zur Kommunikation mit "
+"Abonnenten konfigurieren, bevor Sie die Migration starten können."
+
+#: ../app/Subscription.php:315 ../app/Subscription.php:325
+#, php-format
+msgid "Campaign %s does not exist"
+msgstr "Kampagne %s existiert nicht"
+
+#: ../app/Subscription.php:335
+msgid "Mailchimp error: "
+msgstr "MailChimp-Fehler:"
+
+#: ../app/Subscription.php:352
+msgid "Wrong product mapping params."
+msgstr "Falsche Parameter bei der Produkt-Zuordnung"
+
+#: ../app/Subscription.php:361
+msgid ""
+"There are no products in the system. Please upload a CSV file with correct "
+"products."
+msgstr ""
+"Es gibt keine Produkte im System. Bitte laden Sie eine CSV-Datei mit "
+"gültigen Produkten hoch."
+
+#: ../app/Subscription.php:383
+msgid "Missed data, probably was not uploaded or not processed."
+msgstr "Fehlende Daten, vielleicht wurden diese nicht hochgeladen oder verarbeitet."
+
+#: ../app/Subscription.php:394
+msgid "The plugin is now migrating your subscribers to LaterPay."
+msgstr "Das Plugin migriert nun Ihre Abonnenten zu LaterPay."
+
+#: ../app/Install.php:31
+msgid "Get a free time pass for the rest of your subscription period"
+msgstr "Kostenlosen Zeitpass für die Restlaufzeit Ihres Abos erhalten"
+
+#: ../app/Install.php:32
+msgid "Switch for Free Now"
+msgstr "Jetzt kostenlos wechseln"
+
+#: ../app/Parse.php:85
+msgid "Subscriber"
+msgstr "Abonnent"
+
+#: ../app/Parse.php:118
+msgid "You have to pause the migration before you can upload new data."
+msgstr "Sie müssen die Migration pausieren, bevor Sie neue Daten hochladen können."
+
+#: ../app/Parse.php:127
+msgid "Incorrect token."
+msgstr "Ungültiger Token."
+
+#: ../app/Parse.php:136
+msgid "Incorrect file."
+msgstr "Ungültige Datei."
+
+#: ../app/Parse.php:157
+msgid "The file you tried to upload did not conform to the required format."
+msgstr "Die Datei, die Sie hochladen möchten, erfüllt nicht die Formatanforderungen."
+
+#: ../app/Parse.php:166
+msgid "Can't upload file. Please make sure the upload folder is writable."
+msgstr ""
+"Hochladen nicht möglich. Bitte stellen Sie sicher, dass der Upload-Ordner "
+"beschreibbar ist."
+
+#: ../app/Parse.php:179
+msgid "Error when writing to the database."
+msgstr "Fehler beim Schreiben in die Datenbank."
+
+#: ../app/Parse.php:186
+msgid "File contains invalid data."
+msgstr "Datei enthält ungültige Daten."
+
+#: ../app/Parse.php:194
+msgid "File was successfully processed."
+msgstr "Datei wurde erfolgreich verarbeitet."
+
+#: ../app/Main.php:189
 msgid "Migration"
 msgstr "Migration"
+
+#: ../app/Main.php:207
+msgid "The LaterPay plugin has to be installed and activated."
+msgstr "Das LaterPay Plugin muss installiert und aktiviert werden."
