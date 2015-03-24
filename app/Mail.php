@@ -7,43 +7,43 @@ class LaterPay_Migrator_Mail
      */
     public static $fields = array(
         'EMAIL' => array(
-            'name'       => 'Email',
-            'field_type' => 'text',
-            'req'        => true,
+            'name'          => 'Email',
+            'field_type'    => 'text',
+            'req'           => true,
         ),
         'FNAME' => array(
-            'name'       => 'First Name',
-            'field_type' => 'text',
-            'req'        => true,
+            'name'          => 'First Name',
+            'field_type'    => 'text',
+            'req'           => true,
         ),
         'LNAME' => array(
-            'name'       => 'Last Name',
-            'field_type' => 'text',
-            'req'        => true,
+            'name'          => 'Last Name',
+            'field_type'    => 'text',
+            'req'           => true,
         ),
         'EDATE' => array(
-            'name'       => 'Expiry Date',
-            'field_type' => 'date',
-            'req'        => true,
+            'name'          => 'Expiry Date',
+            'field_type'    => 'date',
+            'req'           => true,
         ),
         'PROD' => array(
-            'name'       => 'Product',
-            'field_type' => 'text',
-            'req'        => true,
+            'name'          => 'Product',
+            'field_type'    => 'text',
+            'req'           => true,
         ),
     );
 
     /**
-     * Notify users that their subscription has expired.
+     * Notify users that their subscription is about to expiry (2 weeks in advance).
      *
-     * @return array $expired_subscriptions
+     * @return array $subscriptions
      */
-    public static function notify_subscription_expired() {
-        $expired_subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry( true );
+    public static function notify_subscription_about_to_expiry() {
+        $subscriptions = LaterPay_Migrator_Subscription::get_subscriptions_by_expiry();
 
-        if ( $expired_subscriptions ) {
+        if ( $subscriptions ) {
             $data = array();
-            foreach ( $expired_subscriptions as $subscription ) {
+            foreach ( $subscriptions as $subscription ) {
                 list( $first_name, $last_name ) = explode( ' ', $subscription['subscriber_name'] );
                 // set user email to data
                 $data[] = array(
@@ -55,6 +55,45 @@ class LaterPay_Migrator_Mail
                         'PROD'  => $subscription['product'],
                     )
                 );
+
+                // set flag to mark user as notified before expiration of subscription
+                LaterPay_Migrator_Subscription::mark_user( 'was_notified_before_expiry' );
+            }
+
+            if ( $data ) {
+                // send email to notify user that his subscription is about to expire
+                $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
+                self::send_notification_email( $campaign_name, $data );
+            }
+        }
+
+        return $subscriptions;
+    }
+
+    /**
+     * Notify users that their subscription has expired.
+     *
+     * @return array $expired_subscriptions
+     */
+    public static function notify_subscription_expired() {
+        $expired_subscriptions = LaterPay_Migrator_Subscription::get_subscriptions_by_expiry( true );
+
+        if ( $expired_subscriptions ) {
+            $data = array();
+            foreach ( $expired_subscriptions as $subscription ) {
+                list( $first_name, $last_name ) = explode( ' ', $subscription['subscriber_name'] );
+
+                // set user email to data
+                $data[] = array(
+                    'email' => $subscription['email'],
+                    'data'  => array(
+                        'FNAME' => $first_name,
+                        'LNAME' => $last_name,
+                        'EDATE' => $subscription['expiry'],
+                        'PROD'  => $subscription['product'],
+                    )
+                );
+
                 LaterPay_Migrator_Subscription::change_user_role( $subscription['email'] );
 
                 // set flag to mark user as notified after expiration of subscription
@@ -64,6 +103,7 @@ class LaterPay_Migrator_Mail
             if ( $data ) {
                 // send email to notify user that his subscription has expired
                 $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
+
                 self::send_notification_email( $campaign_name, $data );
             }
         }
@@ -74,7 +114,7 @@ class LaterPay_Migrator_Mail
     /**
      * Send notification emails to the users.
      *
-     * @param string $campaign_name mailchimp campaign name
+     * @param string $campaign_name MailChimp campaign name
      * @param array  $data          array of emails
      *
      * @return bool|string          bool or error message
@@ -119,43 +159,6 @@ class LaterPay_Migrator_Mail
     }
 
     /**
-     * Notify users that their subscriptions are about to expiry (2 weeks in advance).
-     *
-     * @return array $subscriptions
-     */
-    public static function notify_subscription_about_to_expiry() {
-        $subscriptions = LaterPay_Migrator_Subscription::get_subsriptions_by_expiry();
-
-        if ( $subscriptions ) {
-            $data = array();
-            foreach ( $subscriptions as $subscription ) {
-                list( $first_name, $last_name ) = explode( ' ', $subscription['subscriber_name'] );
-                // set user email to data
-                $data[] = array(
-                    'email' => $subscription['email'],
-                    'data'  => array(
-                        'FNAME' => $first_name,
-                        'LNAME' => $last_name,
-                        'EDATE' => $subscription['expiry'],
-                        'PROD'  => $subscription['product'],
-                    )
-                );
-
-                // set flag to mark user as notified before expiration of subscription
-                LaterPay_Migrator_Subscription::mark_user( 'was_notified_before_expiry' );
-            }
-
-            if ( $data ) {
-                // send email to notify user that his subscription is about to expire
-                $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
-                self::send_notification_email( $campaign_name, $data );
-            }
-        }
-
-        return $subscriptions;
-    }
-
-    /**
      * Init MailChimp.
      *
      * @return Mailchimp
@@ -164,17 +167,17 @@ class LaterPay_Migrator_Mail
         $api_key   = get_option( 'laterpay_migrator_mailchimp_api_key' );
         $mailchimp = new Mailchimp( $api_key );
 
-        // disable SSL verification
         if ( ! get_option( 'laterpay_migrator_mailchimp_ssl_connection' ) ) {
-            curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0);
+            // disable SSL verification, if the site does not have SSL
+            curl_setopt( $mailchimp->ch, CURLOPT_SSL_VERIFYHOST, 0 );
+            curl_setopt( $mailchimp->ch, CURLOPT_SSL_VERIFYPEER, 0 );
         }
 
         return $mailchimp;
     }
 
     /**
-     * Add fields to the list
+     * Add fields to the list.
      *
      * @param Mailchimp $mailchimp object
      * @param int       $list_id   list id
@@ -189,7 +192,7 @@ class LaterPay_Migrator_Mail
             $vars = $mergeVars['data'][0]['merge_vars'];
         }
 
-        // filter vars that already exists by tags
+        // filter vars that already exist by tags
         $fields = LaterPay_Migrator_Mail::$fields;
         foreach ( $vars as $var ) {
             if ( isset( $fields[$var['tag']], $fields ) ) {
@@ -200,7 +203,15 @@ class LaterPay_Migrator_Mail
         // set new fields to the list
         if ( $fields ) {
             foreach ( $fields as $tag => $data ) {
-                $mailchimp->lists->mergeVarAdd( $list_id, $tag, $data['name'], array( 'field_type' => $data['field_type'], 'req' => $data['req'] ) );
+                $mailchimp->lists->mergeVarAdd(
+                                    $list_id,
+                                    $tag,
+                                    $data['name'],
+                                    array(
+                                        'field_type'    => $data['field_type'],
+                                        'req'           => $data['req'],
+                                    )
+                                );
             }
         }
     }

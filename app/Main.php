@@ -17,8 +17,8 @@ class LaterPay_Migrator_Main
         $config = get_laterpay_migrator_config();
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $this, 'ajax_get_purchase_link' ) );
         add_action( 'wp_ajax_laterpay_migrator_file_upload',        array( 'LaterPay_Migrator_Parse', 'file_upload' ) );
-        add_action( 'wp_ajax_laterpay_migrator_activate',           array( 'LaterPay_Migrator_Subscription', 'activate_subscription' ) );
-        add_action( 'template_redirect',                            array( $this, 'remove_subscriber_role' ) );
+        add_action( 'wp_ajax_laterpay_migrator_activate',           array( 'LaterPay_Migrator_Subscription', 'activate_migration_process' ) );
+        add_action( 'template_redirect',                            array( $this, 'migrate_subscriber_to_laterpay' ) );
         add_filter( 'modify_menu',                                  array( $this, 'add_menu' ) );
 
         if ( get_option( 'laterpay_migrator_is_active' ) && ! LaterPay_Migrator_Subscription::is_migration_completed() ) {
@@ -62,13 +62,13 @@ class LaterPay_Migrator_Main
     }
 
     /**
-     * Get purchased url for user subscription leftover time
+     * Get purchase URL for remaining subscription time of user.
      *
      * @return string
      */
     public function get_purchase_url() {
-        $currency = get_option( 'laterpay_currency' );
-        $price = 0;
+        $currency   = get_option( 'laterpay_currency' );
+        $price      = 0; // switching to a timepass is free
 
         $client_options = LaterPay_Helper_Config::get_php_client_options();
         $client = new LaterPay_Client(
@@ -96,7 +96,7 @@ class LaterPay_Migrator_Main
             'subp' => true,
         );
 
-        $url  = add_query_arg( $url_params , home_url() );
+        $url  = add_query_arg( $url_params, home_url() );
         $hash = LaterPay_Helper_Pricing::get_hash_by_url( $url );
         $url  = $url . '&hash=' . $hash;
 
@@ -113,13 +113,13 @@ class LaterPay_Migrator_Main
     }
 
     /**
-     * Process user migration to the LaterPay
+     * Process user migration to LaterPay.
      *
      * @wp-hook template_redirect
      *
      * @return void
      */
-    public function remove_subscriber_role() {
+    public function migrate_subscriber_to_laterpay() {
         if ( ! isset( $_GET['subp'] ) || ! $_GET['subp'] ) {
             return;
         }
@@ -165,8 +165,8 @@ class LaterPay_Migrator_Main
 
         if ( $has_access ) {
             // mark user as migrated to LaterPay
-            LaterPay_Migrator_Subscription::mark_user( 'is_migrated_to_laterpay' );
             LaterPay_Migrator_Subscription::change_user_role();
+            LaterPay_Migrator_Subscription::mark_user( 'is_migrated_to_laterpay' );
         }
 
         wp_redirect( $redirect_url );
@@ -202,9 +202,9 @@ class LaterPay_Migrator_Main
      * @return void
      */
     public static function activate() {
-        // check if LaterPay plugin installed
+        // check, if the 'laterpay' plugin is installed
         if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
-            _e( 'LaterPay plugin should be installed and activated.', 'laterpay_migrator');
+            _e( 'The LaterPay plugin has to be installed and activated.', 'laterpay_migrator' );
             exit;
         }
 
@@ -225,7 +225,7 @@ class LaterPay_Migrator_Main
      * @return void
      */
     public static function deactivate() {
-        // pause migration process on deacttivation
+        // pause migration process on deactivation
         update_option( 'laterpay_migrator_is_active', 0 );
 
         wp_clear_scheduled_hook( 'notify_subscription_expired' );

@@ -9,7 +9,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
      * @return void
      */
     public function load_assets() {
-        // load LaterPay admin styles
+        // load backend styles from 'laterpay' plugin plus plugin-specific styles
         wp_register_style(
             'laterpay-backend',
             $this->config->get( 'lp_css_url' ) . 'laterpay-backend.css',
@@ -28,7 +28,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
         wp_enqueue_style( 'open-sans' );
         wp_enqueue_style( 'laterpay-migrator-backend' );
 
-        // load LaterPay-specific JS
+        // load backend scripts from 'laterpay' plugin plus plugin-specific Javascript
         wp_register_script(
             'laterpay-backend',
             $this->config->get( 'lp_js_url' ) . 'laterpay-backend.js',
@@ -65,8 +65,8 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
 
         global $wp_roles;
 
-        $timepasses = LaterPay_Helper_TimePass::get_all_time_passes();
-        $roles      = $wp_roles->roles;
+        $timepasses             = LaterPay_Helper_TimePass::get_all_time_passes();
+        $roles                  = $wp_roles->roles;
 
         $migration_is_active    = get_option( 'laterpay_migrator_is_active' );
         $migration_is_completed = LaterPay_Migrator_Subscription::is_migration_completed();
@@ -83,7 +83,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
             'top_nav'                           => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),
             'admin_menu'                        => LaterPay_Helper_View::get_admin_menu(),
-            'subscriptions_state'               => LaterPay_Migrator_Subscription::get_subscriptions_state(),
+            'subscriptions_state'               => LaterPay_Migrator_Subscription::get_migration_status(),
             'mailchimp_api_key'                 => get_option( 'laterpay_migrator_mailchimp_api_key' ),
             'mailchimp_campaign_before_expired' => get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' ),
             'mailchimp_campaign_after_expired'  => get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' ),
