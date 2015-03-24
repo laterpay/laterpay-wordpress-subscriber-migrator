@@ -10,7 +10,7 @@
  * Domain Path: /languages
  */
 
-// make sure we don't expose any info if called directly
+// make sure we don't expose any info when called directly
 if ( ! function_exists( 'add_action' ) ) {
     echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
     exit;
@@ -76,7 +76,7 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
         $config->set( 'lp_js_url',          $laterpay_plugin_url . 'built_assets/js/' );
         $config->set( 'lp_image_url',       $laterpay_plugin_url . 'built_assets/img/' );
 
-        // migration plugin assets
+        // migrator plugin assets
         $plugin_url = $config->get( 'plugin_url' );
         $config->set( 'css_url',            $plugin_url . 'built_assets/css/' );
         $config->set( 'js_url',             $plugin_url . 'built_assets/js/' );

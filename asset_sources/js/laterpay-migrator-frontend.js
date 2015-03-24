@@ -28,7 +28,7 @@
                 $.get(
                     lpMigratorVars.ajaxUrl,
                     {
-                        action  : 'laterpay_migrator_get_purchase_url'
+                        action: 'laterpay_migrator_get_purchase_url'
                     },
                     function(r) {
                         if (r.success) {
