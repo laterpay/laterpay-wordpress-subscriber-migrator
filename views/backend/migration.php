@@ -39,22 +39,12 @@
                         <?php _e( 'Invalid', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'Number of subscribers who were offered to switch to LaterPay', 'laterpay_migrator' ); ?>">
-                        <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['offered']; ?></big>
-                        <?php _e( 'Offered', 'laterpay_migrator' ); ?>
-                    </li>
-                    <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'Number of subscribers who did not yet follow the switching offer', 'laterpay_migrator' ); ?>">
-                        <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['ignored']; ?></big>
-                        <?php _e( 'Ignored', 'laterpay_migrator' ); ?>
-                    </li>
-                    <li class="lp_tooltip lp_statistics-row__item"
                         data-tooltip="<?php _e( 'Number of subscribers who have already switched to LaterPay', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['migrated']; ?></big>
                         <?php _e( 'Migrated', 'laterpay_migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'XXX', 'laterpay_migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Number of subscribers who have not switched to LaterPay yet', 'laterpay_migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['remaining']; ?></big>
                         <?php _e( 'Remaining', 'laterpay_migrator' ); ?>
                     </li>
@@ -97,56 +87,67 @@
             </div>
         </div>
 
-        <h2><?php _e( 'Subscriber Data CSV Import', 'laterpay_migrator' ); ?></h2>
-        <form id="lp_js_uploadForm" method="post">
-            <input type="hidden" name="action" value="laterpay_migrator_file_upload">
-            <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
-            <div>
-                <table class="lp_upload">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="lp_upload__input-value-wrapper">
-                                    <span class="lp_upload__input-value"></span>
-                                </div>
-                                <span class="lp_upload__input-wrapper">
-                                    <span id="lp_js_uploadButton" class="lp_upload__button button button-primary"><?php _e( 'Select CSV File to Upload', 'laterpay_migrator' ); ?></span>
-                                    <input type="file" id="lp_js_fileInput" class="lp_upload__input" name="file" size="10" accept=".csv">
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </form>
 
-        <div class="lp_layout lp_empty-state"<?php if ( $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
-            <div class="lp_layout__item lp_1/4">
-                <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>
-                <ul class="lp_list--bulleted">
-                    <li class="lp_list__item"><?php _e( 'Text qualified by double quotes', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'Fields delimited by semicolons', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'File encoded in UTF-8', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
-                </ul>
-            </div><div class="lp_layout__item lp_1/4">
-                <h3><?php _e( 'Required Data per Record (in that order!)', 'laterpay_migrator' ); ?></h3>
-                <ul class="lp_list--bulleted">
-                    <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'Family name', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'Expiry date of subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
-                    <li class="lp_list__item"><?php _e( 'Subscribed product', 'laterpay_migrator' ); ?></li>
-                </ul>
-            </div><div class="lp_layout__item lp_1/4">
-                <?php _e( 'You can download a template CSV file here that you can fill with your real data:', 'laterpay_migrator' ); ?>
-                <?php echo '<a href="' . $laterpay['example_url'] . '">' . 'example.csv' . '</a>'; ?>
+        <div<?php if ( $laterpay['products'] ) { echo ' class="lp_has-imported-data"'; } ?>>
+            <h2><?php _e( 'Subscriber Data CSV Import', 'laterpay_migrator' ); ?></h2>
+            <form id="lp_js_uploadForm"<?php if ( $laterpay['products'] ) { echo ' class="lp_has-imported-data"'; } ?> method="post">
+                <input type="hidden" name="action" value="laterpay_migrator_file_upload">
+                <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
+                <div class="lp_greybox">
+                    <table class="lp_upload">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="lp_upload__input-value-wrapper">
+                                        <span class="lp_upload__input-value"></span>
+                                    </div>
+                                    <span class="lp_upload__input-wrapper">
+                                        <span id="lp_js_uploadButton" class="lp_upload__button button button-primary"><?php _e( 'Select CSV File to Upload', 'laterpay_migrator' ); ?></span>
+                                        <input type="file" id="lp_js_fileInput" class="lp_upload__input" name="file" size="10" accept=".csv">
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+            <div class="lp_layout lp_empty-state">
+                <div class="lp_layout__item lp_1/4">
+                    <h3><?php _e( 'Required Data Format', 'laterpay_migrator' ); ?></h3>
+                    <ul class="lp_list--bulleted">
+                        <li class="lp_list__item"><?php _e( 'Text qualified by double quotes', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Fields delimited by semicolons', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'File encoded in UTF-8', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'No first line with field names', 'laterpay_migrator' ); ?></li>
+                    </ul>
+                </div><div class="lp_layout__item lp_1/4">
+                    <h3><?php _e( 'Required Data per Record (in that order!)', 'laterpay_migrator' ); ?></h3>
+                    <ul class="lp_list--bulleted">
+                        <li class="lp_list__item"><?php _e( 'Email address', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'First name', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Family name', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Expiry date of subscription (dd-mm-yyyy)', 'laterpay_migrator' ); ?></li>
+                        <li class="lp_list__item"><?php _e( 'Subscribed product', 'laterpay_migrator' ); ?></li>
+                    </ul>
+                </div><div class="lp_layout__item lp_1/4">
+                    <?php echo sprintf(
+                            __( 'You can %s and fill in your real data.', 'laterpay_migrator' ),
+                            '<a href="' . $laterpay['example_url'] . '">' .
+                                __( 'download a template CSV file here', 'laterpay_migrator' ) .
+                            '</a>'
+                    ); ?>
+                </div>
             </div>
         </div>
+
+        <a href="#" id="lp_js_toggleFileUploadVisibility" class="lp_upload-visibility-toggle lp_block lp_mt lp_mb+"<?php if ( ! $laterpay['products'] ) { echo ' style="display:none;"'; } ?>>
+            <?php _e( 'Delete existing and import new subscriber data', 'laterpay_migrator' ); ?>
+        </a>
+        <hr class="lp_form-group-separator<?php if ( $laterpay['products'] ) { echo ' lp_has-imported-data'; } ?>">
+
+
         <?php if ( $laterpay['products'] ): ?>
-            <hr class="lp_form-group-separator">
-
-
             <form id="lp_js_migratorMainForm" method="post">
                 <input type="hidden" name="action" value="laterpay_migrator_activate">
                 <?php if ( function_exists( 'wp_nonce_field' ) ) { wp_nonce_field( 'laterpay_migrator' ); } ?>
