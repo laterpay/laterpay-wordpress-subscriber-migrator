@@ -91,15 +91,17 @@
                     $o.mainForm.serializeArray(),
                     function(response) {
                         setMessage(response.message, response.success);
+
                         if (response.mode) {
                             // switch button text
                             $o.statusButton.text(response.mode.text);
+
+                            // update status indicator
                             $o.statusLabels
                             .removeClass($o.active)
                                 .parent()
-                                    .removeClass()
-                                    .addClass('lp_status-indicator')
-                                    .addClass('lp_is-' + response.mode.value)
+                                .removeClass()
+                                .addClass('lp_status-indicator lp_is-' + response.mode.value)
                                     .find('.lp_status--' + response.mode.value)
                                     .addClass($o.active);
                         }
