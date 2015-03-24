@@ -41,7 +41,7 @@
 
                 $o.fileUploadVisibilityToggle
                 .mousedown(function() {
-                    toggleFileUploadVisibility();
+                    toggleFileUploadVisibility($(this));
                 })
                 .click(function(e) {e.preventDefault();});
 
