@@ -213,8 +213,8 @@ class LaterPay_Migrator_Main
         $install->install();
 
         // register cron jobs for email sending
-        wp_schedule_event( time(), 'daily', 'notify_subscription_expired' );
-        wp_schedule_event( time(), 'daily', 'notify_subscription_about_to_expiry' );
+        wp_schedule_event( mktime( 23, 59, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'notify_subscription_expired' );
+        wp_schedule_event( mktime( 23, 58, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'notify_subscription_about_to_expiry' );
     }
 
     /**
