@@ -2,7 +2,7 @@
 /*
  * Plugin Name: LaterPay Subscriber Migrator
  * Plugin URI: https://github.com/laterpay/laterpay-wordpress-subscriber-migrator
- * Description: Extension for LaterPay plugin to migrate existing subscribers to LaterPay. Requires the LaterPay WordPress plugin > v0.9.11.2.
+ * Description: Extension for the LaterPay plugin to migrate existing subscribers to LaterPay. Requires the LaterPay WordPress plugin > v0.9.11.2.
  * Author: LaterPay GmbH and Aliaksandr Vahura
  * Version: 0.2.0
  * Author URI: https://laterpay.net/
