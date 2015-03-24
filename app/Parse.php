@@ -6,7 +6,7 @@ class LaterPay_Migrator_Parse
     public static $column_mapping = array(
         0 => 'email',
         1 => 'first_name',
-        2 => 'second_name',
+        2 => 'last_name',
         3 => 'date',
         4 => 'product',
     );
@@ -77,8 +77,8 @@ class LaterPay_Migrator_Parse
                 $products[] = $final_row['product'];
             }
 
-            $first_name  = isset( $final_row['first_name'] ) ? $final_row['first_name'] : '';
-            $second_name = isset( $final_row['second_name'] ) ? $final_row['second_name'] : '';
+            $first_name  = isset( $final_row['first_name'] ) ? $final_row['first_name'] : 'User';
+            $second_name = isset( $final_row['last_name'] ) ? $final_row['last_name'] : 'User';
 
             // prepare data and set as final
             $final_data[] = array(
@@ -105,6 +105,15 @@ class LaterPay_Migrator_Parse
      * @return void
      */
     public static function file_upload() {
+        if ( get_option( 'laterpay_migrator_is_active' ) ) {
+            wp_send_json(
+                array(
+                    'success' => false,
+                    'message' => __( 'You can\'t upload file while migration process is active.', 'laterpay_migrator' ),
+                )
+            );
+        }
+
         if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator' ) ) {
             wp_send_json(
                 array(

@@ -309,26 +309,26 @@ class LaterPay_Migrator_Subscription
         update_option( 'laterpay_migrator_mailchimp_ssl_connection',          $post_form->get_field_value( 'mailchimp_ssl_connection' ) );
 
         // check mailchimp data
-        $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
         try {
+            $mailchimp = LaterPay_Migrator_Mail::init_mailchimp();
             // pre-expiry campaign validation
             $pre_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             if ( ! $pre_expiry_campaign['data'] ) {
-                throw new Exception( sprintf ( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+                throw new Exception( sprintf ( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             } else {
                 $list_id = $pre_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
-                // TODO: add fields to the list
+                LaterPay_Migrator_Mail::add_fields( $mailchimp, $list_id );
             }
 
             // post-expiry campaign validation
             $post_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             if ( ! $post_expiry_campaign['data'] ) {
-                throw new Exception( sprintf( __( 'Campaign % does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
+                throw new Exception( sprintf( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             } else {
                 $list_id = $post_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
-                // TODO: add fields to the list
+                LaterPay_Migrator_Mail::add_fields( $mailchimp, $list_id );
             }
         } catch ( Exception $e ) {
             wp_send_json(
