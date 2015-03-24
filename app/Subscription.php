@@ -243,7 +243,8 @@ class LaterPay_Migrator_Subscription
         }
 
         // format expiry date
-        $state['expiry'] = date_i18n( get_option( 'date_format' ), strtotime( $state['expiry'] ) );
+        $localized_date_format = substr( get_locale(), 0, 2 ) == 'de' ? 'd.m.Y' : 'm-d-Y';
+        $state['expiry'] = date_i18n( $localized_date_format, strtotime( $state['expiry'] ) );
 
         // set remaining
         $state['remaining'] = $state['valid'] - ( $state['ignored'] + $state['migrated'] );

@@ -13,6 +13,7 @@
                 fileUploadForm              : $('#lp_js_uploadForm'),
                 fileInput                   : $('#lp_js_fileInput'),
                 fileUploadButton            : $('#lp_js_uploadButton'),
+                fileUploadVisibilityToggle  : $('#lp_js_toggleFileUploadVisibility'),
 
                 // sitenotice configuration inputs
                 sitenoticeInputs            : $('.lp_js_sitenoticeInput'),
@@ -37,6 +38,12 @@
                     $o.files = event.target.files;
                     uploadFile();
                 });
+
+                $o.fileUploadVisibilityToggle
+                .mousedown(function() {
+                    toggleFileUploadVisibility();
+                })
+                .click(function(e) {e.preventDefault();});
 
                 // plugin status
                 $o.statusButton
@@ -83,6 +90,11 @@
                                     $o.fileUploadButton.text($o.fileUploadButton.attr('data'));
                                 },
                 });
+            },
+
+            toggleFileUploadVisibility = function($trigger) {
+                $trigger.fadeOut(250);
+                $('.lp_has-imported-data').slideDown(250);
             },
 
             switchPluginStatus = function() {
