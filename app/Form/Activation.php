@@ -1,6 +1,6 @@
 <?php
 
-class LaterPay_Migrator_Validation extends LaterPay_Form_Abstract
+class LaterPay_Migrator_Form_Activation extends LaterPay_Form_Abstract
 {
     /**
      * Implementation of abstract method.

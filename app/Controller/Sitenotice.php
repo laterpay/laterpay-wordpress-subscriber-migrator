@@ -1,6 +1,6 @@
 <?php
 
-class LaterPay_Migrator_Sitenotice extends LaterPay_Controller_Abstract
+class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstract
 {
 
     /**
@@ -42,7 +42,7 @@ class LaterPay_Migrator_Sitenotice extends LaterPay_Controller_Abstract
      */
     public function render_page() {
         if ( is_user_logged_in() ) {
-            if ( LaterPay_Migrator_Subscription::is_active() ) {
+            if ( LaterPay_Migrator_Helper_Subscription::is_active() ) {
                 $this->load_assets();
 
                 // assign variables to the view template
@@ -58,5 +58,33 @@ class LaterPay_Migrator_Sitenotice extends LaterPay_Controller_Abstract
                 $this->render( 'frontend/partials/sitenotice' );
             }
         }
+    }
+
+    /**
+     * Ajax method to get purchase URL.
+     *
+     * @wp-hook wp_ajax_laterpay_migrator_get_purchase_url
+     *
+     * @return void
+     */
+    public function ajax_get_purchase_link() {
+        if ( is_user_logged_in() ) {
+            $url = LaterPay_Migrator_Helper_Common::get_purchase_url();
+
+            if ( $url ) {
+                wp_send_json(
+                    array(
+                        'success' => true,
+                        'url'     => $url,
+                    )
+                );
+            }
+        }
+
+        wp_send_json(
+            array(
+                'success' => false,
+            )
+        );
     }
 }
