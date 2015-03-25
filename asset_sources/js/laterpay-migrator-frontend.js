@@ -17,11 +17,11 @@
             },
 
             displaySitenotice = function() {
-                var spaceForSitenotice = ( $o.body.style ? parseInt($o.body.style.paddingTop, 10) || 0 : 0 ) + $o.sitenotice.outerHeight();
+// var spaceForSitenotice = (parseInt($o.body.css('padding-top'), 10) || 0 ) + $o.sitenotice.outerHeight();
 
-                // increase the top padding of the body by the height of the sitenotice
-                // so the sitenotice can be absolute positioned at top:0 without overlap
-                $('body').css('padding-top', spaceForSitenotice + 'px');
+// // increase the top padding of the body by the height of the sitenotice
+// // so the sitenotice can be absolute positioned at top:0 without overlap
+// $('body').css('padding-top', spaceForSitenotice + 'px');
             },
 
             getPurchaseUrl = function() {
