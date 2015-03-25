@@ -30,7 +30,7 @@ class LaterPay_Migrator_Install
 
         add_option( 'laterpay_migrator_sitenotice_message',                 __( 'Get a free time pass for the rest of your subscription period', 'laterpay_migrator' ) );
         add_option( 'laterpay_migrator_sitenotice_button_text',             __( 'Switch for Free Now', 'laterpay_migrator' ) );
-        add_option( 'laterpay_migrator_sitenotice_bg_color',                '#e8d20c' );
+        add_option( 'laterpay_migrator_sitenotice_bg_color',                '#f1d200' );
         add_option( 'laterpay_migrator_sitenotice_text_color',              '#555555' );
 
         add_option( 'laterpay_migrator_mailchimp_api_key',                  '' );
