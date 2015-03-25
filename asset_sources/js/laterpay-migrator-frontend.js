@@ -17,7 +17,7 @@
             },
 
             displaySitenotice = function() {
-                var spaceForSitenotice = (parseInt($o.body.style.paddingTop, 10) || 0 ) + $o.sitenotice.outerHeight();
+                var spaceForSitenotice = ( $o.body.style ? parseInt($o.body.style.paddingTop, 10) || 0 : 0 ) + $o.sitenotice.outerHeight();
 
                 // increase the top padding of the body by the height of the sitenotice
                 // so the sitenotice can be absolute positioned at top:0 without overlap

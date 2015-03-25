@@ -29,14 +29,15 @@ class LaterPay_Migrator_Bootstrap
         $admin_migration_controller = new LaterPay_Migrator_Controller_Admin_Migration( $config );
         add_filter( 'modify_menu',                                  array( $admin_migration_controller, 'add_menu' ) );
 
+        $sitenotice_controller = new LaterPay_Migrator_Controller_Sitenotice( $config );
+        add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $sitenotice_controller, 'ajax_get_purchase_link' ) );
+
         if ( get_option( 'laterpay_migrator_is_active' ) && ! LaterPay_Migrator_Helper_Subscription::is_migration_completed() ) {
-            add_action( 'send_expiry_notification',                        array( $this, 'send_expiry_notification' ), 10, 1 );
+            add_action( 'send_expiry_notification',                 array( $this, 'send_expiry_notification' ), 10, 1 );
 
             // include styles and scripts only if user is logged in and not in admin area
             if ( ! is_admin() && is_user_logged_in() ) {
-                $sitenotice_controller = new LaterPay_Migrator_Controller_Sitenotice( $config );
-                add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',  array( $sitenotice_controller, 'ajax_get_purchase_link' ) );
-                add_action( 'wp_footer',                                   array( $sitenotice_controller, 'render_page' ) );
+                add_action( 'wp_footer',                            array( $sitenotice_controller, 'render_page' ) );
             }
         }
     }
