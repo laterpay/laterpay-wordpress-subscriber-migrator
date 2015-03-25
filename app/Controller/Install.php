@@ -1,9 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Install
+class LaterPay_Migrator_Controller_Install
 {
-
-    public static $subscriptions_table_name = 'laterpay_subscriber_migrations';
 
     /**
      * Install LaterPay migration plugin.
@@ -14,7 +12,7 @@ class LaterPay_Migrator_Install
         $config = get_laterpay_migrator_config();
 
         // create table for storing parsed subscriber data
-        $this->create_migration_table();
+        LaterPay_Migrator_Model_Migration::create_table();
 
         // create upload directory, if it does not exist and set write access
         wp_mkdir_p( $config->get( 'upload_dir' ) );
@@ -37,41 +35,5 @@ class LaterPay_Migrator_Install
         add_option( 'laterpay_migrator_mailchimp_ssl_connection',           0 );
         add_option( 'laterpay_migrator_mailchimp_campaign_after_expired',   '' );
         add_option( 'laterpay_migrator_mailchimp_campaign_before_expired',  '' );
-    }
-
-    /**
-     * Create a table for managing all the user and process data required for the migration.
-     *
-     * @return void
-     */
-    protected function create_migration_table() {
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
-        $table_subscriber_migrations = self::get_migration_table_name();
-        $sql = "
-            CREATE TABLE $table_subscriber_migrations (
-                id                          INT(11)       NOT NULL AUTO_INCREMENT,
-                expiry                      DATE          NOT NULL,
-                product                     varchar(255)  NOT NULL,
-                email                       varchar(255)  NOT NULL,
-                subscriber_name             varchar(255)  NOT NULL,
-                is_migrated_to_laterpay     tinyint(1)    NOT NULL DEFAULT 0,
-                was_notified_before_expiry  tinyint(1)    NOT NULL DEFAULT 0,
-                was_notified_after_expiry   tinyint(1)    NOT NULL DEFAULT 0,
-                PRIMARY KEY  (id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
-
-        dbDelta( $sql );
-    }
-
-    /**
-     * Get migration table name.
-     *
-     * @return string
-     */
-    public static function get_migration_table_name() {
-        global $wpdb;
-
-        return $wpdb->prefix . self::$subscriptions_table_name;
     }
 }

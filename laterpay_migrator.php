@@ -21,31 +21,45 @@ if ( ! function_exists( 'get_plugin_data' ) ) {
 }
 
 $directory = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
-register_activation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'deactivate' ) );
 
-require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Main.php' );
-require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Install.php' );
+define( 'DS', DIRECTORY_SEPARATOR );
+define( 'LP_MIGRATOR_DIR', $directory );
 
-$main = new LaterPay_Migrator_Main();
-add_action( 'init', array( $main, 'init' ) );
+register_activation_hook( __FILE__, array( 'LaterPay_Migrator_Bootstrap', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Bootstrap', 'deactivate' ) );
+
+require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Bootstrap.php' );
+require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Install.php' );
+require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Model' . DS . 'Migration.php' );
+
+$bootstrap = new LaterPay_Migrator_Bootstrap();
+add_action( 'init', array( $bootstrap, 'init' ) );
 
 // check if LaterPay plugin active
 if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
 
     if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
-        require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay' . DIRECTORY_SEPARATOR . 'laterpay_load.php' );
-        require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/application/Controller/' . 'Abstract.php' );
-        require_once( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/application/Form/' . 'Abstract.php' );
+        require_once( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'laterpay_load.php' );
+        require_once( WP_PLUGIN_DIR . DS . 'laterpay/application/Controller/' . 'Abstract.php' );
+        require_once( WP_PLUGIN_DIR . DS . 'laterpay/application/Form/' . 'Abstract.php' );
     }
 
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Install.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Mail.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Menu.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Parse.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Subscription.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Sitenotice.php' );
-    require_once( $directory . 'app' . DIRECTORY_SEPARATOR . 'Validation.php' );
+    // controllers
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Admin' . DS . 'Migration.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Mail.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Migration.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Parse.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Sitenotice.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Subscription.php' );
+
+    // helpers
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Helper' . DS . 'Common.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Helper' . DS . 'Mail.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Helper' . DS . 'Parse.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Helper' . DS . 'Subscription.php' );
+
+    // form
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Form' . DS . 'Activation.php' );
 
     require_once( 'vendor/autoload.php' );
 
@@ -67,7 +81,7 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
 
         // 'laterpay' plugin paths
         $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
-        $laterpay_plugin_dir  = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/';
+        $laterpay_plugin_dir  = WP_PLUGIN_DIR . DS . 'laterpay/';
         $laterpay_plugin_data = get_plugin_data( $laterpay_plugin_dir . 'laterpay.php' );
         $config->set( 'lp_version',         $laterpay_plugin_data['Version'] );
         $config->set( 'lp_plugin_url',      $laterpay_plugin_url );

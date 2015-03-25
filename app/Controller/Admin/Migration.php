@@ -1,8 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
+class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Abstract
 {
-
     /**
      * Load assets.
      *
@@ -69,7 +68,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
         $roles                  = $wp_roles->roles;
 
         $migration_is_active    = get_option( 'laterpay_migrator_is_active' );
-        $migration_is_completed = LaterPay_Migrator_Subscription::is_migration_completed();
+        $migration_is_completed = LaterPay_Migrator_Helper_Subscription::is_migration_completed();
         $status_class           = 'lp_is-setting-up';
 
         if ( $migration_is_active ) {
@@ -83,7 +82,7 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
             'top_nav'                           => $this->get_menu( 'backend/partials/navigation', $this->config->get( 'lp_view_dir' ) ),
             'admin_menu'                        => LaterPay_Helper_View::get_admin_menu(),
-            'subscriptions_state'               => LaterPay_Migrator_Subscription::get_migration_status(),
+            'subscriptions_state'               => LaterPay_Migrator_Helper_Subscription::get_migration_status(),
             'mailchimp_api_key'                 => get_option( 'laterpay_migrator_mailchimp_api_key' ),
             'mailchimp_campaign_before_expired' => get_option( 'laterpay_migrator_mailchimp_campaign_before_expired' ),
             'mailchimp_campaign_after_expired'  => get_option( 'laterpay_migrator_mailchimp_campaign_after_expired' ),
@@ -105,5 +104,23 @@ class LaterPay_Migrator_Menu extends LaterPay_Controller_Abstract
         // render 'migration' tab in 'laterpay' plugin backend
         $this->assign( 'laterpay', $view_args );
         $this->render( 'backend/migration' );
+    }
+
+    /**
+     * Add 'migration' tab to the 'laterpay' plugin backend.
+     *
+     * @param $menu
+     *
+     * @return mixed
+     */
+    public function add_menu( $menu ) {
+        $menu[ 'migration' ] = array(
+            'url'   => 'laterpay-migration-tab',
+            'title' => __( 'Migration', 'laterpay_migrator' ),
+            'cap'   => 'activate_plugins',
+            'run'   => array( $this, 'render_page' ),
+        );
+
+        return $menu;
     }
 }
