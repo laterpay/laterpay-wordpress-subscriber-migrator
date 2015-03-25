@@ -427,11 +427,13 @@ class LaterPay_Migrator_Subscription
 
         $map = $products_mapping[$data['product']];
 
-        // change roles
-        if ( isset( $map['assign'] ) ) {
+        // assign role
+        if ( isset( $map['assign'] ) && $map['assign'] ) {
             $user->add_role( $map['assign'] );
         }
-        if ( isset( $map['remove'] ) ) {
+
+        // remove role
+        if ( isset( $map['remove'] ) && $map['remove'] ) {
             $user->remove_role( $map['remove'] );
         }
 

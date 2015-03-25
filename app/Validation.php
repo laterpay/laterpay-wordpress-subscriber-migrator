@@ -43,13 +43,6 @@ class LaterPay_Migrator_Validation extends LaterPay_Form_Abstract
             array(
                 'validators' => array(
                     'is_array',
-                    'array_check' => array(
-                        'cmp' => array(
-                            array(
-                                'ne' => 0,
-                            ),
-                        ),
-                    ),
                 ),
             )
         );
@@ -59,13 +52,6 @@ class LaterPay_Migrator_Validation extends LaterPay_Form_Abstract
             array(
                 'validators' => array(
                     'is_array',
-                    'array_check' => array(
-                        'cmp' => array(
-                            array(
-                                'ne' => 0,
-                            ),
-                        ),
-                    ),
                 ),
             )
         );
