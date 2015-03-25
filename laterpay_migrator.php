@@ -25,8 +25,8 @@ $directory = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
 define( 'DS', DIRECTORY_SEPARATOR );
 define( 'LP_MIGRATOR_DIR', $directory );
 
-register_activation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Main', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'LaterPay_Migrator_Bootstrap', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'LaterPay_Migrator_Bootstrap', 'deactivate' ) );
 
 require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Bootstrap.php' );
 require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Install.php' );
