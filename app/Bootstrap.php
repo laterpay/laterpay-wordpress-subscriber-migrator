@@ -35,7 +35,7 @@ class LaterPay_Migrator_Bootstrap
         if ( get_option( 'laterpay_migrator_is_active' ) && ! LaterPay_Migrator_Helper_Subscription::is_migration_completed() ) {
             add_action( 'send_expiry_notification',                 array( $this, 'send_expiry_notification' ), 10, 1 );
 
-            // include styles and scripts only if user is logged in and not in admin area
+            // include styles and scripts only, if user is logged in and not in admin area
             if ( ! is_admin() && is_user_logged_in() ) {
                 add_action( 'wp_footer',                            array( $sitenotice_controller, 'render_page' ) );
             }

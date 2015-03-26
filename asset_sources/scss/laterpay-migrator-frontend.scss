@@ -17,14 +17,14 @@ body {
 
     .lp_siiitenotice__content {
         margin: $fs auto;
-        max-width: 960px;
+        max-width: 970px;
     }
 
     .lp_siiitenotice__message {
         float: left;
         font-style: normal;
         font-weight: normal;
-        padding: $fs--05 0 $fs--025; // arbitrary visual adjustment that should really not be necessary in good CSS
+        padding: $fs--075 $fs $fs--075 0;
     }
 
     .lp_siiitenotice__button {
@@ -36,9 +36,10 @@ body {
         border-width: 0 1px 2px 0 !important;
         color: $text--inverse !important;
         cursor: pointer !important;
+        display: inline-block !important;
         font-size: $fs--2 !important;
         line-height: 1.1 !important;
-        margin: 0 0 0 $fs !important;
+        margin: 2px 0 0 !important;
         padding: $fs--025 $fs $fs--025 0 !important;
         text-decoration: none !important;
         text-shadow: 0 -1px 0 darken($laterpay-brand--darker, 13%) !important;
@@ -72,6 +73,18 @@ body {
         &:active {
             border-top-color: transparent !important;
             border-width: 2px 1px 0 0 !important;
+        }
+    }
+}
+
+
+// responsiveness ------------------------------------------------------------------------------------------------------
+@media (max-width:1023px) {
+    .lp_siiitenotice{
+
+        .lp_siiitenotice__content {
+            margin-right: $fs;
+            margin-left: $fs;
         }
     }
 }

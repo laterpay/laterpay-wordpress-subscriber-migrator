@@ -17,11 +17,17 @@
                     getPurchaseUrl();
                 })
                 .on('click', function(e) {e.preventDefault();});
+
+                // adjust sitenotice position on resize
+                $(window).resize(function() {
+                    displaySitenotice();
+                });
             },
 
             displaySitenotice = function() {
                 var htmlMarginTop       = parseInt($o.html.css('margin-top'), 10) || 0,
                     siteheaderTop       = parseInt($o.siteheader.css('top'), 10) || 0,
+                    // adminbarHeight      = $o.adminbar.is(':visible') ? $o.adminbar.outerHeight() : 0,
                     adminbarHeight      = $o.adminbar.outerHeight(),
                     sitenoticeHeight    = $o.sitenotice.outerHeight();
 
