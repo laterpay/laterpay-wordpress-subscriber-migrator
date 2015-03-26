@@ -8,7 +8,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
      * @return void
      */
     public function load_assets() {
-        // load backend styles from 'laterpay' plugin plus plugin-specific styles
+        // load backend styles from 'laterpay' plugin plus migrator plugin-specific styles
         wp_register_style(
             'laterpay-backend',
             $this->config->get( 'lp_css_url' ) . 'laterpay-backend.css',

@@ -9,11 +9,18 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstra
      * @return void
      */
     public function load_assets() {
-        // load plugin-specific styles
+        // load post-view styles from 'laterpay' plugin plus migrator plugin-specific styles
+        wp_register_style(
+            'laterpay-post-view',
+            $this->config->css_url . 'laterpay-post-view.css',
+            array(),
+            $this->config->version
+        );
         wp_register_style(
             'laterpay-migrator-frontend',
             $this->config->get( 'css_url' ) . 'laterpay-migrator-frontend.css'
         );
+        wp_enqueue_style( 'laterpay-post-view' );
         wp_enqueue_style( 'laterpay-migrator-frontend' );
 
         // load plugin-specific Javascript

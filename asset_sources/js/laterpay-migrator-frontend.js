@@ -2,8 +2,11 @@
 
     function laterpayMigratorFrontend() {
         var $o = {
+                html                : $('html'),
                 body                : $('body'),
-                sitenotice          : $('.lp_sitenotice'),
+                adminbar            : $('#wpadminbar'),
+                sitenotice          : $('.lp_siiitenotice'),
+                siteheader          : $('.site-header'),
                 purchaseButton      : $('#lp_buySubscription'),
                 fakePurchaseButton  : '#lp_fakeButton',
             },
@@ -17,11 +20,19 @@
             },
 
             displaySitenotice = function() {
-// var spaceForSitenotice = (parseInt($o.body.css('padding-top'), 10) || 0 ) + $o.sitenotice.outerHeight();
+                var htmlMarginTop       = parseInt($o.html.css('margin-top'), 10) || 0,
+                    siteheaderTop       = parseInt($o.siteheader.css('top'), 10) || 0,
+                    adminbarHeight      = $o.adminbar.outerHeight(),
+                    sitenoticeHeight    = $o.sitenotice.outerHeight();
 
-// // increase the top padding of the body by the height of the sitenotice
-// // so the sitenotice can be absolute positioned at top:0 without overlap
-// $('body').css('padding-top', spaceForSitenotice + 'px');
+                // increase margin-top of HTML to make room for the sitenotice
+                $o.html.css('margin-top', htmlMarginTop + sitenoticeHeight + 'px');
+
+                // adjust top of the sitenotice to position it below the adminbar
+                $o.sitenotice.css('top', adminbarHeight + 'px');
+
+                // increase top of the site-header to position it below the sitenotice
+                $o.siteheader.css('top', siteheaderTop + sitenoticeHeight + 'px');
             },
 
             getPurchaseUrl = function() {
@@ -45,8 +56,10 @@
             },
 
             init = function() {
-                displaySitenotice();
                 bindEvents();
+
+                // render sitenotice with a delay to allow other Javascript-based position to complete before
+                setTimeout(function() {displaySitenotice();}, 500);
             };
 
         init();
