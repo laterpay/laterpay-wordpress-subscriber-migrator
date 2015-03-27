@@ -61,7 +61,12 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
     // form
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Form' . DS . 'Activation.php' );
 
-    require_once( 'vendor/autoload.php' );
+    // composer autoloader required 5.3+ php version for work
+    if ( version_compare( PHP_VERSION, '5.3.0', '>=' ) ) {
+        require_once( 'vendor/autoload.php' );
+    } else {
+        require_once( 'vendor/mailchimp/mailchimp/src/Mailchimp.php' );
+    }
 
     /**
      * Get the plugin settings.
