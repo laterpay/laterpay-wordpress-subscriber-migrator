@@ -17,20 +17,20 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => true,
-                    'message' => __( 'The migration process is paused now.', 'laterpay_migrator' ),
+                    'message' => __( 'The migration process is paused now.', 'laterpay-migrator' ),
                     'mode'    => array(
-                        'text'  => __( 'Start Migration', 'laterpay_migrator' ),
+                        'text'  => __( 'Start Migration', 'laterpay-migrator' ),
                         'value' => 'setting-up',
                     ),
                 )
             );
         }
 
-        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator' ) ) {
+        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay-migrator' ) ) {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Incorrect nonce.', 'laterpay_migrator' ),
+                    'message' => __( 'Incorrect nonce.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -41,7 +41,7 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'You have to configure the Subscription Mapping and Subscriber Communication sections before you can start the migration process.', 'laterpay_migrator' ),
+                    'message' => __( 'You have to configure the Subscription Mapping and Subscriber Communication sections before you can start the migration process.', 'laterpay-migrator' ),
                     'data'    => array(
                         'errors' => $post_form->get_errors(),
                     ),
@@ -68,7 +68,7 @@ class LaterPay_Migrator_Controller_Subscription
             // validate settings for pre-expiry campaign
             $pre_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             if ( ! $pre_expiry_campaign['data'] ) {
-                throw new Exception( sprintf ( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
+                throw new Exception( sprintf ( __( 'Campaign %s does not exist', 'laterpay-migrator' ), $post_form->get_field_value( 'mailchimp_campaign_before_expired' ) ) );
             } else {
                 $list_id = $pre_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
@@ -78,7 +78,7 @@ class LaterPay_Migrator_Controller_Subscription
             // validate settings for post-expiry campaign
             $post_expiry_campaign = $mailchimp->campaigns->getList( array( 'title' => $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             if ( ! $post_expiry_campaign['data'] ) {
-                throw new Exception( sprintf( __( 'Campaign %s does not exist', 'laterpay_migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
+                throw new Exception( sprintf( __( 'Campaign %s does not exist', 'laterpay-migrator' ), $post_form->get_field_value( 'mailchimp_campaign_after_expired' ) ) );
             } else {
                 $list_id = $post_expiry_campaign['data'][0]['list_id'];
                 // set new fields to the list
@@ -88,7 +88,7 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Mailchimp error: ', 'laterpay_migrator' ) . $e->getMessage(),
+                    'message' => __( 'Mailchimp error: ', 'laterpay-migrator' ) . $e->getMessage(),
                 )
             );
         }
@@ -105,7 +105,7 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Wrong product mapping params.', 'laterpay_migrator' ),
+                    'message' => __( 'Wrong product mapping params.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -114,7 +114,7 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'There are no products in the system. Please upload a CSV file with correct products.', 'laterpay_migrator' ),
+                    'message' => __( 'There are no products in the system. Please upload a CSV file with correct products.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -136,7 +136,7 @@ class LaterPay_Migrator_Controller_Subscription
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Missed data, probably was not uploaded or not processed.', 'laterpay_migrator' ),
+                    'message' => __( 'Missed data, probably was not uploaded or not processed.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -147,9 +147,9 @@ class LaterPay_Migrator_Controller_Subscription
         wp_send_json(
             array(
                 'success' => true,
-                'message' => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay_migrator' ),
+                'message' => __( 'The plugin is now migrating your subscribers to LaterPay.', 'laterpay-migrator' ),
                 'mode'    => array(
-                    'text'  => __( 'Pause Migration', 'laterpay_migrator' ),
+                    'text'  => __( 'Pause Migration', 'laterpay-migrator' ),
                     'value' => 'migrating',
                 ),
             )

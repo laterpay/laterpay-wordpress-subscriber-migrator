@@ -40,6 +40,15 @@ class LaterPay_Migrator_Bootstrap
                 add_action( 'wp_footer',                            array( $sitenotice_controller, 'render_page' ) );
             }
         }
+
+        // load the textdomain for 'plugins_loaded', 'register_activation_hook', and 'register_deactivation_hook'
+        $textdomain_dir     = dirname( $config->get( 'plugin_base_name' ) );
+        $textdomain_path    = $textdomain_dir . $config->get( 'text_domain_path' );
+        load_plugin_textdomain(
+            'laterpay-migrator',
+            false,
+            $textdomain_path
+        );
     }
 
     /**
@@ -52,7 +61,7 @@ class LaterPay_Migrator_Bootstrap
     public static function activate() {
         // check, if the 'laterpay' plugin is installed
         if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
-            _e( 'The LaterPay plugin has to be installed and activated.', 'laterpay_migrator' );
+            _e( 'The LaterPay plugin has to be installed and activated.', 'laterpay-migrator' );
             exit;
         }
 
@@ -86,6 +95,7 @@ class LaterPay_Migrator_Bootstrap
     public function send_expiry_notification( $modifier ) {
         // send mail notification
         $mail_controller = new LaterPay_Migrator_Controller_Mail();
+
         return $mail_controller->send_notification_email( $modifier );
     }
 }

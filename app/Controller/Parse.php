@@ -15,16 +15,16 @@ class LaterPay_Migrator_Controller_Parse
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'You have to pause the migration before you can upload new data.', 'laterpay_migrator' ),
+                    'message' => __( 'You have to pause the migration before you can upload new data.', 'laterpay-migrator' ),
                 )
             );
         }
 
-        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay_migrator' ) ) {
+        if ( ! isset( $_POST['_wpnonce'] ) || $_POST['_wpnonce'] !== wp_create_nonce( 'laterpay-migrator' ) ) {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Incorrect token.', 'laterpay_migrator' ),
+                    'message' => __( 'Incorrect token.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -33,7 +33,7 @@ class LaterPay_Migrator_Controller_Parse
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Incorrect file.', 'laterpay_migrator' ),
+                    'message' => __( 'Incorrect file.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -54,7 +54,7 @@ class LaterPay_Migrator_Controller_Parse
                 wp_send_json(
                     array(
                         'success' => false,
-                        'message' => __( 'The file you tried to upload did not conform to the required format.', 'laterpay_migrator' ),
+                        'message' => __( 'The file you tried to upload did not conform to the required format.', 'laterpay-migrator' ),
                     )
                 );
             }
@@ -63,7 +63,7 @@ class LaterPay_Migrator_Controller_Parse
                 wp_send_json(
                     array(
                         'success' => false,
-                        'message' => __( 'Can\'t upload file. Please make sure the upload folder is writable.', 'laterpay_migrator' ),
+                        'message' => __( 'Can\'t upload file. Please make sure the upload folder is writable.', 'laterpay-migrator' ),
                     )
                 );
             }
@@ -76,14 +76,14 @@ class LaterPay_Migrator_Controller_Parse
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'Error when writing to the database.', 'laterpay_migrator' ),
+                    'message' => __( 'Error when writing to the database.', 'laterpay-migrator' ),
                 )
             );
         } elseif ( $result === 0 ) {
             wp_send_json(
                 array(
                     'success' => false,
-                    'message' => __( 'File contains invalid data.', 'laterpay_migrator' ),
+                    'message' => __( 'File contains invalid data.', 'laterpay-migrator' ),
                 )
             );
         }
@@ -91,7 +91,7 @@ class LaterPay_Migrator_Controller_Parse
         wp_send_json(
             array(
                 'success' => true,
-                'message' => __( 'File was successfully processed.', 'laterpay_migrator' ),
+                'message' => __( 'File was successfully processed.', 'laterpay-migrator' ),
             )
         );
     }

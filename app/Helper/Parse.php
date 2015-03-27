@@ -82,7 +82,7 @@ class LaterPay_Migrator_Helper_Parse
             // make sure we have a name we can address the subscriber with in emails
             $subscriber_name = trim( $final_row['first_name'] . ' ' . $final_row['last_name'] );
             if ( $subscriber_name == '' ) {
-                $subscriber_name = __( 'Subscriber', 'laterpay_migrator' );
+                $subscriber_name = __( 'Subscriber', 'laterpay-migrator' );
             }
 
             // prepare data and set as final

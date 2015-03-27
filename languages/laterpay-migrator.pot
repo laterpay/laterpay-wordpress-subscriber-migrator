@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"POT-Revision-Date: Tue Mar 24 2015 18:14:05 GMT+0100 (CET)\n"
+"POT-Revision-Date: Fri Mar 27 2015 02:58:45 GMT+0100 (CET)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -89,12 +89,12 @@ msgid "Complete"
 msgstr ""
 
 #: ../views/backend/migration.php:76 ../views/backend/migration.php:80 ..
-#: /app/Subscription.php:266
+#: /app/Controller/Subscription.php:22
 msgid "Start Migration"
 msgstr ""
 
 #: ../views/backend/migration.php:77 ../views/backend/migration.php:82 ..
-#: /app/Subscription.php:396
+#: /app/Controller/Subscription.php:152
 msgid "Pause Migration"
 msgstr ""
 
@@ -287,95 +287,95 @@ msgstr ""
 msgid "Email Notification 2, sent on the day the subscription expires"
 msgstr ""
 
-#: ../app/Subscription.php:264
+#: ../app/Bootstrap.php:55
+msgid "The LaterPay plugin has to be installed and activated."
+msgstr ""
+
+#: ../app/Helper/Parse.php:85
+msgid "Subscriber"
+msgstr ""
+
+#: ../app/Controller/Subscription.php:20
 msgid "The migration process is paused now."
 msgstr ""
 
-#: ../app/Subscription.php:277
+#: ../app/Controller/Subscription.php:33
 msgid "Incorrect nonce."
 msgstr ""
 
-#: ../app/Subscription.php:288
+#: ../app/Controller/Subscription.php:44
 msgid ""
 "You have to configure the Subscription Mapping and Subscriber Communication "
 "sections before you can start the migration process."
 msgstr ""
 
-#: ../app/Subscription.php:315 ../app/Subscription.php:325
+#: ../app/Controller/Subscription.php:71 ../app/Controller/Subscription.php:81
 #, php-format
 msgid "Campaign %s does not exist"
 msgstr ""
 
-#: ../app/Subscription.php:335
+#: ../app/Controller/Subscription.php:91
 msgid "Mailchimp error: "
 msgstr ""
 
-#: ../app/Subscription.php:352
+#: ../app/Controller/Subscription.php:108
 msgid "Wrong product mapping params."
 msgstr ""
 
-#: ../app/Subscription.php:361
+#: ../app/Controller/Subscription.php:117
 msgid ""
 "There are no products in the system. Please upload a CSV file with correct "
 "products."
 msgstr ""
 
-#: ../app/Subscription.php:383
+#: ../app/Controller/Subscription.php:139
 msgid "Missed data, probably was not uploaded or not processed."
 msgstr ""
 
-#: ../app/Subscription.php:394
+#: ../app/Controller/Subscription.php:150
 msgid "The plugin is now migrating your subscribers to LaterPay."
 msgstr ""
 
-#: ../app/Install.php:31
+#: ../app/Controller/Install.php:29
 msgid "Get a free time pass for the rest of your subscription period"
 msgstr ""
 
-#: ../app/Install.php:32
+#: ../app/Controller/Install.php:30
 msgid "Switch for Free Now"
 msgstr ""
 
-#: ../app/Parse.php:85
-msgid "Subscriber"
-msgstr ""
-
-#: ../app/Parse.php:118
+#: ../app/Controller/Parse.php:18
 msgid "You have to pause the migration before you can upload new data."
 msgstr ""
 
-#: ../app/Parse.php:127
+#: ../app/Controller/Parse.php:27
 msgid "Incorrect token."
 msgstr ""
 
-#: ../app/Parse.php:136
+#: ../app/Controller/Parse.php:36
 msgid "Incorrect file."
 msgstr ""
 
-#: ../app/Parse.php:157
+#: ../app/Controller/Parse.php:57
 msgid "The file you tried to upload did not conform to the required format."
 msgstr ""
 
-#: ../app/Parse.php:166
+#: ../app/Controller/Parse.php:66
 msgid "Can't upload file. Please make sure the upload folder is writable."
 msgstr ""
 
-#: ../app/Parse.php:179
+#: ../app/Controller/Parse.php:79
 msgid "Error when writing to the database."
 msgstr ""
 
-#: ../app/Parse.php:186
+#: ../app/Controller/Parse.php:86
 msgid "File contains invalid data."
 msgstr ""
 
-#: ../app/Parse.php:194
+#: ../app/Controller/Parse.php:94
 msgid "File was successfully processed."
 msgstr ""
 
-#: ../app/Main.php:189
+#: ../app/Controller/Admin/Migration.php:119
 msgid "Migration"
-msgstr ""
-
-#: ../app/Main.php:207
-msgid "The LaterPay plugin has to be installed and activated."
 msgstr ""

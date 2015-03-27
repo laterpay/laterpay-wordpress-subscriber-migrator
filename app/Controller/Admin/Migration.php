@@ -116,7 +116,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     public function add_menu( $menu ) {
         $menu[ 'migration' ] = array(
             'url'   => 'laterpay-migration-tab',
-            'title' => __( 'Migration', 'laterpay_migrator' ),
+            'title' => __( 'Migration', 'laterpay-migrator' ),
             'cap'   => 'activate_plugins',
             'run'   => array( $this, 'render_page' ),
         );
