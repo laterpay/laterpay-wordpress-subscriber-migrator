@@ -49,7 +49,7 @@
                         <?php _e( 'Remaining', 'laterpay-migrator' ); ?>
                     </li>
                     <li class="lp_tooltip lp_statistics-row__item"
-                        data-tooltip="<?php _e( 'Latest renewal date in imported subscriber records', 'laterpay-migrator' ); ?>">
+                        data-tooltip="<?php _e( 'Last expiry in imported subscriber records', 'laterpay-migrator' ); ?>">
                         <big class="lp_statistics-row__value"><?php echo $laterpay['subscriptions_state']['expiry'] ? $laterpay['subscriptions_state']['expiry'] : __( 'n/a', 'laterpay-migrator' ); ?></big>
                         <?php _e( 'Last Expiry', 'laterpay-migrator' ); ?>
                     </li>

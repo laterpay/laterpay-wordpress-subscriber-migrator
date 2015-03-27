@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"PO-Revision-Date: Fri Mar 27 2015 03:38:58 GMT+0100 (CET)\n"
+"PO-Revision-Date: Fri Mar 27 2015 13:50:01 GMT+0100 (CET)\n"
 "Last-Translator: tester <drodler@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -64,8 +64,8 @@ msgid "Remaining"
 msgstr "Verbleibend"
 
 #: ../views/backend/migration.php:52
-msgid "Latest renewal date in imported subscriber records"
-msgstr "Spätestes Verlängerungsdatum in den importierten Abonnentendaten"
+msgid "Last expiry in imported subscriber records"
+msgstr "Spätestes Enddatum in den importierten Abonnentendaten"
 
 #: ../views/backend/migration.php:53
 msgid "n/a"
@@ -73,7 +73,7 @@ msgstr "n/a"
 
 #: ../views/backend/migration.php:54
 msgid "Last Expiry"
-msgstr "Spätestes Ablaufdatum"
+msgstr "Spätestes Enddatum"
 
 #: ../views/backend/migration.php:62
 msgid "Setup"
