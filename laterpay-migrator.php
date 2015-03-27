@@ -61,7 +61,7 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
     // form
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Form' . DS . 'Activation.php' );
 
-    // composer autoloader required 5.3+ php version for work
+    // composer autoloader requires PHP 5.3+
     if ( version_compare( PHP_VERSION, '5.3.0', '>=' ) ) {
         require_once( 'vendor/autoload.php' );
     } else {
