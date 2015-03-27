@@ -322,7 +322,7 @@
                                     value="<?php echo $laterpay['mailchimp_api_key']; ?>"
                                     placeholder="<?php _e( 'Account Settings &#10142; Extras &#10142; API keys', 'laterpay-migrator' ); ?>">
                         </div><div class="lp_layout__item lp_ml-">
-                            <label><?php _e( 'This site uses SSL', 'laterpay' ); ?></label>
+                            <label><?php _e( 'My site uses SSL', 'laterpay-migrator' ); ?></label>
                         </div><div class="lp_layout__item">
                             <div class="lp_toggle">
                                 <label class="lp_toggle__label">

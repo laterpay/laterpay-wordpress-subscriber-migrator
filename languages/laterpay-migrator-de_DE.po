@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"PO-Revision-Date: Fri Mar 27 2015 03:04:08 GMT+0100 (CET)\n"
+"PO-Revision-Date: Fri Mar 27 2015 03:38:58 GMT+0100 (CET)\n"
 "Last-Translator: tester <drodler@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -23,6 +23,7 @@ msgstr ""
 "X-Generator: Loco - https://localise.biz/"
 
 #: ../views/backend/migration.php:19
+#, fuzzy
 msgid "Test mode"
 msgstr "Test-Modus"
 
@@ -84,7 +85,7 @@ msgstr "Migration"
 
 #: ../views/backend/migration.php:68
 msgid "Complete"
-msgstr "Abgeschlossen"
+msgstr "Fertig"
 
 #: ../views/backend/migration.php:76 ../views/backend/migration.php:80 ..
 #: app/Controller/Subscription.php:22
@@ -151,7 +152,7 @@ msgstr "Abonniertes Produkt"
 #: ../views/backend/migration.php:135
 #, php-format
 msgid "You can %s and fill in your real data."
-msgstr "Sie können %s und Ihre echten Daten eintragen."
+msgstr "Sie können eine %s und Ihre echten Daten eintragen."
 
 #: ../views/backend/migration.php:137
 msgid "download a template CSV file here"
@@ -284,8 +285,8 @@ msgid "Account Settings &#10142; Extras &#10142; API keys"
 msgstr "Konto-Einstellungen &#10142; Extras &#10142; API-Keys"
 
 #: ../views/backend/migration.php:325
-msgid "This site uses SSL"
-msgstr "Diese Seite verwendet SSL"
+msgid "My site uses SSL"
+msgstr "Meine Webseite nutzt SSL"
 
 #: ../views/backend/migration.php:343
 msgid "Email Notification 1, sent 14 days before the subscription expires"
@@ -303,7 +304,7 @@ msgstr "MailChimp Kampagnen-Namen eingeben"
 msgid "Email Notification 2, sent on the day the subscription expires"
 msgstr "E-Mail-Benachrichtigung 2, wird am Ablauftag des Abos gesendet"
 
-#: ../app/Bootstrap.php:55
+#: ../app/Bootstrap.php:64
 msgid "The LaterPay plugin has to be installed and activated."
 msgstr "Das LaterPay Plugin muss installiert und aktiviert werden."
 
