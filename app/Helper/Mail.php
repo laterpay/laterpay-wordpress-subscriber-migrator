@@ -92,7 +92,7 @@ class LaterPay_Migrator_Helper_Mail
     }
 
     /**
-     * Prepare mail data
+     * Prepare mail data.
      *
      * @param string       $modifier  before|after
      *
@@ -130,6 +130,7 @@ class LaterPay_Migrator_Helper_Mail
             );
 
             if ( $need_change_role ) {
+                // remove the role from the user that gives a subscriber unlimited access to paid content, if configured
                 LaterPay_Migrator_Helper_Subscription::change_user_role( $subscription['email'] );
             }
 

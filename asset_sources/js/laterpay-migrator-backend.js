@@ -53,7 +53,7 @@
                 .click(function(e) {e.preventDefault();});
 
                 // live update sitenotice preview
-                // (function is only triggered 800ms after the keyup)
+                // (function is triggered with a delay of 800ms after the keyup event)
                 $o.sitenoticeInputs
                 .keyup(
                     debounce(function() {
