@@ -90,10 +90,9 @@ class LaterPay_Migrator_Bootstrap
     }
 
     /**
-     *  Send notification
+     *  Send email notification.
      */
     public function send_expiry_notification( $modifier ) {
-        // send mail notification
         $mail_controller = new LaterPay_Migrator_Controller_Mail();
 
         return $mail_controller->send_notification_email( $modifier );
