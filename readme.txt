@@ -10,11 +10,29 @@ Plugin URI: https://github.com/laterpay/laterpay-wordpress-subscriber-migrator
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
-Migrate existing subscribers from other services to LaterPay. This is an extension for the LaterPay WordPress plugin. It requires the LaterPay WordPress plugin > v0.9.11.2.
+Migrate existing subscribers from other payment services to LaterPay. This is an extension for the LaterPay WordPress plugin. It requires the LaterPay WordPress plugin > v0.9.11.2.
 
 
 == Description ==
-XXX
+The LaterPay migrator allows you to migrate existing subscribers from other payment services to LaterPay.
+
+We recommend the following high-level process for the migration:
+# Install the LaterPay plugin on your site (https://wordpress.org/plugins/laterpay/)
+# Install the LaterPay migrator plugin on your site (this plugin here). It will show up in the LaterPay plugin backend as tab 'Migration'.
+# Configure the LaterPay plugin; make sure that you
+## Give all roles used for subscribers unlimited access to paid content in the LaterPay advanced settings ('LaterPay' page of the WordPress settings)
+## Configure corresponding time passes for your subscriptions in the 'Pricing' tab of the LaterPay plugin
+# Switch the LaterPay plugin into live mode in the 'Account' tab of the LaterPay plugin
+# Deactivate your subscription plugin so that new subscriptions or renewals are not possible anymore
+# Export the subscriber data from your subscription service
+# Import the subscriber data as CSV file in the 'Migration' tab of the LaterPay plugin
+# Configure and start the migration process in the 'Migration' tab of the LaterPay plugin
+
+The LaterPay migration plugin will then render an eye-catching bar at the top of the screen for every active subscriber.
+It prompts the subscriber to switch to a free LaterPay time pass for the remaining duration of their subscription.
+If a subscriber has not yet switched, the plugin sends an email 14 days before the subscription expires with a request to switch to a free LaterPay time pass for the remaining duration of the subscription.
+If a subscriber has not yet switched, the plugin sends an email at the end of the day on which the subscription expires with a request to switch to a free LaterPay time pass for the remaining duration of the subscription.
+When a subscriber switches to a LaterPay time pass or when the subscription expires, the user role that gives him unlimited access to all paid content will be removed from him. From then on, access to paid content requires a LaterPay time pass or an individual purchase of that content.
 
 
 == Installation ==
@@ -29,12 +47,13 @@ The plugin will notify you about available updates that you can install with a s
 
 == Screenshots ==
 
-1. Empty state
-2. Migration state
+1. Empty state after activation of migrator plugin
+2. Active migration process
+
 
 == Changelog ==
 
-= 1.0 (March 26, 2015): Initial Release =
+= 1.0 (April 2, 2015): Initial Release =
 * Added functionality to upload a CSV file with subscriber data
 * Added functionality to notify existing subscribers about the upcoming migration via a sitenotice bar
 * Added functionality to notify existing subscribers about the upcoming migration via emails sent with MailChimp
