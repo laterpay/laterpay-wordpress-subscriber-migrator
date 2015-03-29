@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"PO-Revision-Date: Sun Mar 29 2015 21:31:09 GMT+0200 (CEST)\n"
+"PO-Revision-Date: Sun Mar 29 2015 21:35:01 GMT+0200 (CEST)\n"
 "Last-Translator: tester <drodler@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -89,7 +89,7 @@ msgstr "Fertig"
 #: ../views/backend/migration.php:76 ../views/backend/migration.php:80 ..
 #: app/Controller/Subscription.php:22
 msgid "Start Migration"
-msgstr "Migration beginnen"
+msgstr "Migration starten"
 
 #: ../views/backend/migration.php:77 ../views/backend/migration.php:82 ..
 #: app/Controller/Subscription.php:152
