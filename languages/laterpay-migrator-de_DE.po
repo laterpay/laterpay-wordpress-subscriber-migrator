@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"PO-Revision-Date: Fri Mar 27 2015 13:50:01 GMT+0100 (CET)\n"
+"PO-Revision-Date: Sun Mar 29 2015 21:31:09 GMT+0200 (CEST)\n"
 "Last-Translator: tester <drodler@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -23,7 +23,6 @@ msgstr ""
 "X-Generator: Loco - https://localise.biz/"
 
 #: ../views/backend/migration.php:19
-#, fuzzy
 msgid "Test mode"
 msgstr "Test-Modus"
 
@@ -115,7 +114,7 @@ msgstr "Text in doppelten Anführungszeichen"
 
 #: ../views/backend/migration.php:120
 msgid "Fields delimited by semicolons"
-msgstr "Komma-getrennte Felder"
+msgstr "Felder durch Strichpunkte getrennt"
 
 #: ../views/backend/migration.php:121
 msgid "File encoded in UTF-8"
@@ -168,7 +167,7 @@ msgstr "Abo-Zuordnung"
 
 #: ../views/backend/migration.php:160
 msgid "Subscribed Product"
-msgstr "Abonniertes Product"
+msgstr "Abonniertes Produkt"
 
 #: ../views/backend/migration.php:166
 msgid "Time Pass to Offer"
@@ -235,7 +234,7 @@ msgid ""
 msgstr ""
 "Das Plugin wird jedem Abonnenten, der noch nicht zu LaterPay gewechselt ist, "
 "maximal zwei E-Mails senden, in denen er gebeten wird, zu einem kostenfreien "
-"Zeitpass zu wechslen, der für die Restlaufzeit seines Abos gültig ist."
+"Zeitpass zu wechseln, der für die Restlaufzeit seines Abos gültig ist."
 
 #: ../views/backend/migration.php:308
 msgid ""
