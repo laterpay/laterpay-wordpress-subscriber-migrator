@@ -133,7 +133,7 @@ class LaterPay_Migrator_Helper_Subscription
             $data = self::get_user_subscription_data( $user );
         }
 
-        if ( ! $user || ! $data ) {
+        if ( ! $user instanceof WP_User || ! $data ) {
             return false;
         }
 
@@ -151,7 +151,10 @@ class LaterPay_Migrator_Helper_Subscription
 
         // remove role
         if ( isset( $map['remove'] ) && $map['remove'] ) {
-            $user->remove_role( $map['remove'] );
+            // check if user has roles
+            if ( is_array( $user->roles ) && count( $user->roles ) > 1 ) {
+                $user->remove_role( $map['remove'] );
+            }
         }
 
         return true;

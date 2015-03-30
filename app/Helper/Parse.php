@@ -42,7 +42,7 @@ class LaterPay_Migrator_Helper_Parse
         // extract all data from the uploaded file into an array
         $data = array();
         foreach ( $csvFile as $line ) {
-            $data[] = str_getcsv( $line );
+            $data[] = fgetcsv( $line );
         }
 
         // array to store mapped data
@@ -72,6 +72,12 @@ class LaterPay_Migrator_Helper_Parse
             if ( ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
                 continue;
             } else if ( ! strtotime( $final_row['date'] ) ) {
+                continue;
+            }
+
+            // check if user exists in the system
+            $user = get_user_by( 'email', $final_row['email'] );
+            if ( ! $user instanceof WP_User ) {
                 continue;
             }
 
