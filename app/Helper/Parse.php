@@ -42,7 +42,7 @@ class LaterPay_Migrator_Helper_Parse
         // extract all data from the uploaded file into an array
         $data = array();
         foreach ( $csvFile as $line ) {
-            $data[] = fgetcsv( $line );
+            $data[] = str_getcsv( $line );
         }
 
         // array to store mapped data
