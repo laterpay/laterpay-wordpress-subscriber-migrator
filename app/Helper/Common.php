@@ -47,7 +47,7 @@ class LaterPay_Migrator_Helper_Common {
             'pricing'       => $currency . ( $price * 100 ),
             'expiry'        => $expiry_time,
             'url'           => $url,
-            'title'         => $time_pass['title'],
+            'title'         => __( 'Switching Time Pass' , 'laterpay-migrator' ),
         );
 
         return $client->get_add_url( $params );
