@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"POT-Revision-Date: Fri Mar 27 2015 03:30:26 GMT+0100 (CET)\n"
+"POT-Revision-Date: Tue Mar 31 2015 10:58:35 GMT+0200 (CEST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -65,7 +65,7 @@ msgid "Remaining"
 msgstr ""
 
 #: ../views/backend/migration.php:52
-msgid "Latest renewal date in imported subscriber records"
+msgid "Last expiry in imported subscriber records"
 msgstr ""
 
 #: ../views/backend/migration.php:53
@@ -291,7 +291,11 @@ msgstr ""
 msgid "The LaterPay plugin has to be installed and activated."
 msgstr ""
 
-#: ../app/Helper/Parse.php:85
+#: ../app/Helper/Common.php:50
+msgid "Free Switching Time Pass"
+msgstr ""
+
+#: ../app/Helper/Parse.php:91
 msgid "Subscriber"
 msgstr ""
 

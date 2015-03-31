@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LaterPay Subscriber Migrator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Tue Mar 24 2015 18:13:58 GMT+0100 (CET)\n"
-"PO-Revision-Date: Sun Mar 29 2015 21:38:02 GMT+0200 (CEST)\n"
-"Last-Translator: tester <drodler@laterpay.net>\n"
+"PO-Revision-Date: Tue Mar 31 2015 11:01:14 GMT+0200 (CEST)\n"
+"Last-Translator: Tobias Woldrich <twoldrich@laterpay.net>\n"
 "Language-Team: \n"
 "Language: German\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
@@ -310,7 +310,11 @@ msgstr "E-Mail-Benachrichtigung 2, wird am Ablauftag des Abos gesendet"
 msgid "The LaterPay plugin has to be installed and activated."
 msgstr "Das LaterPay Plugin muss installiert und aktiviert werden."
 
-#: ../app/Helper/Parse.php:85
+#: ../app/Helper/Common.php:50
+msgid "Free Switching Time Pass"
+msgstr "Kostenfreier Übergangszeitpass"
+
+#: ../app/Helper/Parse.php:91
 msgid "Subscriber"
 msgstr "Abonnent"
 
