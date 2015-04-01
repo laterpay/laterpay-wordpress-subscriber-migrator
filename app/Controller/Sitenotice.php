@@ -61,7 +61,7 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstra
                 );
 
                 // render sitenotice with LaterPay purchase button
-                $this->assign( 'laterpay-migrator', $view_args );
+                $this->assign( 'laterpay_migrator', $view_args );
                 $this->render( 'frontend/partials/sitenotice' );
             }
         }
