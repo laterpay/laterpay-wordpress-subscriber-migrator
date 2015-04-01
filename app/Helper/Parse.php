@@ -69,7 +69,11 @@ class LaterPay_Migrator_Helper_Parse
             }
 
             // validate data
-            if ( ! $final_row['product'] || ! $final_row['email'] || ! $final_row['date'] ) {
+            if ( ! isset( $final_row['product'] ) || ! $final_row['product'] ) {
+                continue;
+            } else if ( ! isset( $final_row['email'] ) || ! $final_row['email'] ) {
+                continue;
+            } else if ( ! isset( $final_row['date'] ) || ! $final_row['date'] ) {
                 continue;
             } else if ( ! strtotime( $final_row['date'] ) ) {
                 continue;

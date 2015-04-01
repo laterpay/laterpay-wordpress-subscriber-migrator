@@ -144,6 +144,14 @@ class LaterPay_Migrator_Controller_Subscription
         // activate migration process
         update_option( 'laterpay_migrator_is_active', 1 );
 
+        // change roles of all users that already expired
+        $exp_subscriptions = LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true );
+        if ( $exp_subscriptions ) {
+            foreach ( $exp_subscriptions as $exp_data ) {
+                LaterPay_Migrator_Helper_Subscription::change_user_role( $exp_data['email'], $exp_data );
+            }
+        }
+
         wp_send_json(
             array(
                 'success' => true,

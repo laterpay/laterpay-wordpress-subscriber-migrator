@@ -70,8 +70,8 @@ class LaterPay_Migrator_Bootstrap
         $install_controller->install();
 
         // register cron jobs for email sending
-        wp_schedule_event( mktime( 23, 58, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'send_expiry_notification', array( 'before' ) );
-        wp_schedule_event( mktime( 23, 59, 0, date( 'n' ), date( 'j' ), date( 'Y' ) ), 'daily', 'send_expiry_notification', array( 'after' ) );
+        wp_schedule_event( mktime( 0, 0, 0, date( 'n' ), date( 'j' ) + 1, date( 'Y' ) ), 'daily', 'send_expiry_notification', array( 'before' ) );
+        wp_schedule_event( mktime( 0, 0, 0, date( 'n' ), date( 'j' ) + 1, date( 'Y' ) ), 'daily', 'send_expiry_notification', array( 'after' ) );
     }
 
     /**

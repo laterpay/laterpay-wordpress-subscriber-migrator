@@ -121,15 +121,18 @@ class LaterPay_Migrator_Helper_Subscription
      * Change user role according to subscriber data mapping.
      *
      * @param string $email user email
+     * @param array  $data  user subscription data
      *
      * @return bool result of operation
      */
-    public static function change_user_role( $email = null ) {
+    public static function change_user_role( $email = null, $data = null ) {
         if ( ! $email ) {
             $user = self::get_current_user_data();
-            $data = self::get_user_subscription_data();
         } else {
             $user = get_user_by( 'email', $email );
+        }
+
+        if ( ! $data ) {
             $data = self::get_user_subscription_data( $user );
         }
 
