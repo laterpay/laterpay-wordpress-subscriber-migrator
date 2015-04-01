@@ -27,6 +27,12 @@ class LaterPay_Migrator_Controller_Mail
             $campaign_id  = $campaign['data'][0]['id'];
             $list_id      = $campaign['data'][0]['list_id'];
 
+            // unsubscribe existent users in list from it
+            $users = $mailchimp->lists->members( $list_id );
+            if ( $users['data'] ) {
+                $mailchimp->lists->batchUnsubscribe( $list_id, $users['data'], false, false );
+            }
+
             // subscribe users from $data to this list
             $subscribe_data = array();
             foreach ( $data as $fields ) {
@@ -41,9 +47,6 @@ class LaterPay_Migrator_Controller_Mail
             $r_campaign    = $mailchimp->campaigns->replicate( $campaign_id );
             $r_campaign_id = $r_campaign['id'];
             $mailchimp->campaigns->send( $r_campaign_id );
-
-            // unsubscribe users from $data
-            $mailchimp->lists->batchUnsubscribe( $list_id, $data, false, false );
         } catch ( Exception $e ) {
             return $e->getMessage();
         }
