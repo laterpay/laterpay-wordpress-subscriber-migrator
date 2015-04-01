@@ -196,8 +196,9 @@ class LaterPay_Migrator_Helper_Subscription
             return $status;
         }
 
+        $expired = count( LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true ) );
         foreach ( $subscriptions as $data ) {
-            // increase valid subscriber data count
+            // increase total subscriber data count
             $status['valid'] += 1;
 
             // increase migrated subscribers count
@@ -213,10 +214,11 @@ class LaterPay_Migrator_Helper_Subscription
 
         // format expiry date
         $localized_date_format = substr( get_locale(), 0, 2 ) == 'de' ? 'd.m.Y' : 'm-d-Y';
-        $status['expiry'] = date_i18n( $localized_date_format, strtotime( $status['expiry'] ) );
+        $status['expiry']      = date_i18n( $localized_date_format, strtotime( $status['expiry'] ) );
 
         // calculate remaining subscribers to be migrated count
-        $status['remaining'] = $status['valid'] - $status['migrated'];
+        $status['remaining']   = $status['valid'] - $status['migrated'] - $expired;
+        $status['invalid']     = (int) get_option( 'laterpay_migrator_invalid_count' );
 
         return $status;
     }

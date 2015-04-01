@@ -56,6 +56,7 @@ class LaterPay_Migrator_Helper_Parse
         // clear migration table
         LaterPay_Migrator_Model_Migration::clear_table();
 
+        $invalid_count = 0;
         // build array of values for query
         foreach ( $data as $row ) {
             $final_row = array();
@@ -63,6 +64,7 @@ class LaterPay_Migrator_Helper_Parse
             foreach ( $values as $key => $value ) {
                 if ( isset( self::$column_mapping[$key] ) ) {
                     $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
+                    $invalid_count++;
                     continue;
                 }
                 break;
@@ -70,18 +72,23 @@ class LaterPay_Migrator_Helper_Parse
 
             // validate data
             if ( ! isset( $final_row['product'] ) || ! $final_row['product'] ) {
+                $invalid_count++;
                 continue;
             } else if ( ! isset( $final_row['email'] ) || ! $final_row['email'] ) {
+                $invalid_count++;
                 continue;
             } else if ( ! isset( $final_row['date'] ) || ! $final_row['date'] ) {
+                $invalid_count++;
                 continue;
             } else if ( ! strtotime( $final_row['date'] ) ) {
+                $invalid_count++;
                 continue;
             }
 
             // check if user exists in the system
             $user = get_user_by( 'email', $final_row['email'] );
             if ( ! $user instanceof WP_User ) {
+                $invalid_count++;
                 continue;
             }
 
@@ -103,6 +110,9 @@ class LaterPay_Migrator_Helper_Parse
                 'subscriber_name' => $subscriber_name,
             );
         }
+
+        // update invalid count
+        update_option( 'laterpay_migrator_invalid_count', $invalid_count );
 
         // save products in options
         update_option( 'laterpay_migrator_products', $products );

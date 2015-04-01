@@ -25,6 +25,7 @@ class LaterPay_Migrator_Controller_Install
         add_option( 'laterpay_migrator_products_mapping',                   '' );
         add_option( 'laterpay_migrator_limit',                              200 );
         add_option( 'laterpay_migrator_expiry_modifier',                    '2 week' );
+        add_option( 'laterpay_migrator_invalid_count',                      0 );
 
         add_option( 'laterpay_migrator_sitenotice_message',                 __( 'Get a free time pass for the rest of your subscription period', 'laterpay-migrator' ) );
         add_option( 'laterpay_migrator_sitenotice_button_text',             __( 'Switch for Free Now', 'laterpay-migrator' ) );
