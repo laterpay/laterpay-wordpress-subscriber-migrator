@@ -224,18 +224,19 @@ class LaterPay_Migrator_Helper_Subscription
     }
 
     /**
-     * Check if current user already migrated with active subscription but lost access to the website content
+     * Check, if the current user has already migrated to LaterPay and is still within his paid subscription period,
+     * but lost access to his LaterPay time pass.
      *
      * @return bool has access
      */
     public static function lost_access() {
-        // check if user has data and migrated to the laterpay
+        // check, if user has data and is migrated to LaterPay already
         $data = self::get_user_subscription_data();
         if ( ! $data || ! $data['is_migrated_to_laterpay'] ) {
             return false;
         }
 
-        // check if subscription expired
+        // check, if subscription of user has expired
         if ( self::get_expiry_time( $data ) < time() ) {
             return false;
         }
@@ -250,7 +251,7 @@ class LaterPay_Migrator_Helper_Subscription
         // get corresponding time pass id
         $time_pass_id = $map['timepass'];
 
-        // check user if has no access to the corresponding time pass
+        // check, if user does not have access to the corresponding time pass
         $tokenized_pass_id = LaterPay_Helper_TimePass::get_tokenized_time_pass_id( $time_pass_id );
 
         $client_options  = LaterPay_Helper_Config::get_php_client_options();
@@ -263,8 +264,8 @@ class LaterPay_Migrator_Helper_Subscription
         );
         $result = $laterpay_client->get_access( array( $tokenized_pass_id ) );
 
-        // some error ocurred, let user ability to restore
-        // TODO: should we provide it in this case??
+        // some error occurred, allow user to restore his switching time pass
+// TODO: should we provide it in this case??
         if ( empty( $result ) || ! array_key_exists( 'articles', $result ) ) {
             return true;
         }

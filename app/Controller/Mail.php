@@ -19,7 +19,7 @@ class LaterPay_Migrator_Controller_Mail
 
         // wrap in try catch block
         try {
-            // init mailchimp
+            // init MailChimp client
             $mailchimp    = LaterPay_Migrator_Helper_Mail::init_mailchimp();
 
             // get campaign
@@ -27,7 +27,7 @@ class LaterPay_Migrator_Controller_Mail
             $campaign_id  = $campaign['data'][0]['id'];
             $list_id      = $campaign['data'][0]['list_id'];
 
-            // unsubscribe existent users in list from it
+            // unsubscribe users from MailChimp list
             $users = $mailchimp->lists->members( $list_id );
             if ( $users['data'] ) {
                 $mailchimp->lists->batchUnsubscribe( $list_id, $users['data'], false, false );
