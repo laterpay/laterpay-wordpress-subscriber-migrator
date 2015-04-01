@@ -85,7 +85,7 @@ class LaterPay_Migrator_Helper_Subscription
             }
         }
 
-        if ( $data['is_migrated_to_laterpay'] ) {
+        if ( $data['is_migrated_to_laterpay'] || self::get_expiry_time( $data ) < time() ) {
             return false;
         }
 
