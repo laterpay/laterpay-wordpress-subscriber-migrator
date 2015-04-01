@@ -64,7 +64,6 @@ class LaterPay_Migrator_Helper_Parse
             foreach ( $values as $key => $value ) {
                 if ( isset( self::$column_mapping[$key] ) ) {
                     $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
-                    $invalid_count++;
                     continue;
                 }
                 break;
