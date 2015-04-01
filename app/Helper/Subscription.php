@@ -49,7 +49,7 @@ class LaterPay_Migrator_Helper_Subscription
             }
         }
 
-        return strtotime( $data['expiry'] . ' ' . '23:59' );
+        return strtotime( $data['expiry'] . ' ' . '23:59:59' );
     }
 
     /**
@@ -221,5 +221,62 @@ class LaterPay_Migrator_Helper_Subscription
         $status['invalid']     = (int) get_option( 'laterpay_migrator_invalid_count' );
 
         return $status;
+    }
+
+    /**
+     * Check if current user already migrated with active subscription but lost access to the website content
+     *
+     * @return bool has access
+     */
+    public static function lost_access() {
+        // check if user has data and migrated to the laterpay
+        $data = self::get_user_subscription_data();
+        if ( ! $data || ! $data['is_migrated_to_laterpay'] ) {
+            return false;
+        }
+
+        // check if subscription expired
+        if ( self::get_expiry_time( $data ) < time() ) {
+            return false;
+        }
+
+        // get user product mapping
+        $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+            return false;
+        }
+        $map = $products_mapping[$data['product']];
+
+        // get corresponding time pass id
+        $time_pass_id = $map['timepass'];
+
+        // check user if has no access to the corresponding time pass
+        $tokenized_pass_id = LaterPay_Helper_TimePass::get_tokenized_time_pass_id( $time_pass_id );
+
+        $client_options  = LaterPay_Helper_Config::get_php_client_options();
+        $laterpay_client = new LaterPay_Client(
+            $client_options['cp_key'],
+            $client_options['api_key'],
+            $client_options['api_root'],
+            $client_options['web_root'],
+            $client_options['token_name']
+        );
+        $result = $laterpay_client->get_access( array( $tokenized_pass_id ) );
+
+        // some error ocurred, let user ability to restore
+        // TODO: should we provide it in this case??
+        if ( empty( $result ) || ! array_key_exists( 'articles', $result ) ) {
+            return true;
+        }
+
+        $has_access = false;
+
+        foreach ( $result['articles'] as $article_access ) {
+            if ( $article_access['access'] ) {
+                $has_access = true;
+            }
+        }
+
+        return ! $has_access;
     }
 }
