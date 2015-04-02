@@ -85,7 +85,7 @@ class LaterPay_Migrator_Model_Migration {
     /**
      * Get about to expire or already expired subscriptions (depends on param usage).
      *
-     * @param  bool $is_expired            also get expired subscriptions
+     * @param  bool $is_expired            also get expired subscriptions TODO: what exactly does this flag do?
      * @param  bool $ignore_notifications  ignore notification flags
      *
      * @return array|null $result
@@ -95,7 +95,6 @@ class LaterPay_Migrator_Model_Migration {
 
         $table        = $wpdb->prefix . self::$table;
         $modifier     = get_option( 'laterpay_migrator_expiry_modifier' );
-        $current_date = date( 'Y-m-d', time() );
 
         $sql = "
             SELECT
@@ -107,11 +106,13 @@ class LaterPay_Migrator_Model_Migration {
 
         if ( $is_expired ) {
             $sql .= $ignore_notifications ? '' : "was_notified_after_expiry = 0 AND ";
-            $sql .= "expiry < '$current_date';";
+            // expiry date is in the past
+            $sql .= "expiry < CURDATE();";
         } else {
             $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
-            $sql .= "expiry >= '$current_date' AND ";
-            $sql .= "expiry <= DATE_ADD( '$current_date', INTERVAL $modifier );";
+            // expiry date is in the future and before ???? TODO: what does the second condition mean?
+            $sql .= "expiry >= CURDATE() AND ";
+            $sql .= "expiry <= DATE_ADD( CURDATE(), INTERVAL $modifier );";
         }
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
@@ -207,7 +208,7 @@ class LaterPay_Migrator_Model_Migration {
      *
      * @param array $data
      *
-     * @return bool|int false on mysql error or total rows affected
+     * @return bool|int false on SQL error or total rows affected
      */
     public static function import_data( $data ) {
         global $wpdb;
@@ -250,7 +251,7 @@ class LaterPay_Migrator_Model_Migration {
                     }
                 }
 
-                // complete SQL statement
+                // conclude SQL statement
                 $sql .= ';';
 
                 $last_key   = $key + 1;
