@@ -196,7 +196,7 @@ class LaterPay_Migrator_Helper_Subscription
             return $status;
         }
 
-        $expired = count( LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true ) );
+        $expired = count( LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true, true ) );
         foreach ( $subscriptions as $data ) {
             // increase total subscriber data count
             $status['valid'] += 1;
