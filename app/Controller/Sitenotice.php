@@ -49,7 +49,7 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstra
      */
     public function render_page() {
         if ( is_user_logged_in() ) {
-            // check if user lost access to the website
+            // check, if user has lost access to his switching time pass
             $lost_access = LaterPay_Migrator_Helper_Subscription::lost_access();
             if ( LaterPay_Migrator_Helper_Subscription::is_active() || $lost_access ) {
                 $this->load_assets();
