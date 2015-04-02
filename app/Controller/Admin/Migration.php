@@ -27,7 +27,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         wp_enqueue_style( 'open-sans' );
         wp_enqueue_style( 'laterpay-migrator-backend' );
 
-        // load backend scripts from 'laterpay' plugin plus plugin-specific Javascript
+        // load backend scripts from 'laterpay' plugin plus migrator plugin-specific Javascript
         wp_register_script(
             'laterpay-backend',
             $this->config->get( 'lp_js_url' ) . 'laterpay-backend.js',
@@ -45,6 +45,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         wp_enqueue_script( 'laterpay-backend' );
         wp_enqueue_script( 'laterpay-migrator-backend' );
 
+        // pass variables to Javascript
         wp_localize_script(
             'laterpay-migrator-backend',
             'lpMigratorVars',
@@ -107,7 +108,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     }
 
     /**
-     * Add 'migration' tab to the 'laterpay' plugin backend.
+     * Add 'migration' tab to the 'laterpay' plugin backend navigation.
      *
      * @param $menu
      *

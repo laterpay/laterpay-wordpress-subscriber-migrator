@@ -17,7 +17,7 @@ class LaterPay_Migrator_Model_Migration {
     public static function create_table() {
         global $wpdb;
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
         $table = $wpdb->prefix . self::$table;
         $sql = "
@@ -46,13 +46,13 @@ class LaterPay_Migrator_Model_Migration {
 
         $table = $wpdb->prefix . self::$table;
 
-        $sql   = "TRUNCATE TABLE {$table};";
+        $sql = "TRUNCATE TABLE {$table};";
 
         $wpdb->query( $sql );
     }
 
     /**
-     * Get user subscription data by email
+     * Get user subscription data by email.
      *
      * @param $email
      *
@@ -63,7 +63,7 @@ class LaterPay_Migrator_Model_Migration {
 
         $table = $wpdb->prefix . self::$table;
 
-        $sql   = "
+        $sql = "
             SELECT
                 *
             FROM
@@ -85,8 +85,8 @@ class LaterPay_Migrator_Model_Migration {
     /**
      * Get about to expire or already expired subscriptions (depends on param usage).
      *
-     * @param  bool $is_expired            need to get expired subscriptions
-     * @param  bool $ignore_notifications  need to ignore notification flags
+     * @param  bool $is_expired            also get expired subscriptions
+     * @param  bool $ignore_notifications  ignore notification flags
      *
      * @return array|null $result
      */
@@ -124,7 +124,7 @@ class LaterPay_Migrator_Model_Migration {
     }
 
     /**
-     * Set a given value to a given flag for specific user.
+     * Set a given value to a given flag for a given user.
      *
      * @param  string $email user email
      * @param  string $flag  flag field name
@@ -158,7 +158,7 @@ class LaterPay_Migrator_Model_Migration {
     }
 
     /**
-     * Get not migrated subscriptions
+     * Get not yet migrated subscriptions.
      *
      * @return mixed
      */
@@ -182,7 +182,7 @@ class LaterPay_Migrator_Model_Migration {
     }
 
     /**
-     * Get all subscriptions data
+     * Get all subscriptions data.
      *
      * @return mixed
      */

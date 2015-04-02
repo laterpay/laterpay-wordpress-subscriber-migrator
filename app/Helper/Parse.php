@@ -22,6 +22,7 @@ class LaterPay_Migrator_Helper_Parse
         $config  = get_laterpay_migrator_config();
 
         $csvFile = null;
+
         // search CSV file in upload folder
         $files = glob( $config->get( 'upload_dir' ) . '*', GLOB_MARK );
         foreach ( $files as $file ) {
@@ -36,7 +37,7 @@ class LaterPay_Migrator_Helper_Parse
             return false;
         }
 
-        // array of products
+        // initialize products array
         $products = array();
 
         // extract all data from the uploaded file into an array
@@ -45,7 +46,7 @@ class LaterPay_Migrator_Helper_Parse
             $data[] = str_getcsv( $line );
         }
 
-        // array to store mapped data
+        // initialize array with mapped data
         $final_data = array();
 
         // check, if data has at least 1 row
@@ -57,6 +58,7 @@ class LaterPay_Migrator_Helper_Parse
         LaterPay_Migrator_Model_Migration::clear_table();
 
         $invalid_count = 0;
+
         // build array of values for query
         foreach ( $data as $row ) {
             $final_row = array();
@@ -84,7 +86,7 @@ class LaterPay_Migrator_Helper_Parse
                 continue;
             }
 
-            // check if user exists in the system
+            // check, if user exists as WordPress user
             $user = get_user_by( 'email', $final_row['email'] );
             if ( ! $user instanceof WP_User ) {
                 $invalid_count++;

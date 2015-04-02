@@ -3,7 +3,7 @@
 class LaterPay_Migrator_Controller_Mail
 {
     /**
-     * Send notification emails  to the users.
+     * Send notification emails to the users.
      *
      * @param string  $modifier  before | after expiry
      *
@@ -33,7 +33,7 @@ class LaterPay_Migrator_Controller_Mail
                 $mailchimp->lists->batchUnsubscribe( $list_id, $users['data'], false, false );
             }
 
-            // subscribe users from $data to this list
+            // subscribe users from $data to MailChimp list
             $subscribe_data = array();
             foreach ( $data as $fields ) {
                 $subscribe_data[] = array(

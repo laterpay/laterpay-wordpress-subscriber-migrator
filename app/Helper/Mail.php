@@ -3,7 +3,7 @@
 class LaterPay_Migrator_Helper_Mail
 {
     /**
-     * @var array of mailchimp fields
+     * @var array of MailChimp fields
      */
     public static $fields = array(
         'EMAIL' => array(
@@ -34,7 +34,7 @@ class LaterPay_Migrator_Helper_Mail
     );
 
     /**
-     * Init MailChimp.
+     * Init MailChimp library.
      *
      * @return Mailchimp
      */
@@ -75,7 +75,7 @@ class LaterPay_Migrator_Helper_Mail
             }
         }
 
-        // set new fields to the list
+        // add new fields to the list
         if ( $fields ) {
             foreach ( $fields as $tag => $data ) {
                 $mailchimp->lists->mergeVarAdd(
@@ -101,14 +101,14 @@ class LaterPay_Migrator_Helper_Mail
     public static function prepare_mail_data( $modifier ) {
         // init defaults
         $subscriptions    = array();
-        $need_change_role = false;
+        $need_to_change_role = false;
 
         // check modifier
         if ( $modifier === 'before' ) {
             $subscriptions = LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry();
         } elseif ( $modifier === 'after' ) {
             $subscriptions = LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true );
-            $need_change_role = true;
+            $need_to_change_role = true;
         }
 
         if ( ! $subscriptions || ! is_array( $subscriptions ) ) {
@@ -129,12 +129,12 @@ class LaterPay_Migrator_Helper_Mail
                 )
             );
 
-            if ( $need_change_role ) {
+            if ( $need_to_change_role ) {
                 // remove the role from the user that gives a subscriber unlimited access to paid content, if configured
                 LaterPay_Migrator_Helper_Subscription::change_user_role( $subscription['email'] );
             }
 
-            // set flag to mark user as notified before expiration of subscription
+            // flag user as notified about upcoming / happened expiry of subscription
             LaterPay_Migrator_Model_Migration::set_flag( $subscription['email'], 'was_notified_' . $modifier . '_expiry' );
         }
 

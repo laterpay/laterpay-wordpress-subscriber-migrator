@@ -9,7 +9,7 @@ global $wpdb;
 
 $table_subscriber_migrations = $wpdb->prefix . 'laterpay_subscriber_migrations';
 
-// remove custom tables
+// remove custom table
 $sql = "
     DROP TABLE IF EXISTS
         $table_subscriber_migrations

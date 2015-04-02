@@ -55,8 +55,10 @@ class LaterPay_Migrator_Controller_Migration
         }
 
         if ( $has_access ) {
-            // mark user as migrated to LaterPay
+            // remove or add user roles as specified
             LaterPay_Migrator_Helper_Subscription::change_user_role();
+
+            // mark user as migrated to LaterPay
             LaterPay_Migrator_Model_Migration::set_flag( $user->user_email, 'is_migrated_to_laterpay' );
         }
 

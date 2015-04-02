@@ -3,7 +3,7 @@
 class LaterPay_Migrator_Helper_Subscription
 {
     /**
-     * Default migration status
+     * Default migration status.
      *
      * @var array
      */
@@ -16,7 +16,7 @@ class LaterPay_Migrator_Helper_Subscription
     );
 
     /**
-     * Get WP user.
+     * Get data of current WordPress user.
      *
      * @return false|object WP_User
      */
@@ -34,7 +34,7 @@ class LaterPay_Migrator_Helper_Subscription
     }
 
     /**
-     * Get expiry time of a subscription.
+     * Get expiry time of a subscription as absolute date (not as relative time remaining).
      *
      * @param  array $data subscription data
      *
@@ -53,7 +53,7 @@ class LaterPay_Migrator_Helper_Subscription
     }
 
     /**
-     * Get user subscription data.
+     * Get subscription data for a given user.
      *
      * @param null|object $user user instanse
      *
@@ -93,7 +93,7 @@ class LaterPay_Migrator_Helper_Subscription
     }
 
     /**
-     * Get time pass id from mapping.
+     * Get time pass id from subscriber data mapping.
      *
      * @param  array    $data subscription data
      *
@@ -154,7 +154,7 @@ class LaterPay_Migrator_Helper_Subscription
 
         // remove role
         if ( isset( $map['remove'] ) && $map['remove'] ) {
-            // check if user has roles
+            // remove role, if user has at least one role
             if ( is_array( $user->roles ) && count( $user->roles ) > 1 ) {
                 $user->remove_role( $map['remove'] );
             }
@@ -265,7 +265,6 @@ class LaterPay_Migrator_Helper_Subscription
         $result = $laterpay_client->get_access( array( $tokenized_pass_id ) );
 
         // some error occurred, allow user to restore his switching time pass
-// TODO: should we provide it in this case??
         if ( empty( $result ) || ! array_key_exists( 'articles', $result ) ) {
             return true;
         }

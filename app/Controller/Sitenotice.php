@@ -23,7 +23,7 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstra
         wp_enqueue_style( 'laterpay-post-view' );
         wp_enqueue_style( 'laterpay-migrator-frontend' );
 
-        // load plugin-specific Javascript
+        // load migrator plugin-specific Javascript
         wp_register_script(
             'laterpay-migrator-frontend',
             $this->config->get( 'js_url' ) . 'laterpay-migrator-frontend.js',
@@ -33,6 +33,7 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstra
         );
         wp_enqueue_script( 'laterpay-migrator-frontend' );
 
+        // pass variables to Javascript
         wp_localize_script(
             'laterpay-migrator-frontend',
             'lpMigratorVars',

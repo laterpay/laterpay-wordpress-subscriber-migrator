@@ -4,7 +4,7 @@ class LaterPay_Migrator_Controller_Install
 {
 
     /**
-     * Install LaterPay migration plugin.
+     * Install LaterPay migrator plugin.
      *
      * @return void
      */
