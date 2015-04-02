@@ -105,8 +105,10 @@ class LaterPay_Migrator_Model_Migration {
                 is_migrated_to_laterpay = 0 AND ";
 
         if ( $is_expired ) {
+            $sql .= "was_notified_after_expiry = 0 AND ";
             $sql .= "expiry < '$current_date';";
         } else {
+            $sql .= "was_notified_before_expiry = 0 AND ";
             $sql .= "expiry >= '$current_date' AND ";
             $sql .= "expiry <= DATE_ADD( '$current_date', INTERVAL $modifier );";
         }

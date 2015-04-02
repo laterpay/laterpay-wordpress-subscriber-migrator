@@ -149,6 +149,8 @@ class LaterPay_Migrator_Controller_Subscription
         if ( $exp_subscriptions ) {
             foreach ( $exp_subscriptions as $exp_data ) {
                 LaterPay_Migrator_Helper_Subscription::change_user_role( $exp_data['email'], $exp_data );
+                // set users as already notified to prevent them from receiving of notification emails
+                LaterPay_Migrator_Model_Migration::set_flag( $exp_data['email'], 'was_notified_after_expiry' );
             }
         }
 
