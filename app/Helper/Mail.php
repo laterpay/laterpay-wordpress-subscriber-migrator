@@ -105,9 +105,9 @@ class LaterPay_Migrator_Helper_Mail
 
         // check modifier
         if ( $modifier === 'before' ) {
-            $subscriptions = LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry();
+            $subscriptions = LaterPay_Migrator_Model_Migration::get_about_to_expire_subscriptions();
         } elseif ( $modifier === 'after' ) {
-            $subscriptions = LaterPay_Migrator_Model_Migration::get_subscriptions_by_expiry( true );
+            $subscriptions = LaterPay_Migrator_Model_Migration::get_expired_subscriptions();
             $need_to_change_role = true;
         }
 

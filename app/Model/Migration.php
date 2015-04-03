@@ -83,19 +83,16 @@ class LaterPay_Migrator_Model_Migration {
     }
 
     /**
-     * Get about to expire or already expired subscriptions (depends on param usage).
+     * Get expired subscriptions.
      *
-     * @param  bool $is_expired            also get expired subscriptions
-     * @param  bool $ignore_notifications  ignore notification flags
+     * @param  bool $ignore_notifications  ignore notification flag for subscriptions
      *
      * @return array|null $result
      */
-    public static function get_subscriptions_by_expiry( $is_expired = false, $ignore_notifications = false ) {
+    public static function get_expired_subscriptions( $ignore_notifications = false ) {
         global $wpdb;
 
-        $table        = $wpdb->prefix . self::$table;
-        $modifier     = get_option( 'laterpay_migrator_expiry_modifier' );
-        $current_date = date( 'Y-m-d', time() );
+        $table = $wpdb->prefix . self::$table;
 
         $sql = "
             SELECT
@@ -105,14 +102,45 @@ class LaterPay_Migrator_Model_Migration {
             WHERE
                 is_migrated_to_laterpay = 0 AND ";
 
-        if ( $is_expired ) {
-            $sql .= $ignore_notifications ? '' : "was_notified_after_expiry = 0 AND ";
-            $sql .= "expiry < '$current_date';";
-        } else {
-            $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
-            $sql .= "expiry >= '$current_date' AND ";
-            $sql .= "expiry <= DATE_ADD( '$current_date', INTERVAL $modifier );";
+        $sql .= $ignore_notifications ? '' : "was_notified_after_expiry = 0 AND ";
+        // expiry date is in the past
+        $sql .= "expiry < CURDATE();";
+
+        $result = $wpdb->get_results( $sql, ARRAY_A );
+
+        if ( ! $result ) {
+            return null;
         }
+
+        return $result;
+    }
+
+    /**
+     * Get about to expire subscriptions.
+     *
+     * @param  bool $ignore_notifications  ignore notification flag for subscriptions
+     *
+     * @return array|null $result
+     */
+    public static function get_about_to_expire_subscriptions( $ignore_notifications = false ) {
+        global $wpdb;
+
+        $table    = $wpdb->prefix . self::$table;
+        $modifier = get_option( 'laterpay_migrator_expiry_modifier' );
+
+        $sql = "
+            SELECT
+                *
+            FROM
+                {$table}
+            WHERE
+                is_migrated_to_laterpay = 0 AND ";
+
+        $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
+        // expiry date equal or greater then current date
+        $sql .= "expiry >= CURDATE() AND ";
+        // and expiry date equal or less then modified date (14 days by default)
+        $sql .= "expiry <= DATE_ADD( CURDATE(), INTERVAL $modifier );";
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
 
@@ -207,7 +235,7 @@ class LaterPay_Migrator_Model_Migration {
      *
      * @param array $data
      *
-     * @return bool|int false on mysql error or total rows affected
+     * @return bool|int false on SQL error or total rows affected
      */
     public static function import_data( $data ) {
         global $wpdb;
@@ -250,7 +278,7 @@ class LaterPay_Migrator_Model_Migration {
                     }
                 }
 
-                // complete SQL statement
+                // conclude SQL statement
                 $sql .= ';';
 
                 $last_key   = $key + 1;
