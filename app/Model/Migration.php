@@ -85,7 +85,7 @@ class LaterPay_Migrator_Model_Migration {
     /**
      * Get expired subscriptions.
      *
-     * @param  bool $ignore_notifications  ignore notification flags
+     * @param  bool $ignore_notifications  ignore notification flag for subscriptions
      *
      * @return array|null $result
      */
@@ -103,6 +103,7 @@ class LaterPay_Migrator_Model_Migration {
                 is_migrated_to_laterpay = 0 AND ";
 
         $sql .= $ignore_notifications ? '' : "was_notified_after_expiry = 0 AND ";
+        // expiry date is in the past
         $sql .= "expiry < CURDATE();";
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
@@ -117,7 +118,7 @@ class LaterPay_Migrator_Model_Migration {
     /**
      * Get about to expire subscriptions.
      *
-     * @param  bool $ignore_notifications  ignore notification flags
+     * @param  bool $ignore_notifications  ignore notification flag for subscriptions
      *
      * @return array|null $result
      */
@@ -136,7 +137,9 @@ class LaterPay_Migrator_Model_Migration {
                 is_migrated_to_laterpay = 0 AND ";
 
         $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
+        // expiry date equal or greater then current date
         $sql .= "expiry >= CURDATE() AND ";
+        // and expiry date equal or less then modified date (14 days by default)
         $sql .= "expiry <= DATE_ADD( CURDATE(), INTERVAL $modifier );";
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
