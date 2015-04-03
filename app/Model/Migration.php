@@ -137,9 +137,9 @@ class LaterPay_Migrator_Model_Migration {
                 is_migrated_to_laterpay = 0 AND ";
 
         $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
-        // expiry date equal or greater then current date
+        // expiry date equal or greater than current date
         $sql .= "expiry >= CURDATE() AND ";
-        // and expiry date equal or less then modified date (14 days by default)
+        // and expiry date equal or less than modified date (14 days by default)
         $sql .= "expiry <= DATE_ADD( CURDATE(), INTERVAL $modifier );";
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
