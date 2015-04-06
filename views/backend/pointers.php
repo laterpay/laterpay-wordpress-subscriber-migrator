@@ -6,7 +6,7 @@
 ?>
 
 <?php
-    // plugin menu pointer
+    // laterpay migrator plugin pointer
     if ( in_array( LaterPay_Migrator_Controller_Admin_Migration::MIGRATOR_POINTER, $laterpay['pointers'] ) ):
         $pointer_content = '<h3>' . __( 'Subscriber Migration plugin activated', 'laterpay' ) . '</h3>';
         $pointer_content .= '<p>' . __( 'The tab "Migration" has been added to the LaterPay plugin backend. You can configure and manage the subscriber migration process from there.', 'laterpay' ) . '</p>';
