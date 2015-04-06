@@ -37,7 +37,7 @@ delete_option( 'laterpay_migrator_mailchimp_ssl_connection' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
 
-// remove all dismissed LaterPay Migrator pointers
+// remove all dismissed wp pointers
 $pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
 if ( ! empty( $pointers ) && is_array( $pointers ) ) {
     $replace_string = 'meta_value';

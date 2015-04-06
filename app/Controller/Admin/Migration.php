@@ -2,7 +2,7 @@
 
 class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Abstract
 {
-    const MIGRATOR_POINTER = 'laterpay_migrator_pointer';
+    const ADMIN_MENU_POINTER = 'lpsmp01';
 
     /**
      * Load assets.
@@ -143,16 +143,16 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
             'id'      => 'laterpay_migration_tab_help',
             'title'   => __( 'Subscriber Migration', 'laterpay_migrator' ),
             'content' => __( '
-                                                    <p>
-                                                        Explanation goes here!
-                                                    </p>',
+                            <p>
+                                Explanation goes here!
+                            </p>',
                 'laterpay_migrator'
             ),
         ) );
     }
 
     /**
-     * Add LaterPay Migrator plugin pointers.
+     * Add wp pointers.
      *
      * @return void
      */
@@ -175,7 +175,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     }
 
     /**
-     * Get all active pointers
+     * Get all active pointers.
      *
      * @return array $pointers
      */
@@ -183,8 +183,8 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         $dismissed_pointers = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
         $pointers = array();
 
-        if ( ! in_array( self::MIGRATOR_POINTER, $dismissed_pointers ) ) {
-            $pointers[] = self::MIGRATOR_POINTER;
+        if ( ! in_array( self::ADMIN_MENU_POINTER, $dismissed_pointers ) ) {
+            $pointers[] = self::ADMIN_MENU_POINTER;
         }
 
         return $pointers;
@@ -196,9 +196,9 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
      * @return array $pointers
      */
     public static function get_all_pointers() {
-        $reflection      = new ReflectionClass( __CLASS__ );
-        $class_constants = $reflection->getConstants();
-        $pointers        = array();
+        $reflection         = new ReflectionClass( __CLASS__ );
+        $class_constants    = $reflection->getConstants();
+        $pointers           = array();
 
         if ( $class_constants ) {
             foreach ( array_keys( $class_constants ) as $key_value ) {
@@ -212,7 +212,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     }
 
     /**
-     * Enqueue assets to show laterpay migrator pointers
+     * Enqueue assets to show wp pointers.
      *
      * @return void
      */
