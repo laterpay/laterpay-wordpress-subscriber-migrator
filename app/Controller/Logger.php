@@ -4,6 +4,13 @@ class LaterPay_Migrator_Controller_Logger
 {
     protected $writer = null;
 
+    /**
+     * Logger constructor
+     *
+     * @param $file_name
+     *
+     * @return void
+     */
     public function __construct( $file_name ) {
         if ( ! $this->writer ) {
             $config       = get_laterpay_migrator_config();
@@ -12,11 +19,24 @@ class LaterPay_Migrator_Controller_Logger
         }
     }
 
+    /**
+     * Logger destructor
+     *
+     * @return void
+     */
     public function __destruct() {
         @fclose( $this->writer );
         $this->writer = null;
     }
 
+    /**
+     * Log writer
+     *
+     * @param null $message Log message
+     * @param null $data    Log data
+     *
+     * @return bool|int     result of operation
+     */
     public function log( $message = null, $data = null ) {
         if ( ! $this->writer ) {
             return false;
