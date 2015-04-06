@@ -51,6 +51,7 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Parse.php' );
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Sitenotice.php' );
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Subscription.php' );
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Logger.php' );
 
     // helpers
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Helper' . DS . 'Common.php' );
@@ -101,6 +102,11 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
         $config->set( 'js_url',             $plugin_url . 'built_assets/js/' );
         $config->set( 'image_url',          $plugin_url . 'built_assets/img/' );
         $config->set( 'upload_dir',         $plugin_dir_path . 'upload/' );
+
+        // migrator logger
+        $upload_dir = wp_upload_dir();
+        $config->set( 'log_dir',            $upload_dir['basedir'] . '/laterpay_migrator_logs/' );
+        $config->set( 'cron_log',           'cron.log' );
 
         // plugin headers
         $plugin_headers = get_file_data(

@@ -18,6 +18,10 @@ class LaterPay_Migrator_Controller_Install
         wp_mkdir_p( $config->get( 'upload_dir' ) );
         @chown( $config->get( 'upload_dir' ), 0777 );
 
+        // create log directory, if it does not exist and set write access
+        wp_mkdir_p( $config->get( 'log_dir' ) );
+        @chown( $config->get( 'log_dir' ), 0777 );
+
         // add options
         add_option( 'laterpay_migrator_is_active',                          0 );
 
