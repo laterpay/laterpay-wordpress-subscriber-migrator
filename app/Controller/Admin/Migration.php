@@ -115,13 +115,37 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
      * @return mixed
      */
     public function add_menu( $menu ) {
+        $migration_tab_url = 'laterpay-migration-tab';
+
         $menu[ 'migration' ] = array(
-            'url'   => 'laterpay-migration-tab',
+            'url'   => $migration_tab_url,
             'title' => __( 'Migration', 'laterpay-migrator' ),
             'cap'   => 'activate_plugins',
             'run'   => array( $this, 'render_page' ),
         );
 
+        // add action for contextual help render
+        add_action( 'load-laterpay_page_' . $migration_tab_url, array( $this, 'add_help' ) );
+
         return $menu;
+    }
+
+    /**
+     * Add contextual help for migration tab.
+     *
+     * @return void
+     */
+    public function add_help() {
+        $screen = get_current_screen();
+        $screen->add_help_tab( array(
+            'id'      => 'laterpay_migration_tab_help',
+            'title'   => __( 'Subscriber Migration', 'laterpay_migrator' ),
+            'content' => __( '
+                                                    <p>
+                                                        Explanation goes here!
+                                                    </p>',
+                'laterpay_migrator'
+            ),
+        ) );
     }
 }
