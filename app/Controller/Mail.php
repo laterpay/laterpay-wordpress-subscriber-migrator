@@ -16,9 +16,9 @@ class LaterPay_Migrator_Controller_Mail
         $data          = LaterPay_Migrator_Helper_Mail::prepare_mail_data( $modifier );
         $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_' . $modifier . '_expired' );
 
-        $logger->log( "LaterPay Migrator Cron started with modifier: ", $modifier );
-        $logger->log( "Mail data: ", $data );
-        $logger->log( "Campaign name: ", $campaign_name );
+        $logger->log( 'LaterPay Migrator cron started with modifier: ', $modifier );
+        $logger->log( 'Mail data: ', $data );
+        $logger->log( 'Campaign name: ', $campaign_name );
 
         if ( ! $data || ! is_array( $data ) || ! $campaign_name ) {
             return false;
@@ -34,8 +34,8 @@ class LaterPay_Migrator_Controller_Mail
             $campaign_id  = $campaign['data'][0]['id'];
             $list_id      = $campaign['data'][0]['list_id'];
 
-            $logger->log( "Mailchimp campaign info: ", $campaign );
-            $logger->log( "List id: ", $list_id );
+            $logger->log( 'MailChimp campaign info: ', $campaign );
+            $logger->log( 'List id: ', $list_id );
 
             // unsubscribe users from MailChimp list
             $users = $mailchimp->lists->members( $list_id );
@@ -43,7 +43,7 @@ class LaterPay_Migrator_Controller_Mail
                 $mailchimp->lists->batchUnsubscribe( $list_id, $users['data'], false, false );
             }
 
-            $logger->log( "List members data: ", $users );
+            $logger->log( 'List members data: ', $users );
 
             // subscribe users from $data to MailChimp list
             $subscribe_data = array();
@@ -55,15 +55,15 @@ class LaterPay_Migrator_Controller_Mail
             }
             $res = $mailchimp->lists->batchSubscribe( $list_id, $subscribe_data, false );
 
-            $logger->log( "Subscribe result: ", $res );
+            $logger->log( 'Subscription result: ', $res );
 
             // replicate campaign
             $r_campaign    = $mailchimp->campaigns->replicate( $campaign_id );
             $r_campaign_id = $r_campaign['id'];
             $send          = $mailchimp->campaigns->send( $r_campaign_id );
 
-            $logger->log( "Campaign replication result: ", $r_campaign );
-            $logger->log( "Campaign send result: ", $send );
+            $logger->log( 'Campaign replication result: ', $r_campaign );
+            $logger->log( 'Campaign send result: ', $send );
         } catch ( Exception $e ) {
             return $e->getMessage();
         }

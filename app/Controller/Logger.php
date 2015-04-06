@@ -5,7 +5,7 @@ class LaterPay_Migrator_Controller_Logger
     protected $writer = null;
 
     /**
-     * Logger constructor
+     * Logger constructor.
      *
      * @param $file_name
      *
@@ -20,7 +20,7 @@ class LaterPay_Migrator_Controller_Logger
     }
 
     /**
-     * Logger destructor
+     * Logger destructor.
      *
      * @return void
      */
@@ -30,7 +30,7 @@ class LaterPay_Migrator_Controller_Logger
     }
 
     /**
-     * Log writer
+     * Log writer.
      *
      * @param null $message Log message
      * @param null $data    Log data
@@ -42,8 +42,9 @@ class LaterPay_Migrator_Controller_Logger
             return false;
         }
 
-        $ts  = date( "Y.m.d - H:i:s", time() );
+        $ts  = date( 'Y.m.d - H:i:s', time() );
         $res = @fwrite( $this->writer, $ts . ": $message" . print_r( $data, true ) . PHP_EOL );
+
         return $res;
     }
 }
