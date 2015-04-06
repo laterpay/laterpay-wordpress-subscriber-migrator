@@ -2,6 +2,8 @@
 
 class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Abstract
 {
+    const MIGRATOR_POINTER = 'laterpay_migrator_pointer';
+
     /**
      * Load assets.
      *
@@ -147,5 +149,82 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
                 'laterpay_migrator'
             ),
         ) );
+    }
+
+    /**
+     * Add LaterPay Migrator plugin pointers.
+     *
+     * @return void
+     */
+    public function add_pointers() {
+        $pointers = $this->get_active_pointers();
+
+        // don't render the template, if there are no pointers to be shown
+        if ( empty( $pointers ) ) {
+            return;
+        }
+
+        // assign pointers
+        $view_args = array(
+            'pointers' => $pointers,
+        );
+
+        $this->assign( 'laterpay', $view_args );
+
+        echo $this->get_text_view( 'backend/pointers' );
+    }
+
+    /**
+     * Get all active pointers
+     *
+     * @return array $pointers
+     */
+    public function get_active_pointers() {
+        $dismissed_pointers = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
+        $pointers = array();
+
+        if ( ! in_array( self::MIGRATOR_POINTER, $dismissed_pointers ) ) {
+            $pointers[] = self::MIGRATOR_POINTER;
+        }
+
+        return $pointers;
+    }
+
+    /**
+     * Return all pointer constants from current class.
+     *
+     * @return array $pointers
+     */
+    public static function get_all_pointers() {
+        $reflection      = new ReflectionClass( __CLASS__ );
+        $class_constants = $reflection->getConstants();
+        $pointers        = array();
+
+        if ( $class_constants ) {
+            foreach ( array_keys( $class_constants ) as $key_value ) {
+                if ( strpos( $key_value, 'POINTER') !== FALSE ) {
+                    $pointers[] = $class_constants[$key_value];
+                }
+            }
+        }
+
+        return $pointers;
+    }
+
+    /**
+     * Enqueue assets to show laterpay migrator pointers
+     *
+     * @return void
+     */
+    public function add_pointers_script() {
+        $pointers = $this->get_active_pointers();
+
+        // don't enqueue the assets, if there are no pointers to be shown
+        if ( empty( $pointers ) ) {
+            return;
+        }
+
+        wp_enqueue_script( 'wp-pointer' );
+        wp_enqueue_style( 'wp-pointer' );
     }
 }

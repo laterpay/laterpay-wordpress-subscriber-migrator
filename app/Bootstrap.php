@@ -28,6 +28,8 @@ class LaterPay_Migrator_Bootstrap
 
         $admin_migration_controller = new LaterPay_Migrator_Controller_Admin_Migration( $config );
         add_filter( 'modify_menu',                                  array( $admin_migration_controller, 'add_menu' ) );
+        add_action( 'admin_print_footer_scripts',                   array( $admin_migration_controller, 'add_pointers' ) );
+        add_action( 'admin_enqueue_scripts',                        array( $admin_migration_controller, 'add_pointers_script' ) );
 
         $sitenotice_controller = new LaterPay_Migrator_Controller_Sitenotice( $config );
         add_action( 'wp_ajax_laterpay_migrator_get_purchase_url',   array( $sitenotice_controller, 'ajax_get_purchase_link' ) );

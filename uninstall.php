@@ -7,6 +7,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
+$table_usermeta              = $wpdb->usermeta;
 $table_subscriber_migrations = $wpdb->prefix . 'laterpay_subscriber_migrations';
 
 // remove custom table
@@ -35,3 +36,26 @@ delete_option( 'laterpay_migrator_mailchimp_api_key' );
 delete_option( 'laterpay_migrator_mailchimp_ssl_connection' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
+
+// remove all dismissed LaterPay Migrator pointers
+$pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
+if ( ! empty( $pointers ) && is_array( $pointers ) ) {
+    $replace_string = 'meta_value';
+
+    foreach ( $pointers as $pointer ) {
+        // we need to use prefix ',' before pointer names to remove them properly from string
+        $replace_string = "REPLACE($replace_string, ',$pointer', '')";
+    }
+
+    $sql = "
+        UPDATE
+            $table_usermeta
+        SET
+            meta_value = $replace_string
+        WHERE
+            meta_key = 'dismissed_wp_pointers'
+        ;
+    ";
+
+    $wpdb->query( $sql );
+}
