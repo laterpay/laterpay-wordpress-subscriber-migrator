@@ -98,7 +98,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
             'timepasses'                        => $timepasses,
             'roles'                             => $roles,
             'products_mapping'                  => get_option( 'laterpay_migrator_products_mapping' ),
-            'example_url'                       => $this->config->get( 'plugin_url' ) . 'example.csv',
+            'example_url'                       => $this->config->get( 'plugin_url' ) . 'templates/example.csv',
             'migration_is_active'               => $migration_is_active,
             'migration_is_completed'            => $migration_is_completed,
             'status_class'                      => $status_class,
