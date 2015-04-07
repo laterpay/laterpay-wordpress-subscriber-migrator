@@ -42,7 +42,7 @@ $directory = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
 define( 'DS', DIRECTORY_SEPARATOR );
 define( 'LP_MIGRATOR_DIR', $directory );
 
-// check if LaterPay plugin active
+// check, if LaterPay plugin is active
 if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
 
     if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
