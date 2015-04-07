@@ -51,19 +51,18 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
     }
 
     require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Admin' . DS . 'Migration.php' );
-}
 
-// remove all dismissed wp pointers
-$pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
-if ( ! empty( $pointers ) && is_array( $pointers ) ) {
-    $replace_string = 'meta_value';
+    // remove all dismissed wp pointers
+    $pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
+    if ( ! empty( $pointers ) && is_array( $pointers ) ) {
+        $replace_string = 'meta_value';
 
-    foreach ( $pointers as $pointer ) {
-        // we need to use prefix ',' before pointer names to remove them properly from string
-        $replace_string = "REPLACE($replace_string, ',$pointer', '')";
-    }
+        foreach ( $pointers as $pointer ) {
+            // we need to use prefix ',' before pointer names to remove them properly from string
+            $replace_string = "REPLACE($replace_string, ',$pointer', '')";
+        }
 
-    $sql = "
+        $sql = "
         UPDATE
             $table_usermeta
         SET
@@ -73,5 +72,6 @@ if ( ! empty( $pointers ) && is_array( $pointers ) ) {
         ;
     ";
 
-    $wpdb->query( $sql );
+        $wpdb->query( $sql );
+    }
 }
