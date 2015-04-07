@@ -106,6 +106,7 @@ if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
         $upload_dir = wp_upload_dir();
         $config->set( 'log_dir',            $upload_dir['basedir'] . '/laterpay_migrator_logs/' );
         $config->set( 'cron_log',           'cron.log' );
+        $config->set( 'parse_log',          'parse.log' );
 
         // plugin headers
         $plugin_headers = get_file_data(

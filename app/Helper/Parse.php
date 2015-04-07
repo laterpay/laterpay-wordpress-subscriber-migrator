@@ -20,7 +20,7 @@ class LaterPay_Migrator_Helper_Parse
      */
     public static function parse_csv() {
         $config  = get_laterpay_migrator_config();
-
+        $logger  = new LaterPay_Migrator_Controller_Logger( $config->get( 'parse_log' ) );
         $csvFile = null;
 
         // search CSV file in upload folder
@@ -73,15 +73,19 @@ class LaterPay_Migrator_Helper_Parse
 
             // validate data
             if ( ! isset( $final_row['product'] ) || ! $final_row['product'] ) {
+                $logger->log( 'Missed product: ', $final_row );
                 $invalid_count++;
                 continue;
             } else if ( ! isset( $final_row['email'] ) || ! $final_row['email'] ) {
+                $logger->log( 'Missed email: ', $final_row );
                 $invalid_count++;
                 continue;
             } else if ( ! isset( $final_row['date'] ) || ! $final_row['date'] ) {
+                $logger->log( 'Missed date: ', $final_row );
                 $invalid_count++;
                 continue;
             } else if ( ! strtotime( $final_row['date'] ) ) {
+                $logger->log( 'Wrong date format: ', $final_row );
                 $invalid_count++;
                 continue;
             }
@@ -89,6 +93,7 @@ class LaterPay_Migrator_Helper_Parse
             // check, if user exists as WordPress user
             $user = get_user_by( 'email', $final_row['email'] );
             if ( ! $user instanceof WP_User ) {
+                $logger->log( 'User not exist: ', $final_row );
                 $invalid_count++;
                 continue;
             }
