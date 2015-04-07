@@ -37,17 +37,32 @@ delete_option( 'laterpay_migrator_mailchimp_ssl_connection' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_after_expired' );
 delete_option( 'laterpay_migrator_mailchimp_campaign_before_expired' );
 
-// remove all dismissed wp pointers
-$pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
-if ( ! empty( $pointers ) && is_array( $pointers ) ) {
-    $replace_string = 'meta_value';
+$directory = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
 
-    foreach ( $pointers as $pointer ) {
-        // we need to use prefix ',' before pointer names to remove them properly from string
-        $replace_string = "REPLACE($replace_string, ',$pointer', '')";
+define( 'DS', DIRECTORY_SEPARATOR );
+define( 'LP_MIGRATOR_DIR', $directory );
+
+// check, if LaterPay plugin is active
+if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
+
+    if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
+        require_once( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'laterpay_load.php' );
+        LaterPay_AutoLoader::register_namespace( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'application', 'LaterPay' );
     }
 
-    $sql = "
+    require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Controller' . DS . 'Admin' . DS . 'Migration.php' );
+
+    // remove all dismissed wp pointers
+    $pointers = LaterPay_Migrator_Controller_Admin_Migration::get_all_pointers();
+    if ( ! empty( $pointers ) && is_array( $pointers ) ) {
+        $replace_string = 'meta_value';
+
+        foreach ( $pointers as $pointer ) {
+            // we need to use prefix ',' before pointer names to remove them properly from string
+            $replace_string = "REPLACE($replace_string, ',$pointer', '')";
+        }
+
+        $sql = "
         UPDATE
             $table_usermeta
         SET
@@ -57,5 +72,6 @@ if ( ! empty( $pointers ) && is_array( $pointers ) ) {
         ;
     ";
 
-    $wpdb->query( $sql );
+        $wpdb->query( $sql );
+    }
 }

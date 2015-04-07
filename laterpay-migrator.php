@@ -35,13 +35,12 @@ require_once( LP_MIGRATOR_DIR . 'app' . DS . 'Model' . DS . 'Migration.php' );
 $bootstrap = new LaterPay_Migrator_Bootstrap();
 add_action( 'init', array( $bootstrap, 'init' ) );
 
-// check if LaterPay plugin active
+// check, if LaterPay plugin is active
 if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
 
     if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
         require_once( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'laterpay_load.php' );
-        require_once( WP_PLUGIN_DIR . DS . 'laterpay/application/Controller/' . 'Abstract.php' );
-        require_once( WP_PLUGIN_DIR . DS . 'laterpay/application/Form/' . 'Abstract.php' );
+        LaterPay_AutoLoader::register_namespace( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'application', 'LaterPay' );
     }
 
     // controllers
