@@ -42,8 +42,17 @@ class LaterPay_Migrator_Helper_Parse
 
         // extract all data from the uploaded file into an array
         $data = array();
+
         foreach ( $csvFile as $line ) {
-            $data[] = str_getcsv( $line );
+            if ( version_compare( PHP_VERSION, '5.3.0', '>=' ) ) {
+                $data[] = str_getcsv( $line );
+            } else {
+                $fh = @fopen( 'php://temp', 'r+' );
+                fwrite( $fh, $csvFile );
+                rewind( $fh );
+                $data[] = fgetcsv( $fh );
+                fclose( $fh );
+            }
         }
 
         // initialize array with mapped data
