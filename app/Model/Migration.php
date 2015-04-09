@@ -31,6 +31,7 @@ class LaterPay_Migrator_Model_Migration {
                 was_notified_before_expiry  tinyint(1)    NOT NULL DEFAULT 0,
                 was_notified_after_expiry   tinyint(1)    NOT NULL DEFAULT 0,
                 PRIMARY KEY  (id)
+                UNIQUE KEY  (email)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
         dbDelta( $sql );
@@ -277,6 +278,9 @@ class LaterPay_Migrator_Model_Migration {
                         break;
                     }
                 }
+
+                $sql .= " ON DUPLICATE KEY UPDATE
+                            expiry = IF(VALUES(expiry) > expiry, VALUES(expiry), expiry)";
 
                 // conclude SQL statement
                 $sql .= ';';
