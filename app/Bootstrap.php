@@ -70,6 +70,7 @@ class LaterPay_Migrator_Bootstrap
         // install table for storing users to be migrated and their respective migration status
         $install_controller = new LaterPay_Migrator_Controller_Install();
         $install_controller->install();
+        // run required database migrations
         $install_controller->update_migration_table_add_index();
 
         // register cron jobs for email sending

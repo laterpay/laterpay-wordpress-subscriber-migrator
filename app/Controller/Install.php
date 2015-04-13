@@ -43,7 +43,7 @@ class LaterPay_Migrator_Controller_Install
     }
 
     /**
-     * Add index to the migration table
+     * Add index to the migration table.
      *
      * @return void
      */
@@ -51,7 +51,7 @@ class LaterPay_Migrator_Controller_Install
         global $wpdb;
 
         $table   = $wpdb->prefix . LaterPay_Migrator_Model_Migration::$table;
-        $indexes = $wpdb->get_results( 'SHOW INDEX FROM ' . $table .';' );
+        $indexes = $wpdb->get_results( 'SHOW INDEX FROM ' . $table . ';' );
 
         $is_up_to_date = false;
 
