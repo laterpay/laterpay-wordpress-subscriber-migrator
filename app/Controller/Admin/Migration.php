@@ -80,12 +80,12 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
             $status_class = 'lp_is-completed';
         }
 
-        // workaround for sitenotice default message not translated
+        // workaround to make sure the default sitenotice message is translated
         if ( get_option( 'laterpay_migrator_sitenotice_message' ) === false ) {
             add_option( 'laterpay_migrator_sitenotice_message', __( 'Get a free time pass for the rest of your subscription period', 'laterpay-migrator' ) );
         }
 
-        // workaround for sitenotice default button text not translated
+        // workaround to make sure the default sitenotice button text is translated
         if ( get_option( 'laterpay_migrator_sitenotice_button_text' ) === false ) {
             add_option( 'laterpay_migrator_sitenotice_button_text', __( 'Switch for Free Now', 'laterpay-migrator' ) );
         }
