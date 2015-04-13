@@ -80,6 +80,16 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
             $status_class = 'lp_is-completed';
         }
 
+        // workaround for sitenotice default message not translated
+        if ( get_option( 'laterpay_migrator_sitenotice_message' ) === false ) {
+            add_option( 'laterpay_migrator_sitenotice_message', __( 'Get a free time pass for the rest of your subscription period', 'laterpay-migrator' ) );
+        }
+
+        // workaround for sitenotice default button text not translated
+        if ( get_option( 'laterpay_migrator_sitenotice_button_text' ) === false ) {
+            add_option( 'laterpay_migrator_sitenotice_button_text', __( 'Switch for Free Now', 'laterpay-migrator' ) );
+        }
+
         // assign variables to the view template
         $view_args = array(
             'plugin_is_in_live_mode'            => (bool) get_option( 'laterpay_plugin_is_in_live_mode', false ),
@@ -141,12 +151,12 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         $screen = get_current_screen();
         $screen->add_help_tab( array(
             'id'      => 'laterpay_migration_tab_help',
-            'title'   => __( 'Subscriber Migration', 'laterpay_migrator' ),
+            'title'   => __( 'Subscriber Migration', 'laterpay-migrator' ),
             'content' => __( '
                             <p>
                                 Explanation goes here!
                             </p>',
-                'laterpay_migrator'
+                'laterpay-migrator'
             ),
         ) );
     }
