@@ -41,4 +41,29 @@ class LaterPay_Migrator_Controller_Install
         add_option( 'laterpay_migrator_mailchimp_campaign_after_expired',   '' );
         add_option( 'laterpay_migrator_mailchimp_campaign_before_expired',  '' );
     }
+
+    /**
+     * Add index to the migration table
+     *
+     * @return void
+     */
+    public function update_migration_table_add_index() {
+        global $wpdb;
+
+        $table   = $wpdb->prefix . LaterPay_Migrator_Model_Migration::$table;
+        $indexes = $wpdb->get_results( 'SHOW INDEX FROM ' . $table .';' );
+
+        $is_up_to_date = false;
+
+        foreach ( $indexes as $index ) {
+            if ( $index->Key_name === 'idx_migration_email' ) {
+                $is_up_to_date = true;
+            }
+        }
+
+        if ( ! $is_up_to_date ) {
+            // add unique index for email
+            $wpdb->query( "ALTER TABLE " . $table . " ADD UNIQUE INDEX idx_migration_email (email);" );
+        }
+    }
 }

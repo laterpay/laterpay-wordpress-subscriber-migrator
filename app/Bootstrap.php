@@ -70,6 +70,7 @@ class LaterPay_Migrator_Bootstrap
         // install table for storing users to be migrated and their respective migration status
         $install_controller = new LaterPay_Migrator_Controller_Install();
         $install_controller->install();
+        $install_controller->update_migration_table_add_index();
 
         // register cron jobs for email sending
         wp_schedule_event( mktime( 0, 0, 0, date( 'n' ), date( 'j' ) + 1, date( 'Y' ) ), 'daily', 'send_expiry_notification', array( 'before' ) );
