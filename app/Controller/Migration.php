@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Migration
 {
+
     /**
      * Process user migration to LaterPay.
      *

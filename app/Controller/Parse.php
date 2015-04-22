@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Parse
 {
+
     /**
      * Upload CSV file with subscriber data.
      *

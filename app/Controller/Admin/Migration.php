@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Abstract
 {
+
     const ADMIN_MENU_POINTER = 'lpsmp01';
 
     /**

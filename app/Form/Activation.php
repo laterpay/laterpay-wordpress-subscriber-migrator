@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Form_Activation extends LaterPay_Form_Abstract
 {
+
     /**
      * Implementation of abstract method.
      *

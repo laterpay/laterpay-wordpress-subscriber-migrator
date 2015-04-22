@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Helper_Parse
 {
+
     /**
      * @var array of column mapping
      */

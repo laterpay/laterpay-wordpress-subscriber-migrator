@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Helper_Mail
 {
+
     /**
      * @var array of MailChimp fields
      */

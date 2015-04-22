@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Mail
 {
+
     /**
      * Send notification emails to the users.
      *

@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Model_Migration {
+class LaterPay_Migrator_Model_Migration
+{
 
     /**
      * Migration table name

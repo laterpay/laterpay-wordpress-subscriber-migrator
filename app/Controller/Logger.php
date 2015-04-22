@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Logger
 {
+
     protected $writer = null;
 
     /**

@@ -2,6 +2,7 @@
 
 class LaterPay_Migrator_Controller_Subscription
 {
+
     /**
      * Activate migration process. The plugin will then render sitenotices and send email notifications from then on.
      *

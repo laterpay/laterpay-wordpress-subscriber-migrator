@@ -1,6 +1,7 @@
 <?php
 
-class LaterPay_Migrator_Helper_Common {
+class LaterPay_Migrator_Helper_Common
+{
 
     /**
      * Get purchase URL for remaining subscription time of user.
