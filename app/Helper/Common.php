@@ -23,7 +23,7 @@ class LaterPay_Migrator_Helper_Common
 
         $subscription_data = LaterPay_Migrator_Helper_Subscription::get_user_subscription_data();
         $time_pass_id      = LaterPay_Migrator_Helper_Subscription::get_time_pass_id( $subscription_data );
-        $time_pass         = (array) LaterPay_Helper_TimePass::get_time_pass_by_id( $time_pass_id );
+        $time_pass         = LaterPay_Helper_TimePass::get_time_pass_by_id( $time_pass_id );
 
         if ( ! $time_pass || ! $subscription_data ) {
             return false;

@@ -1,6 +1,6 @@
 <?php
 
-class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Abstract
+class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Admin_Base
 {
 
     const ADMIN_MENU_POINTER = 'lpsmp01';
@@ -68,7 +68,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
 
         global $wp_roles;
 
-        $timepasses             = LaterPay_Helper_TimePass::get_all_time_passes();
+        $timepasses             = LaterPay_Helper_TimePass::get_active_time_passes();
         $roles                  = $wp_roles->roles;
 
         $migration_is_active    = get_option( 'laterpay_migrator_is_active' );

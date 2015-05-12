@@ -39,7 +39,7 @@ add_action( 'init', array( $bootstrap, 'init' ) );
 if ( is_plugin_active( 'laterpay/laterpay.php' ) ) {
 
     if ( ! class_exists( 'LaterPay_Autoloader' ) ) {
-        require_once( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'laterpay_load.php' );
+        require_once( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'laterpay-load.php' );
         LaterPay_AutoLoader::register_namespace( WP_PLUGIN_DIR . DS . 'laterpay' . DS . 'application', 'LaterPay' );
     }
 

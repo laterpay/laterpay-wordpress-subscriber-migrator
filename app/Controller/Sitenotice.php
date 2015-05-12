@@ -1,6 +1,6 @@
 <?php
 
-class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Abstract
+class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Base
 {
 
     /**

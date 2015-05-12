@@ -192,7 +192,7 @@
                                         <option value="0" <?php if ( ! $mapping ) echo 'selected'; ?>><?php echo '- ' . __( 'select a time pass', 'laterpay-migrator' ) . ' -'; ?></option>
                                         <?php if ( $laterpay['timepasses'] ) : ?>
                                             <?php foreach ( $laterpay['timepasses'] as $timepass ) : ?>
-                                                <option value="<?php echo $timepass->pass_id; ?>" <?php if ( $mapping && $timepass->pass_id == $mapping['timepass'] ) echo 'selected'; ?>><?php echo $timepass->title; ?></option>
+                                                <option value="<?php echo $timepass['pass_id']; ?>" <?php if ( $mapping && $timepass['pass_id'] == $mapping['timepass'] ) echo 'selected'; ?>><?php echo $timepass['title']; ?></option>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </select>
