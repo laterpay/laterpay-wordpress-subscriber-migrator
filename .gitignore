@@ -3,9 +3,9 @@
 .gulp/
 .sublime-gulp.cache
 /nbproject/
-/laterpay/built_assets/
+/laterpay-migrator/built_assets/
 /node_modules/
 # composer generated files and folders
-/laterpay/vendor/
+/laterpay-migrator/vendor/
 /selenium-tests/
 composer.lock
