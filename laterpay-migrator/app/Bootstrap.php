@@ -9,9 +9,6 @@ class LaterPay_Migrator_Bootstrap
      * @return void
      */
     public function init() {
-        if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
-            return;
-        }
 
         // get plugin config
         $config = get_laterpay_migrator_config();
@@ -61,12 +58,6 @@ class LaterPay_Migrator_Bootstrap
      * @return void
      */
     public static function activate() {
-        // check, if the 'laterpay' plugin is installed
-        if ( ! is_plugin_active( 'laterpay/laterpay.php' ) ) {
-            _e( 'The LaterPay plugin has to be installed and activated.', 'laterpay-migrator' );
-            exit;
-        }
-
         // install table for storing users to be migrated and their respective migration status
         $install_controller = new LaterPay_Migrator_Controller_Install();
         $install_controller->install();
