@@ -147,3 +147,5 @@ function get_laterpay_migrator_config() {
 
     return $config;
 }
+
+// test travis build
