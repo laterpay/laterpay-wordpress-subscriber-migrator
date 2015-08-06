@@ -34,8 +34,9 @@ register_deactivation_hook( __FILE__, 'laterpay_migrator_deactivate' );
 function laterpay_migrator_init() {
     laterpay_migrator_before_start();
     // Write init code here
-    $bootstrap = new LaterPay_Migrator_Bootstrap();
-    $bootstrap->init();
+    $config    = get_laterpay_migrator_config();
+    $bootstrap = new LaterPay_Migrator_Bootstrap( $config );
+    $bootstrap->run();
 }
 
 /**
@@ -84,7 +85,7 @@ function laterpay_migrator_force_deactivate() {
  */
 function laterpay_migrator_before_start() {
      $dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
-    LaterPay_AutoLoader::register_namespace( $dir . 'app', 'LaterPayMigrator' );
+    LaterPay_AutoLoader::register_namespace( $dir . 'application', 'LaterPayMigrator' );
     LaterPay_AutoLoader::register_directory( $dir . 'vendor' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'src' );
 }
 

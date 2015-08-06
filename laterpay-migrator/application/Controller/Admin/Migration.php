@@ -1,9 +1,25 @@
 <?php
 
-class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Admin_Base
-{
+class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_Admin_Base {
 
     const ADMIN_MENU_POINTER = 'lpsmp01';
+
+    /**
+     * @see LaterPay_Core_Event_SubscriberInterface::get_subscribed_events()
+     */
+    public static function get_subscribed_events() {
+        return array(
+            'laterpay_admin_menu_data' => array(
+                array( 'add_menu' ),
+            ),
+            'laterpay_admin_footer_scripts' => array(
+                array( 'add_pointers' ),
+            ),
+            'laterpay_admin_enqueue_scripts' => array(
+                array( 'add_pointers_script' ),
+            ),
+        );
+    }
 
     /**
      * Load assets.
@@ -123,24 +139,21 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     /**
      * Add 'migration' tab to the 'laterpay' plugin backend navigation.
      *
-     * @param $menu
-     *
-     * @return mixed
+     * @param LaterPay_Core_Event $event
      */
-    public function add_menu( $menu ) {
+    public function add_menu( LaterPay_Core_Event $event ) {
+        $menu              = (array) $event->get_result();
         $migration_tab_url = 'laterpay-migration-tab';
 
-        $menu[ 'migration' ] = array(
+        $menu['migration'] = array(
             'url'   => $migration_tab_url,
             'title' => __( 'Migration', 'laterpay-migrator' ),
             'cap'   => 'activate_plugins',
             'run'   => array( $this, 'render_page' ),
+            'help'  => array( $this, 'add_help' ),
         );
 
-        // add action for contextual help render
-        add_action( 'load-laterpay_page_' . $migration_tab_url, array( $this, 'add_help' ) );
-
-        return $menu;
+        $event->set_result( $menu );
     }
 
     /**
@@ -292,9 +305,11 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
     /**
      * Add wp pointers.
      *
+     * @param LaterPay_Core_Event $event
+     *
      * @return void
      */
-    public function add_pointers() {
+    public function add_pointers( LaterPay_Core_Event $event ) {
         $pointers = $this->get_active_pointers();
 
         // don't render the template, if there are no pointers to be shown
@@ -308,8 +323,9 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         );
 
         $this->assign( 'laterpay', $view_args );
-
-        echo $this->get_text_view( 'backend/pointers' );
+        $result = $event->get_result();
+        $result .= $this->get_text_view( 'backend/pointers' );
+        $event->set_result( $result );
     }
 
     /**
@@ -340,8 +356,8 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
 
         if ( $class_constants ) {
             foreach ( array_keys( $class_constants ) as $key_value ) {
-                if ( strpos( $key_value, 'POINTER') !== FALSE ) {
-                    $pointers[] = $class_constants[$key_value];
+                if ( strpos( $key_value, 'POINTER' ) !== false ) {
+                    $pointers[] = $class_constants[ $key_value ];
                 }
             }
         }

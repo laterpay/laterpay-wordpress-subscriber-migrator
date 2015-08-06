@@ -1,7 +1,27 @@
 <?php
 
-class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Base
-{
+class LaterPay_Migrator_Controller_Admin_Sitenotice extends LaterPay_Controller_Base {
+    /**
+     * @see LaterPay_Core_Event_SubscriberInterface::get_subscribed_events()
+     */
+    public static function get_subscribed_events() {
+        return array(
+            'wp_ajax_laterpay_migrator_get_purchase_url' => array(
+                array( 'laterpay_on_admin_view', 200 ),
+                array( 'laterpay_on_ajax_send_json', 0 ),
+                array( 'ajax_get_purchase_link' ),
+            ),
+            'laterpay_post_footer' => array(
+                array( 'is_migrator_active_and_working', 200 ),
+                array( 'is_frontend_and_loggedin', 100 ),
+                array( 'render_page' ),
+            ),
+            'laterpay_send_expiry_notification' => array(
+                array( 'is_migrator_active_and_working', 200 ),
+                array( 'send_expiry_notification' ),
+            ),
+        );
+    }
 
     /**
      * Load assets.
@@ -74,27 +94,64 @@ class LaterPay_Migrator_Controller_Sitenotice extends LaterPay_Controller_Base
      * Ajax method to get purchase URL.
      *
      * @wp-hook wp_ajax_laterpay_migrator_get_purchase_url
+     * @param LaterPay_Core_Event $event
      *
      * @return void
      */
-    public function ajax_get_purchase_link() {
+    public function ajax_get_purchase_link( LaterPay_Core_Event $event ) {
         if ( is_user_logged_in() ) {
             $url = LaterPay_Migrator_Helper_Common::get_purchase_url();
 
             if ( $url ) {
-                wp_send_json(
+                $event->set_result(
                     array(
                         'success' => true,
                         'url'     => $url,
                     )
                 );
+                return;
             }
         }
 
-        wp_send_json(
+        $event->set_result(
             array(
                 'success' => false,
             )
         );
+    }
+
+    /**
+     * To include styles and scripts only, if user is logged in and not in admin area
+     *
+     * @param LaterPay_Core_Event $event
+     */
+    public function is_frontend_and_loggedin( LaterPay_Core_Event $event ) {
+        // include styles and scripts only, if user is logged in and not in admin area
+        if ( ! is_admin() && is_user_logged_in() ) {
+            return;
+        }
+        $event->stop_propagation();
+    }
+
+    /**
+     * @param LaterPay_Core_Event $event
+     */
+    public function is_migrator_active_and_working( LaterPay_Core_Event $event ) {
+        if ( get_option( 'laterpay_migrator_is_active' ) && ! LaterPay_Migrator_Helper_Subscription::is_migration_completed() ) {
+            return;
+        }
+        $event->stop_propagation();
+    }
+
+    /**
+     *  Send email notification.
+     *
+     * @param LaterPay_Core_Event $event
+     */
+    public function send_expiry_notification( LaterPay_Core_Event $event ) {
+        list( $modifier ) = $event->get_arguments() + array( '' );
+        $mail_controller = new LaterPay_Migrator_Core_Mail();
+
+        $event->set_result( $mail_controller->send_notification_email( $modifier ) );
     }
 }

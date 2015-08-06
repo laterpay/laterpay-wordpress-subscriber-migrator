@@ -1,7 +1,6 @@
 <?php
 
-class LaterPay_Migrator_Controller_Mail
-{
+class LaterPay_Migrator_Core_Mail {
 
     /**
      * Send notification emails to the users.
@@ -12,7 +11,7 @@ class LaterPay_Migrator_Controller_Mail
      */
     public static function send_notification_email( $modifier ) {
         $config = get_laterpay_migrator_config();
-        $logger = new LaterPay_Migrator_Controller_Logger( $config->get( 'cron_log' ) );
+        $logger = new LaterPay_Migrator_Core_Logger( $config->get( 'cron_log' ) );
 
         $data          = LaterPay_Migrator_Helper_Mail::prepare_mail_data( $modifier );
         $campaign_name = get_option( 'laterpay_migrator_mailchimp_campaign_' . $modifier . '_expired' );

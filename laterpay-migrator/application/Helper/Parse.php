@@ -21,7 +21,7 @@ class LaterPay_Migrator_Helper_Parse
      */
     public static function parse_csv() {
         $config  = get_laterpay_migrator_config();
-        $logger  = new LaterPay_Migrator_Controller_Logger( $config->get( 'parse_log' ) );
+        $logger  = new LaterPay_Migrator_Core_Logger( $config->get( 'parse_log' ) );
         $csvFile = null;
 
         // search CSV file in upload folder
