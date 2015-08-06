@@ -104,9 +104,9 @@ class LaterPay_Migrator_Model_Migration
             WHERE
                 is_migrated_to_laterpay = 0 AND ";
 
-        $sql .= $ignore_notifications ? '' : "was_notified_after_expiry = 0 AND ";
+        $sql .= $ignore_notifications ? '' : 'was_notified_after_expiry = 0 AND ';
         // expiry date is in the past
-        $sql .= "expiry < CURDATE();";
+        $sql .= 'expiry < CURDATE();';
 
         $result = $wpdb->get_results( $sql, ARRAY_A );
 
@@ -138,9 +138,9 @@ class LaterPay_Migrator_Model_Migration
             WHERE
                 is_migrated_to_laterpay = 0 AND ";
 
-        $sql .= $ignore_notifications ? '' : "was_notified_before_expiry = 0 AND ";
+        $sql .= $ignore_notifications ? '' : 'was_notified_before_expiry = 0 AND ';
         // expiry date equal or greater than current date
-        $sql .= "expiry >= CURDATE() AND ";
+        $sql .= 'expiry >= CURDATE() AND ';
         // and expiry date equal or less than modified date (14 days by default)
         $sql .= "expiry <= DATE_ADD( CURDATE(), INTERVAL $modifier );";
 
@@ -280,8 +280,8 @@ class LaterPay_Migrator_Model_Migration
                     }
                 }
 
-                $sql .= " ON DUPLICATE KEY UPDATE
-                            expiry = IF(VALUES(expiry) > expiry, VALUES(expiry), expiry)";
+                $sql .= ' ON DUPLICATE KEY UPDATE
+                            expiry = IF(VALUES(expiry) > expiry, VALUES(expiry), expiry)';
 
                 // conclude SQL statement
                 $sql .= ';';
