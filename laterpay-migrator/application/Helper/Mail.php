@@ -71,8 +71,8 @@ class LaterPay_Migrator_Helper_Mail
         // filter vars that already exist by tags
         $fields = LaterPay_Migrator_Helper_Mail::$fields;
         foreach ( $vars as $var ) {
-            if ( isset( $fields[$var['tag']], $fields ) ) {
-                unset( $fields[$var['tag']] );
+            if ( isset( $fields[ $var['tag'] ], $fields ) ) {
+                unset( $fields[ $var['tag'] ] );
             }
         }
 

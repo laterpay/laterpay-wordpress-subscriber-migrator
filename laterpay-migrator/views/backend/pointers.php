@@ -16,14 +16,14 @@ if ( in_array( LaterPay_Migrator_Controller_Admin_Migration::ADMIN_MENU_POINTER,
 		if (typeof(jQuery().pointer) !== 'undefined') {
 			jQuery('#toplevel_page_laterpay-plugin')
 			.pointer({
-				content : '<?php echo $pointer_content; ?>',
+				content : '<?php echo laterpay_sanitize_output( $pointer_content ); ?>',
 				position: {
 					edge: 'left',
 					align: 'middle'
 				},
 				close: function() {
 					jQuery.post( ajaxurl, {
-						pointer: '<?php echo LaterPay_Migrator_Controller_Admin_Migration::ADMIN_MENU_POINTER; ?>',
+						pointer: '<?php echo laterpay_sanitize_output( LaterPay_Migrator_Controller_Admin_Migration::ADMIN_MENU_POINTER ); ?>',
 						action: 'dismiss-wp-pointer'
 					});
 				}

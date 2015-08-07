@@ -120,7 +120,7 @@ class LaterPay_Migrator_Form_Activation extends LaterPay_Form_Abstract
             array(
                 'validators' => array(
                     'is_string',
-                    'match' => '/[a-z0-9-]+/'
+                    'match' => '/[a-z0-9-]+/',
                 ),
                 'filters' => array(
                     'to_string',

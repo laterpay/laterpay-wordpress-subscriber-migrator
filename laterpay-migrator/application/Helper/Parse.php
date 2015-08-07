@@ -74,8 +74,8 @@ class LaterPay_Migrator_Helper_Parse
             $final_row = array();
             $values    = explode( ';', $row[0] );
             foreach ( $values as $key => $value ) {
-                if ( isset( self::$column_mapping[$key] ) ) {
-                    $final_row[self::$column_mapping[$key]] = trim( $value, ' "' );
+                if ( isset( self::$column_mapping[ $key ] ) ) {
+                    $final_row[ self::$column_mapping[ $key ] ] = trim( $value, ' "' );
                     continue;
                 }
                 break;

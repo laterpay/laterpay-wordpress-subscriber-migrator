@@ -110,10 +110,10 @@ class LaterPay_Migrator_Helper_Subscription
         }
 
         $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
-        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[ $data['product'] ] ) ) {
             return false;
         }
-        $map = $products_mapping[$data['product']];
+        $map = $products_mapping[ $data['product'] ];
 
         return isset( $map['timepass'] ) ? $map['timepass'] : 0;
     }
@@ -142,11 +142,11 @@ class LaterPay_Migrator_Helper_Subscription
         }
 
         $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
-        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[ $data['product'] ] ) ) {
             return false;
         }
 
-        $map = $products_mapping[$data['product']];
+        $map = $products_mapping[ $data['product'] ];
 
         // assign role
         if ( isset( $map['assign'] ) && $map['assign'] ) {
@@ -244,10 +244,10 @@ class LaterPay_Migrator_Helper_Subscription
 
         // get user product mapping
         $products_mapping = get_option( 'laterpay_migrator_products_mapping' );
-        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[$data['product']] ) ) {
+        if ( ! $products_mapping || ! $data['product'] || ! isset( $products_mapping[ $data['product'] ] ) ) {
             return false;
         }
-        $map = $products_mapping[$data['product']];
+        $map = $products_mapping[ $data['product'] ];
 
         // get corresponding time pass id
         $time_pass_id = $map['timepass'];
