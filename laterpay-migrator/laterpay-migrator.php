@@ -84,9 +84,12 @@ function laterpay_migrator_force_deactivate() {
  * @return void
  */
 function laterpay_migrator_before_start() {
-     $dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
-    LaterPay_AutoLoader::register_namespace( $dir . 'application', 'LaterPayMigrator' );
-    LaterPay_AutoLoader::register_directory( $dir . 'vendor' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'src' );
+    $dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
+    if ( ! class_exists( 'LaterPay_Migrator_AutoLoader' ) ) {
+        require_once( $dir . 'laterpay-load.php' );
+    }
+    LaterPay_Migrator_AutoLoader::register_namespace( $dir . 'application', 'LaterPay_Migrator' );
+    LaterPay_Migrator_AutoLoader::register_directory( $dir . 'vendor' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'mailchimp' . DIRECTORY_SEPARATOR . 'src' );
 }
 
 
@@ -108,9 +111,22 @@ function get_laterpay_migrator_config() {
 
     // 'laterpay' plugin paths
     $laterpay_plugin_url  = plugins_url( '/laterpay/', 'laterpay' );
-    $laterpay_plugin_dir  = WP_PLUGIN_DIR . DS . 'laterpay/';
-    $laterpay_plugin_data = get_plugin_data( $laterpay_plugin_dir . 'laterpay.php' );
-    $config->set( 'lp_version',         $laterpay_plugin_data['Version'] );
+    $laterpay_plugin_dir  = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'laterpay/';
+    // plugin headers
+    $plugin_headers = get_file_data(
+        __FILE__,
+        array(
+            'plugin_name'       => 'Plugin Name',
+            'plugin_uri'        => 'Plugin URI',
+            'description'       => 'Description',
+            'author'            => 'Author',
+            'version'           => 'Version',
+            'author_uri'        => 'Author URI',
+            'textdomain'        => 'Textdomain',
+            'text_domain_path'  => 'Domain Path',
+        )
+    );
+    $config->set( 'lp_version',         $plugin_headers['version'] );
     $config->set( 'lp_plugin_url',      $laterpay_plugin_url );
     $config->set( 'lp_view_dir',        $laterpay_plugin_dir . 'views/' );
     $config->set( 'lp_css_url',         $laterpay_plugin_url . 'built_assets/css/' );
