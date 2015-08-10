@@ -8,7 +8,7 @@ class LaterPay_Migrator_Controller_Admin_Sitenotice extends LaterPay_Controller_
         return array(
             'wp_ajax_laterpay_migrator_get_purchase_url' => array(
                 array( 'laterpay_on_admin_view', 200 ),
-                array( 'laterpay_on_ajax_send_json', 0 ),
+                array( 'laterpay_on_ajax_send_json', 300 ),
                 array( 'ajax_get_purchase_link' ),
             ),
             'laterpay_post_footer' => array(

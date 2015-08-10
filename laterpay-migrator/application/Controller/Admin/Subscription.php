@@ -8,7 +8,7 @@ class LaterPay_Migrator_Controller_Admin_Subscription extends LaterPay_Controlle
         return array(
             'wp_ajax_laterpay_migrator_activate' => array(
                 array( 'laterpay_on_admin_view', 200 ),
-                array( 'laterpay_on_ajax_send_json', 0 ),
+                array( 'laterpay_on_ajax_send_json', 300 ),
                 array( 'activate_migration_process' ),
             ),
         );
@@ -46,7 +46,7 @@ class LaterPay_Migrator_Controller_Admin_Subscription extends LaterPay_Controlle
                     'message' => __( 'Incorrect nonce.', 'laterpay-migrator' ),
                 )
             );
-            return;
+            throw new LaterPay_Core_Exception_InvalidIncomingData( 'wpnonce' );
         }
 
         $post_form = new LaterPay_Migrator_Form_Activation( $_POST );
@@ -61,7 +61,7 @@ class LaterPay_Migrator_Controller_Admin_Subscription extends LaterPay_Controlle
                     ),
                 )
             );
-            return;
+            throw new LaterPay_Core_Exception_FormValidation( get_class( $post_form ), $post_form->get_errors() );
         }
 
         // save sitenotice settings

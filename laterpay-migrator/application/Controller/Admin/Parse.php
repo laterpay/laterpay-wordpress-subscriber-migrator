@@ -8,7 +8,7 @@ class LaterPay_Migrator_Controller_Admin_Parse extends LaterPay_Controller_Base 
         return array(
             'wp_ajax_laterpay_migrator_file_upload' => array(
                 array( 'laterpay_on_admin_view', 200 ),
-                array( 'laterpay_on_ajax_send_json', 0 ),
+                array( 'laterpay_on_ajax_send_json', 300 ),
                 array( 'file_upload' ),
             ),
         );
@@ -40,7 +40,7 @@ class LaterPay_Migrator_Controller_Admin_Parse extends LaterPay_Controller_Base 
                     'message' => __( 'Incorrect token.', 'laterpay-migrator' ),
                 )
             );
-            return;
+            throw new LaterPay_Core_Exception_InvalidIncomingData( '_wpnonce' );
         }
 
         if ( ! isset( $_FILES ) || count( $_FILES ) > 1 ) {
