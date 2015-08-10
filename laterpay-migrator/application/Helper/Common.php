@@ -34,20 +34,15 @@ class LaterPay_Migrator_Helper_Common
         // prepare purchase URL
         $url_params = array(
             'tpid' => LaterPay_Helper_TimePass::get_tokenized_time_pass_id( $time_pass['pass_id'] ),
-            'time' => time(),
             'subp' => true,
         );
-
-        $url  = add_query_arg( $url_params, home_url() );
-        $hash = LaterPay_Helper_Pricing::get_hash_by_url( $url );
-        $url  = $url . '&hash=' . $hash;
 
         // parameters for LaterPay purchase form
         $params = array(
             'article_id'    => LaterPay_Helper_TimePass::get_tokenized_time_pass_id( $time_pass['pass_id'] ),
             'pricing'       => $currency . ( $price * 100 ),
             'expiry'        => $expiry_time,
-            'url'           => $url,
+            'url'           => home_url() . '?' . $client->sign_and_encode( $url_params, home_url() ),
             'title'         => __( 'Free Switching Time Pass' , 'laterpay-migrator' ),
         );
 

@@ -7,23 +7,9 @@ class LaterPay_Migrator_Controller_Frontend_Migration extends LaterPay_Controlle
     public static function get_subscribed_events() {
         return array(
             'laterpay_loaded' => array(
-                array( 'laterpay_on_admin_view', 200 ),
                 array( 'migrate_subscriber_to_laterpay' ),
-                array( 'redirect', 5 ),
             ),
         );
-    }
-
-    /**
-     * Redirect user if redirect_url was setup
-     * @param LaterPay_Core_Event $event
-     */
-    public function redirect( LaterPay_Core_Event $event ) {
-        if ( $event->has_argument( 'redirect_url' ) ) {
-            wp_redirect( $event->get_argument( 'redirect_url' ) );
-            // exit script after redirect was set
-            exit;
-        }
     }
 
     /**
@@ -35,22 +21,39 @@ class LaterPay_Migrator_Controller_Frontend_Migration extends LaterPay_Controlle
      * @return void
      */
     public function migrate_subscriber_to_laterpay( LaterPay_Core_Event $event ) {
-        // subp == subscription purchase
-        if ( ! isset( $_GET['subp'] ) || ! sanitize_text_field( $_GET['subp'] ) ) {
+        $request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( $_SERVER['REQUEST_METHOD'] ) : '';
+        $request        = new LaterPay_Core_Request();
+        $buy            = $request->get_param( 'subp' ); // subp == subscription purchase
+
+        if ( ! isset( $buy ) ) {
             return;
         }
-
-        // tpid == time pass id
-        if ( ! isset( $_GET['tpid'] ) || ! sanitize_text_field( $_GET['tpid'] ) ) {
-            return;
-        }
-
-        $redirect_url = home_url();
-        $event->set_argument( 'redirect_url', $redirect_url );
 
         $user = LaterPay_Migrator_Helper_Subscription::get_current_user_data();
         if ( ! $user ) {
             return;
+        }
+
+        $lptoken = $request->get_param( 'lptoken' );
+        $hmac    = $request->get_param( 'hmac' );
+        $tpid    = $request->get_param( 'tpid' ); // tpid == time pass id
+
+        $client_options  = LaterPay_Helper_Config::get_php_client_options();
+        $laterpay_client = new LaterPay_Client(
+            $client_options['cp_key'],
+            $client_options['api_key'],
+            $client_options['api_root'],
+            $client_options['web_root'],
+            $client_options['token_name']
+        );
+
+        if ( LaterPay_Client_Signing::verify( $hmac, $laterpay_client->get_api_key(), $request->get_data( 'get' ), get_permalink(), $request_method ) ) {
+            // check token
+            if ( ! empty( $lptoken ) ) {
+                $laterpay_client->set_token( $lptoken );
+            } elseif ( ! $laterpay_client->has_token() ) {
+                $laterpay_client->acquire_token();
+            }
         }
 
         // check access for the respective time pass
@@ -64,7 +67,7 @@ class LaterPay_Migrator_Controller_Frontend_Migration extends LaterPay_Controlle
         );
 
         // merge time passes and post id arrays before check
-        $result = $laterpay_client->get_access( array( sanitize_text_field( $_GET['tpid'] ) ) );
+        $result = $laterpay_client->get_access( array( $tpid ) );
         if ( empty( $result ) || ! array_key_exists( 'articles', $result ) ) {
             return;
         }
@@ -85,5 +88,9 @@ class LaterPay_Migrator_Controller_Frontend_Migration extends LaterPay_Controlle
             // mark user as migrated to LaterPay
             LaterPay_Migrator_Model_Migration::set_flag( $user->user_email, 'is_migrated_to_laterpay' );
         }
+
+        wp_redirect( home_url() );
+        // exit script after redirect was set
+        exit;
     }
 }
