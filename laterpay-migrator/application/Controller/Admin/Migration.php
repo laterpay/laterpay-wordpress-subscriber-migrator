@@ -48,6 +48,13 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
 
         // load backend scripts from 'laterpay' plugin plus migrator plugin-specific Javascript
         wp_register_script(
+            'laterpay-velocity',
+            $this->config->get( 'lp_js_url' ) . 'vendor/velocity.min.js',
+            array(),
+            $this->config->get( 'lp_version' ),
+            true
+        );
+        wp_register_script(
             'laterpay-backend',
             $this->config->get( 'lp_js_url' ) . 'laterpay-backend.js',
             array( 'jquery' ),
@@ -61,6 +68,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
             false,
             true
         );
+        wp_enqueue_script( 'laterpay-velocity' );
         wp_enqueue_script( 'laterpay-backend' );
         wp_enqueue_script( 'laterpay-migrator-backend' );
 

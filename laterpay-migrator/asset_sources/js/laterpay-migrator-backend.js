@@ -8,6 +8,9 @@
                 statusLabels                : $('.lp_status-indicator__label'),
                 mainForm                    : $('#lp_js_migratorMainForm'),
 
+                // messages placeholder
+                navigation                  : $('.lp_navigation'),
+
                 // file upload
                 files                       : undefined,
                 fileUploadForm              : $('#lp_js_uploadForm'),
@@ -83,7 +86,7 @@
                                     if (data.success) {
                                         location.reload();
                                     } else {
-                                        setMessage(data.message, false);
+                                        $o.navigation.showMessage(data.message, false);
                                     }
                                 },
                     complete    : function() {
@@ -102,7 +105,7 @@
                     lpMigratorVars.ajaxUrl,
                     $o.mainForm.serializeArray(),
                     function(response) {
-                        setMessage(response.message, response.success);
+                        $o.navigation.showMessage(response.message, response.success);
 
                         if (response.mode) {
                             // switch button text
