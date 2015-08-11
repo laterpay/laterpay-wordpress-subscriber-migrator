@@ -1,5 +1,19 @@
 {
+    "name": "laterpay/laterpay-wordpress-subscriber-migrator",
+    "description": "Extension for the LaterPay WordPress plugin to migrate existing subscribers to LaterPay.",
+    "license": "MIT",
+    "config": {
+        "vendor-dir": "laterpay-migrator/vendor"
+    },
     "require": {
         "mailchimp/mailchimp": "2.0.6"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "dev-develop#9c4de8175ce1f82813f8c9c8f11809ee6c794efc"
+    },
+    "scripts": {
+        "phpcs": "\"laterpay-migrator/vendor/bin/phpcs\" -s -n -p --standard=ruleset.xml --extensions=php --ignore=laterpay-migrator/vendor/*,laterpay-migrator/languages/* laterpay-migrator",
+        "phpcbf": "\"laterpay-migrator/vendor/bin/phpcbf\" --no-patch --standard=ruleset.xml --extensions=php --ignore=laterpay-migrator/vendor/*,laterpay-migrator/languages/* laterpay-migrator",
+        "wpcs": "\"laterpay-migrator/vendor/bin/phpcs\" --config-set installed_paths laterpay-migrator/vendor/wp-coding-standards/wpcs"
     }
 }

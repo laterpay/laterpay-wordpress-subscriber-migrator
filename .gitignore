@@ -1,8 +1,11 @@
+# ide settings files
 .idea/
+.gulp/
 .sublime-gulp.cache
-built_assets/
-upload/
-sftp-config.json
-nbproject/
-node_modules/
-.gulp
+/nbproject/
+/laterpay-migrator/built_assets/
+/node_modules/
+# composer generated files and folders
+/laterpay-migrator/vendor/
+/selenium-tests/
+composer.lock
