@@ -1,0 +1,13 @@
+.lp_list,
+%lp_list,
+.lp_list__item {
+    margin: 0;
+    padding: 0;
+}
+
+.lp_list--bulleted {
+    @extend %lp_list;
+
+    list-style: disc;
+    list-style-position: inside;
+}

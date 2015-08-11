@@ -1,0 +1,30 @@
+.lp_table {
+    border-collapse: collapse;
+    margin: $fs 0;
+
+    .lp_table__heading {
+        border-bottom: 1px solid $border;
+        color: $text--lighter;
+        font-style: normal;
+        font-weight: normal;
+        padding: $fs--05;
+        text-align: left;
+        vertical-align: bottom;
+    }
+
+    tbody td {
+        padding: $fs--05;
+        text-align: left;
+        vertical-align: middle;
+    }
+}
+
+.lp_table--layout {
+    border-collapse: collapse;
+
+    td {
+        padding: 0 $fs--05 $fs--05 0;
+        text-align: left;
+        vertical-align: middle;
+    }
+}

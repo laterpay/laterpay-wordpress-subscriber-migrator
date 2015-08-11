@@ -1,0 +1,91 @@
+@import 'objects/_variables';
+@import 'objects/_polyfills';
+
+body {
+    position: relative !important;
+}
+
+.lp_siiitenotice { // every class with 'site' in it receives totally destructive styles from WordPress
+    font-size: $fs !important;
+    left: 0 !important;
+    margin: 0 !important;
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: $zindex--topmost-1 !important;
+
+    .lp_siiitenotice__content {
+        margin: $fs auto !important;
+        max-width: 970px !important;
+    }
+
+    .lp_siiitenotice__message {
+        float: left !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        line-height: 1.5 !important;
+        padding: $fs--075 $fs $fs--075 0 !important;
+    }
+
+    .lp_siiitenotice__button {
+        @include linear-gradient($laterpay-brand, 0%, $laterpay-brand--darker, 100%, $start, $end);
+
+        border: 1px solid $laterpay-brand--darker !important;
+        border-color: darken($laterpay-brand--darker, 13%) darken($laterpay-brand--darker, 5%) !important;
+        border-radius: 4px !important;
+        border-width: 0 1px 2px 0 !important;
+        color: $text--inverse !important;
+        cursor: pointer !important;
+        display: inline-block !important;
+        font-size: $fs--2 !important;
+        line-height: 1.1 !important;
+        margin: 2px 0 0 !important;
+        padding: $fs--025 $fs $fs--025 0 !important;
+        text-decoration: none !important;
+        text-shadow: 0 -1px 0 darken($laterpay-brand--darker, 13%) !important;
+        white-space: nowrap !important;
+
+        /**
+         * LaterPay logo (rendered in pseudo element from icon font)
+         *
+         * 1. Set font-size in pixels, because IE gets confused with em here
+         * 2. Nullify line-height to avoid icon overlapping other elements
+         */
+        &:before {
+            font-size: 49px !important; /* 1 */
+            left: -2px !important;
+            line-height: 0 !important; /* 2 */
+            margin: 0 (-$fs--05) 0 0 !important;
+            position: relative !important;
+            top: ($fs * 1.1) !important;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            @include linear-gradient($laterpay-brand--highlight, 0%, $laterpay-brand, 100%, $start, $end);
+
+            color: $text--inverse !important;
+            text-decoration: none !important;
+        }
+
+        &:focus,
+        &:active {
+            border-top-color: transparent !important;
+            border-width: 2px 1px 0 0 !important;
+        }
+    }
+}
+
+
+// responsiveness ------------------------------------------------------------------------------------------------------
+@media (max-width:1023px) {
+    .lp_siiitenotice{
+
+        .lp_siiitenotice__content {
+            margin-right: $fs !important;
+            margin-left: $fs !important;
+        }
+    }
+}

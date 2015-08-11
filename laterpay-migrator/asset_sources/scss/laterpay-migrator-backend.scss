@@ -1,0 +1,206 @@
+@import 'objects/_variables';
+@import 'objects/_layout';
+@import 'objects/_lists';
+@import 'objects/_tables';
+@import 'objects/_greybox';
+
+
+// Status indicator ----------------------------------------------------------------------------------------------------
+.lp_status-indicator {
+    border: 2px solid $background--darker;
+    border-radius: 999px; // pill shape
+    display: inline-block;
+    margin-right: $fs;
+    position: relative;
+    top: -2px; // compensate border-width
+
+    .lp_status-indicator__label {
+        color: $text--lighter;
+        display: inline-block;
+        line-height: $fs--2;
+        padding: 0 $fs--05;
+        text-align: center;
+        width: ($fs * 5);
+
+        &:hover,
+        &:focus,
+        &:active {
+            cursor: default;
+        }
+
+        &.lp_is-active {
+            color: $laterpay-brand;
+        }
+    }
+
+    &:before {
+        border: 2px solid $laterpay-brand;
+        border-radius: 999px; // pill shape
+        content: '';
+        display: block;
+        height: $fs--2;
+        padding: 0 $fs--05;
+        position: absolute;
+        top: -2px; // compensate border-width
+        transition: left 0.2s ease-in-out;
+        width: ($fs * 5);
+    }
+
+    &.lp_is-setting-up:before {
+        left: -2px; // compensate 2px border-width
+    }
+
+    &.lp_is-migrating:before {
+        left: ($fs * 6); // width + padding
+    }
+
+    &.lp_is-completed:before {
+        left: ($fs * 6 * 2) + 4px; // 2 * (width + padding) + border-width
+    }
+}
+
+
+// File upload ---------------------------------------------------------------------------------------------------------
+.lp_upload {
+    border: 0 none;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    td {
+        padding: 0;
+    }
+}
+
+.lp_upload__input-value-wrapper {
+
+}
+
+.lp_upload__input-value {
+    color: $text--lighter;
+    position: relative;
+    top: 1px;
+}
+
+.lp_upload__input-wrapper {
+    cursor: pointer;
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+
+.lp_upload__button {
+    transition: left 0.2s ease-in-out;
+
+    .lp_loading-indicator {
+        height: $fs--15;
+        margin: 2px auto;
+        width: $fs--15;
+    }
+}
+
+.lp_upload__input {
+    cursor: pointer;
+    font-size: 100px;
+    height: 100%;
+    opacity: 0.01;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.lp_empty-state {
+    background: #feec88;
+    border: 2px solid #ffd800;
+    border-radius: $border-radius;
+    margin: $fs 0 0;
+    padding: $fs $fs--15;
+}
+
+.lp_has-imported-data {
+    display: none;
+}
+
+
+// CSS-based browser ---------------------------------------------------------------------------------------------------
+.lp_browser {
+    background: $background--lightest;
+    border: 3px solid $border;
+    border-radius: $border-radius;
+    height: ($fs * 20);
+    margin: $fs--05 $fs $fs 0;
+    position: relative;
+    width: 400px;
+}
+
+.lp_browser__omnibar {
+    background: $border;
+    padding: $fs--05;
+}
+
+.lp_browser__omnibar-dot {
+    background: $background;
+    border-radius: 50%;
+    float: left;
+    height: $fs--075;
+    margin-right: $fs--05;
+    width: $fs--075;
+}
+
+.lp_browser__sitenotice {
+    background: #e8d20c;
+    padding: $fs--05 $fs;
+}
+
+.lp_browser__sitenotice-text,
+.lp_browser__sitenotice-button {
+    display: inline-block;
+    font-size: round($fs * 0.6);
+    line-height: 1;
+}
+
+.lp_browser__sitenotice-text {
+    color: $text;
+}
+
+ .lp_browser__sitenotice-button {
+    background: #2ea2cc;
+    border: 1px solid #0074a2;
+    border-radius: 2px;
+    color: $text--inverse;
+    margin-left: $fs--05;
+    padding: $fs--025 $fs--05;
+ }
+
+
+// Email notification configuration ------------------------------------------------------------------------------------
+.lp_api-credentials__input {
+    padding-left: 38px !important;
+}
+
+h3 {
+    margin-bottom: $fs--025;
+}
+
+dfn strong {
+    font-style: normal;
+}
+
+.lp_toggle {
+    margin-top: -$fs--025;
+}
+
+
+// Shame CSS? ----------------------------------------------------------------------------------------------------------
+// a direct fix for the alignment of the labels and hint texts:
+.lp_layout__item {
+
+    label,
+    dfn {
+        display: inline-block;
+        margin-top: $fs--05;
+    }
+
+    input[type=text] {
+        line-height: 1.3;
+    }
+}
