@@ -305,7 +305,7 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
                                     <li> Users, who switch to LaterPay before their subscription has expired, won\'t receive emails anymore.</li>
                                 </ul>
                             </p>',
-                'laterpay-migrator'
+            'laterpay-migrator'
             ),
         ) );
     }
