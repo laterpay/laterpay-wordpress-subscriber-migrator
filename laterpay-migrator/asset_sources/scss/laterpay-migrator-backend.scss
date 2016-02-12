@@ -108,12 +108,14 @@
     top: 0;
 }
 
-.lp_empty-state {
+.lp_migrator_empty-state {
     background: #feec88;
     border: 2px solid #ffd800;
     border-radius: $border-radius;
     margin: $fs 0 0;
     padding: $fs $fs--15;
+    text-align: center;
+    color: #ababab;
 }
 
 .lp_has-imported-data {

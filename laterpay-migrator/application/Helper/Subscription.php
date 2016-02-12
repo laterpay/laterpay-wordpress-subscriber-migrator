@@ -177,6 +177,7 @@ class LaterPay_Migrator_Helper_Subscription
         $not_migrated = LaterPay_Migrator_Model_Migration::get_not_migrated_subscriptions();
 
         if ( ! $not_migrated && LaterPay_Migrator_Model_Migration::get_all_data() ) {
+            update_option( 'laterpay_migrator_is_active', 0 );
             return true;
         }
 

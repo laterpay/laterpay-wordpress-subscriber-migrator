@@ -1,9 +1,9 @@
 === LaterPay ===
 
-Contributors: laterpay, dominik-rodler
+Contributors: laterpay, dominik-rodler, avahura
 Tags: laterpay, extension, migrate, subscriptions
 Requires at least: 3.5.2
-Tested up to: 4.1.1
+Tested up to: 4.4.2
 Stable tag: trunk
 Author URI: https://laterpay.net
 Plugin URI: https://github.com/laterpay/laterpay-wordpress-subscriber-migrator

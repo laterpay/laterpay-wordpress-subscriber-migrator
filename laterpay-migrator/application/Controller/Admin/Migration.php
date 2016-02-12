@@ -95,8 +95,8 @@ class LaterPay_Migrator_Controller_Admin_Migration extends LaterPay_Controller_A
         $timepasses             = LaterPay_Helper_TimePass::get_active_time_passes();
         $roles                  = $wp_roles->roles;
 
-        $migration_is_active    = get_option( 'laterpay_migrator_is_active' );
         $migration_is_completed = LaterPay_Migrator_Helper_Subscription::is_migration_completed();
+        $migration_is_active    = get_option( 'laterpay_migrator_is_active' );
         $status_class           = 'lp_is-setting-up';
 
         if ( $migration_is_active ) {

@@ -112,7 +112,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 </div>
             </form>
 
-            <div class="lp_layout lp_empty-state">
+            <div class="lp_layout lp_migrator_empty-state">
                 <div class="lp_layout__item lp_1/4">
                     <h3><?php echo laterpay_sanitize_output( __( 'Required Data Format', 'laterpay-migrator' ) ); ?></h3>
                     <ul class="lp_list--bulleted">
